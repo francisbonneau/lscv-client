@@ -5,6 +5,15 @@ import Data.*;
 public class Main extends PApplet {
 	
 	private static final long serialVersionUID = 1L;
+	
+	public static void main(String args[]) {
+		
+		String[] hosts = { "10.0.0.60:6379" };
+		
+		DataAggregator da = new DataAggregator(hosts);
+				
+		PApplet.main(new String[] { "--present", "Main" });
+	}
 
 	public void setup() {
 		size(1200, 1200);
@@ -18,13 +27,6 @@ public class Main extends PApplet {
 		}
 	}
 
-	public static void main(String args[]) {
-					
-		System.out.print("starting redis thread");
-		Thread t = new Thread(new RedisSubscribeThread());
-        t.start();
-		
-		PApplet.main(new String[] { "--present", "Main" });
-	}
+
 
 }
