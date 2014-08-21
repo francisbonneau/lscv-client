@@ -19,8 +19,8 @@ public class Particle {
 	
 	public void setup(PVector location) {				
 		this.location = location.get();
-		velocity = new PVector();
-		acceleration = new PVector();
+		velocity = new PVector(0,0);
+		acceleration = new PVector(0,0);
 	}
 	
 	public void update() { 
@@ -31,7 +31,7 @@ public class Particle {
 	public void draw() {
 		p.stroke(0);
 		p.fill(255);
-		p.ellipse(location.x, location.y, 4, 4);
+		p.ellipse(location.x, location.y, 3,3);
 	}
 	
 }

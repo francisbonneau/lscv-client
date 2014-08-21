@@ -58,6 +58,7 @@ public class RenderLoop extends PApplet {
 		if (mousePressed)
 			line(mouseX, mouseY, pmouseX, pmouseY);
 		
+		hud.updateDisplayedData();
 		hud.draw(params);
 	}
 	

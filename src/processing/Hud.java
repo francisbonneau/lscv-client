@@ -28,11 +28,17 @@ public class Hud {
 	
 	public void updateDisplayedData() {
 		
-		HashMap<String, HashMap<Integer, Integer>> newData = null;
-		do {
-			newData = da.data.poll();		
+		HashMap<String, HashMap<Integer, Integer>> newData = da.data.poll();
+		while(newData != null) {	
+					
 			displayedData.add(newData);
-		} while(newData != null);
+			
+			// TODO figure out to which emitter the data is supposed to go
+			Emitter em = emitters.get(0);
+			em.addParticles(newData);
+			
+			newData = da.data.poll();			
+		}
 		
 	}
 	
@@ -55,6 +61,7 @@ public class Hud {
 	 */
 	public void draw(Params params) {		
 		for (Emitter em : emitters) {
+			em.update(params);
 			em.draw(params);
 		}
 	}

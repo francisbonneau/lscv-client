@@ -1,8 +1,11 @@
 package processing;
 
 import processing.core.PApplet;
+import processing.core.PVector;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.msgpack.type.RawValue;
@@ -23,8 +26,44 @@ public class Emitter {
 		particlesList = new ArrayList<>();
 	}
 	
-	public void addParticle() {
+	public void addParticles(HashMap<String, HashMap<Integer, Integer>> newData) {
 		
+		int elementsCount = newData.size();
+		
+		// example of a key : compiz
+		Iterator<String> keys = newData.keySet().iterator();
+		// value ex : 5100 => 1, 12400 => 3, 30000 => 2,
+		Iterator<HashMap<Integer, Integer>> values = newData.values().iterator();
+		
+		int i = 1;
+		while (keys.hasNext()) {
+			String key = keys.next();
+			HashMap<Integer, Integer> value = values.next();
+			
+			Iterator<Integer> k = value.keySet().iterator();
+			Iterator<Integer> v = value.values().iterator();
+			
+			float angle = p.map(i, 1, elementsCount, 1, 360);
+			
+			while(k.hasNext()) { 
+				int latency = k.next();
+				int evntCount = v.next();
+				
+				Particle newP = new Particle(p);
+				newP.setup(new PVector(centerX, centerY));
+				
+				PVector velocity = new PVector(1,1);
+				velocity.fromAngle(angle);		
+				velocity.rotate(angle);
+				
+				newP.velocity = velocity;				
+				
+				particlesList.add(newP);
+			}
+			i++;
+		}
+		
+		//p.map(value, start1, stop1, start2, stop2)		
 	}
 	
 	public void updateParticles() {		
@@ -46,12 +85,17 @@ public class Emitter {
 		p.ellipse(centerX, centerY, radius, radius);
 	}
 	
+	
+	public void update(Params params) {
+		updateParticles();
+	}
+	
 	public void draw(Params params) {
 		
 		if (params.drawEmitterRadius)
 			drawRadius(params.emitterRadiusColor, 
 				params.emitterRadius);
-		
+					
 		drawParticles();
 	}
 	
