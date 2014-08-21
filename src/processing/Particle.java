@@ -10,9 +10,9 @@ public class Particle {
 	public PVector velocity;
 	public PVector acceleration;	
 	
+	public float color;
 	public float size;
-	public boolean alive;	
-	
+	public boolean alive;
 	
 	public Particle(PApplet p) {
 		this.p = p;		
@@ -32,7 +32,9 @@ public class Particle {
 	
 	public void draw() {
 		p.stroke(0);
-		p.fill(255);
+		
+		p.colorMode(p.HSB,360,100,100);
+		p.fill(color, 100, 100);
 		p.ellipse(location.x, location.y, size, size);
 	}
 	

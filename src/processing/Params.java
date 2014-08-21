@@ -38,12 +38,12 @@ public class Params {
 		"100 ns", "10 ns", "1 ns"
 	};
 		
-	public float emitterRadius = 600;
+	public float emitterRadius = 700;
 	public int emitterRadiusColor = 50;
 	public boolean drawEmitterRadius = true;
 
 	public float particleVelocity = 2;
 	public float particleAcceleration = 0;
-	public float particleSize = 3;
+	public float particleSize = 2;
 	
 }

@@ -43,16 +43,25 @@ public class Emitter {
 			Iterator<Integer> k = value.keySet().iterator();
 			Iterator<Integer> v = value.values().iterator();
 			
-			float angle = PApplet.map(i, 1, elementsCount, 1, 360);
+			float angle = PApplet.map(i, 1, elementsCount, 1, 360);			
+			float angleIncr = 360 / elementsCount;
 			
+//			p.println("elementsCount" + elementsCount);
+//			p.println("angle" + angle);
+//			p.println("angleincr" + angleIncr);
+						
 			while(k.hasNext()) { 
 				int latency = k.next();
 				int eventCount = v.next();
 				
 				Particle newP = new Particle(p);
-				newP.setup(new PVector(centerX, centerY), params);
-											
-				newP.velocity.rotate(angle);
+				newP.setup(new PVector(centerX, centerY), params);											
+								
+				newP.color = angle;
+				
+				//newP.velocity.rotate(angle);
+				newP.velocity.rotate(angle + p.random(0, angleIncr));
+				
 				newP.size = newP.size + eventCount;
 				
 				particlesList.add(newP);
