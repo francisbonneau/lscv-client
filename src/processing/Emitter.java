@@ -43,7 +43,7 @@ public class Emitter {
 			Iterator<Integer> k = value.keySet().iterator();
 			Iterator<Integer> v = value.values().iterator();
 			
-			float angle = p.map(i, 1, elementsCount, 1, 360);
+			float angle = PApplet.map(i, 1, elementsCount, 1, 360);
 			
 			while(k.hasNext()) { 
 				int latency = k.next();
@@ -52,8 +52,7 @@ public class Emitter {
 				Particle newP = new Particle(p);
 				newP.setup(new PVector(centerX, centerY));
 				
-				PVector velocity = new PVector(1,1);
-				velocity.fromAngle(angle);		
+				PVector velocity = new PVector(2,2);				
 				velocity.rotate(angle);
 				
 				newP.velocity = velocity;				

@@ -35,8 +35,7 @@ public class DataAggregator implements Observer {
 	public void update(Observable arg0, Object arg1) {
  
 		RedisDataSource source = (RedisDataSource) arg0;
-		System.out.println("update from " + source.ip + " received");
-				
+		
 		@SuppressWarnings("unchecked")
 		Map<String, String> data = (Map<String, String>) arg1;
 		processData(data);		
