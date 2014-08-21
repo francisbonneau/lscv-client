@@ -66,18 +66,18 @@ public class DataAggregator implements Observer {
 			
 			HashMap<Integer, Integer> latencyBreakdown = new HashMap<Integer, Integer>();
 			
-			for (String val : value.split(",")) {								
-				Double exp = Math.pow(10, 9 - roundup);				
-				Double tmp = Math.floor(Double.parseDouble(val) / exp);								
+			for (String val : value.split(",")) {						
+				Double exp = Math.pow(10, 9 - roundup);
+				Double tmp = Math.floor(Double.parseDouble(val) / exp);
 				int roundedVal = (int) (tmp * exp);
-								
+
 				if (latencyBreakdown.get(roundedVal) == null) {
 					latencyBreakdown.put(roundedVal, 1);
 				} else {
 					int newVal = latencyBreakdown.get(roundedVal) + 1;
 					latencyBreakdown.put(roundedVal, newVal);
 				}
-			}						
+			}		
 			
 			processedData.put(processName, latencyBreakdown);			
 		}

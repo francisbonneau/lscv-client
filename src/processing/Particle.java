@@ -30,7 +30,6 @@ public class Particle {
 		p.stroke(0);
 		p.fill(255);
 		p.ellipse(location.x, location.y, 4, 4);
-		
 	}
 	
 }
