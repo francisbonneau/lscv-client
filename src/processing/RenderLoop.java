@@ -1,27 +1,27 @@
+package processing;
+import data.*;
 import processing.core.*;
 
-import Data.*;
-
-public class Main extends PApplet {
+public class RenderLoop extends PApplet {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private Params params;
+	public Params params;
 	
 	public static void main(String args[]) {
 		
 		// fullscreen on 
-		//PApplet.main(new String[] { "--present", "Main" });
+		//PApplet.main(new String[] { "--present", "processing.RenderLoop" });
 		
 		// fullscreen off
-		PApplet.main(new String[] { "Main" });
+		PApplet.main(new String[] { "processing.RenderLoop" });
 	}
 
 	public void setup() {
 		
 		params = new Params();
 		
-		DataAggregator da = new DataAggregator(params.hosts);
+		DataAggregator da = new DataAggregator(this);
 		
 		if (params.fullscreen) { 
 			size(displayWidth, displayHeight);
@@ -35,6 +35,7 @@ public class Main extends PApplet {
 		if (this.params.resizable) {
 		    frame.setResizable(true);
 		}
+		
 		
 				
 		background(0);

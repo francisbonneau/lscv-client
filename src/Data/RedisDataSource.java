@@ -1,4 +1,4 @@
-package Data;
+package data;
 
 import java.lang.reflect.Type;
 import java.util.Map;
