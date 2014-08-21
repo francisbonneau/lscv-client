@@ -9,7 +9,9 @@ public class Particle {
 	public PVector location;
 	public PVector velocity;
 	public PVector acceleration;	
+	
 	public boolean alive;
+	
 	
 	public Particle(PApplet p) {
 		this.p = p;		

@@ -35,6 +35,10 @@ public class Params {
 		"100 µs", "10 µs", "1 µs",
 		"100 ns", "10 ns", "1 ns"
 	};
+		
+	public float emitterRadius = 400;
+	public int emitterRadiusColor = 200;
+	public boolean drawEmitterRadius = true;
 	
 	
 }

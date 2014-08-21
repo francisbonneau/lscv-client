@@ -8,6 +8,8 @@ public class RenderLoop extends PApplet {
 	
 	public Params params;
 	
+	public Hud hud;
+	
 	public static void main(String args[]) {
 		
 		// fullscreen on 
@@ -19,27 +21,28 @@ public class RenderLoop extends PApplet {
 
 	public void setup() {
 		
-		params = new Params();
+		params = new Params(); // default parameters			
 		
-		DataAggregator da = new DataAggregator(this);
-		
-		if (params.fullscreen) { 
+		if (params.fullscreen) // screen settings
 			size(displayWidth, displayHeight);
-		} else {
-			size(params.defaultWidth, params.defaultHeight);			
-		}
+		else
+			size(params.defaultWidth, params.defaultHeight);
 					
 		frameRate(params.framerate);
-
-						
-		if (this.params.resizable) {
-		    frame.setResizable(true);
-		}
 		
-		
-				
+		if (this.params.resizable)
+			frame.setResizable(true);
+									
 		background(0);
 		smooth();
+		
+		// Data source		
+		DataAggregator da = new DataAggregator(this);
+		// Data display
+		hud = new Hud(this);
+		hud.setDataSource(da);
+		hud.addEmitter();
+		
 	}
 
 	public void draw() {
@@ -49,14 +52,13 @@ public class RenderLoop extends PApplet {
 
 		stroke(255);
 		
-		if (params.fpsCounter) {
+		if (params.fpsCounter)
 			displayFPSCounter();
-		}
 		
-		if (mousePressed) {
+		if (mousePressed)
 			line(mouseX, mouseY, pmouseX, pmouseY);
-		}		
-
+		
+		hud.draw(params);
 	}
 	
 	public void keyPressed() { 
