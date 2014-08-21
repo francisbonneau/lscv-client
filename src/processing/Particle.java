@@ -10,17 +10,19 @@ public class Particle {
 	public PVector velocity;
 	public PVector acceleration;	
 	
-	public boolean alive;
+	public float size;
+	public boolean alive;	
 	
 	
 	public Particle(PApplet p) {
 		this.p = p;		
 	}
 	
-	public void setup(PVector location) {				
+	public void setup(PVector location, Params params) {				
 		this.location = location.get();
-		velocity = new PVector(0,0);
-		acceleration = new PVector(0,0);
+		velocity = new PVector(params.particleVelocity, params.particleVelocity);
+		acceleration = new PVector(params.particleAcceleration, params.particleAcceleration);
+		size = params.particleSize;
 	}
 	
 	public void update() { 
@@ -31,7 +33,7 @@ public class Particle {
 	public void draw() {
 		p.stroke(0);
 		p.fill(255);
-		p.ellipse(location.x, location.y, 3,3);
+		p.ellipse(location.x, location.y, size, size);
 	}
 	
 }

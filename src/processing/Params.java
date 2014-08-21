@@ -1,5 +1,7 @@
 package processing;
 
+import processing.core.PVector;
+
 public class Params {
 	
 	// default parameters of the application
@@ -39,6 +41,9 @@ public class Params {
 	public float emitterRadius = 600;
 	public int emitterRadiusColor = 50;
 	public boolean drawEmitterRadius = true;
-	
+
+	public float particleVelocity = 2;
+	public float particleAcceleration = 0;
+	public float particleSize = 3;
 	
 }

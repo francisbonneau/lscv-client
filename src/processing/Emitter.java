@@ -13,7 +13,7 @@ import org.msgpack.type.RawValue;
 
 public class Emitter {
 	
-	private PApplet p;
+	private PApplet p;	
 	public int centerX;
 	public int centerY;	
 	
@@ -26,7 +26,7 @@ public class Emitter {
 		particlesList = new ArrayList<>();
 	}
 	
-	public void addParticles(HashMap<String, HashMap<Integer, Integer>> newData) {
+	public void addParticles(HashMap<String, HashMap<Integer, Integer>> newData, Params params) {
 		
 		int elementsCount = newData.size();
 		
@@ -47,15 +47,13 @@ public class Emitter {
 			
 			while(k.hasNext()) { 
 				int latency = k.next();
-				int evntCount = v.next();
+				int eventCount = v.next();
 				
 				Particle newP = new Particle(p);
-				newP.setup(new PVector(centerX, centerY));
-				
-				PVector velocity = new PVector(2,2);				
-				velocity.rotate(angle);
-				
-				newP.velocity = velocity;				
+				newP.setup(new PVector(centerX, centerY), params);
+											
+				newP.velocity.rotate(angle);
+				newP.size = newP.size + eventCount;
 				
 				particlesList.add(newP);
 			}

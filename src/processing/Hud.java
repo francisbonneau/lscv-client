@@ -26,7 +26,7 @@ public class Hud {
 		this.da = da;			
 	}
 	
-	public void updateDisplayedData() {
+	public void updateDisplayedData(Params params) {
 		
 		HashMap<String, HashMap<Integer, Integer>> newData = da.data.poll();
 		while(newData != null) {	
@@ -35,7 +35,7 @@ public class Hud {
 			
 			// TODO figure out to which emitter the data is supposed to go
 			Emitter em = emitters.get(0);
-			em.addParticles(newData);
+			em.addParticles(newData, params);
 			
 			newData = da.data.poll();			
 		}
