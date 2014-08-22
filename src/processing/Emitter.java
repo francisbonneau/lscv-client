@@ -46,7 +46,7 @@ public class Emitter {
 			float angle = PApplet.map(i, 1, elementsCount, 1, 360);			
 			float angleIncr = 360 / elementsCount;
 			
-			float randomIncr = p.random(0, 0.1f);
+			float randomIncr = p.random(0, 0.5f);
 			
 //			p.println("elementsCount" + elementsCount);
 //			p.println("angle" + angle);
@@ -64,10 +64,13 @@ public class Emitter {
 				//newP.velocity.rotate(angle);
 				//newP.acceleration.rotate(angle);
 				
+				float newAcceleration = PApplet.map(latency, 1, 1000000, 0.1f, 100);				
+				newP.acceleration = new PVector(newAcceleration,newAcceleration);
+				
 				newP.velocity.rotate(angle + randomIncr);
 				newP.acceleration.rotate(angle + randomIncr);
-				
-				newP.size = newP.size + eventCount;
+																			
+				newP.size = (float) Math.sqrt(newP.size * eventCount);
 				
 				particlesList.add(newP);
 			}
