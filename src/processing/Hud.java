@@ -31,7 +31,7 @@ public class Hud {
 		HashMap<String, HashMap<Integer, Integer>> newData = da.data.poll();
 		while(newData != null) {	
 					
-			displayedData.add(newData);
+			//displayedData.add(newData);
 			
 			// TODO figure out to which emitter the data is supposed to go
 			Emitter em = emitters.get(0);

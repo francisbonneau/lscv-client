@@ -11,8 +11,7 @@ public class Particle {
 	public PVector acceleration;	
 	
 	public float color;
-	public float size;
-	public boolean alive;
+	public float size;	
 	
 	public Particle(PApplet p) {
 		this.p = p;		
@@ -27,7 +26,7 @@ public class Particle {
 	
 	public void update() { 
 		velocity.add(acceleration);
-		location.add(velocity);
+		location.add(velocity);		
 	}
 	
 	public void draw() {

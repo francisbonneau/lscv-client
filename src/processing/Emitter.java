@@ -59,8 +59,8 @@ public class Emitter {
 								
 				newP.color = angle;
 				
-				//newP.velocity.rotate(angle);
-				newP.velocity.rotate(angle + p.random(0, angleIncr));
+				newP.velocity.rotate(angle);
+				//newP.velocity.rotate(angle + p.random(0, angleIncr));
 				
 				newP.size = newP.size + eventCount;
 				
@@ -72,10 +72,23 @@ public class Emitter {
 		//p.map(value, start1, stop1, start2, stop2)		
 	}
 	
-	public void updateParticles() {		
-		for (Particle particle : particlesList) {
+	public void updateParticles(Params params) {
+		
+		Iterator<Particle> it = particlesList.iterator();		
+		while(it.hasNext()) { 
+			Particle particle = it.next();
 			particle.update();
+			
+			double distance = Math.sqrt(Math.pow(centerX - particle.location.x, 2) +  
+					Math.pow(centerY - particle.location.y, 2));
+									
+			// check if the particle is outside of the emitter radius
+			if ( distance > params.emitterRadius/2 ) {
+				// if this is the case the particle is removed				
+				it.remove();
+			}
 		}
+		
 	}
 	
 	public void drawParticles() {		
@@ -93,7 +106,7 @@ public class Emitter {
 	
 	
 	public void update(Params params) {
-		updateParticles();
+		updateParticles(params);
 	}
 	
 	public void draw(Params params) {
