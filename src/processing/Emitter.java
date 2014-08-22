@@ -46,6 +46,8 @@ public class Emitter {
 			float angle = PApplet.map(i, 1, elementsCount, 1, 360);			
 			float angleIncr = 360 / elementsCount;
 			
+			float randomIncr = p.random(0, 0.1f);
+			
 //			p.println("elementsCount" + elementsCount);
 //			p.println("angle" + angle);
 //			p.println("angleincr" + angleIncr);
@@ -59,8 +61,11 @@ public class Emitter {
 								
 				newP.color = angle;
 				
-				newP.velocity.rotate(angle);
-				//newP.velocity.rotate(angle + p.random(0, angleIncr));
+				//newP.velocity.rotate(angle);
+				//newP.acceleration.rotate(angle);
+				
+				newP.velocity.rotate(angle + randomIncr);
+				newP.acceleration.rotate(angle + randomIncr);
 				
 				newP.size = newP.size + eventCount;
 				
