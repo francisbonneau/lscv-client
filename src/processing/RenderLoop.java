@@ -33,9 +33,8 @@ public class RenderLoop extends PApplet {
 		if (this.params.resizable)
 			frame.setResizable(true);
 									
-		background(0);
-		smooth();
-		
+		colorMode(HSB,360,100,100);
+	 
 		// Data source		
 		DataAggregator da = new DataAggregator(this);
 		// Data display
@@ -47,7 +46,7 @@ public class RenderLoop extends PApplet {
 
 	public void draw() {
 	 
-		background(0);
+		background(0,0,10);
 		smooth();
 
 		stroke(255);

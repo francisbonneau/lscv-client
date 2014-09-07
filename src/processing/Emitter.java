@@ -46,7 +46,9 @@ public class Emitter {
 			float angle = PApplet.map(i, 1, elementsCount, 1, 360);			
 			float angleIncr = 360 / elementsCount;
 			
-			float randomIncr = p.random(0, 0.5f);
+			p.line(centerX, centerY, (float) Math.cos(angle) * params.emitterRadius, (float) Math.sin(angle) * params.emitterRadius);			
+			
+			//float randomIncr = p.random(0, 0.5f);
 			
 //			p.println("elementsCount" + elementsCount);
 //			p.println("angle" + angle);
@@ -67,8 +69,8 @@ public class Emitter {
 				float newAcceleration = PApplet.map(latency, 1, 1000000, 0.1f, 100);				
 				newP.acceleration = new PVector(newAcceleration,newAcceleration);
 				
-				newP.velocity.rotate(angle + randomIncr);
-				newP.acceleration.rotate(angle + randomIncr);
+				newP.velocity.rotate(angle);
+				newP.acceleration.rotate(angle);
 																			
 				newP.size = (float) Math.sqrt(newP.size * eventCount);
 				
@@ -107,8 +109,8 @@ public class Emitter {
 	
 	public void drawRadius(int color, float radius) {
 		// draw emitters radius
-		p.stroke(color);
-		p.fill(0);
+		p.stroke(0,0,color);
+		p.fill(0,0,10);
 		p.ellipse(centerX, centerY, radius, radius);
 	}
 	

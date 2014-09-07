@@ -39,7 +39,7 @@ public class Params {
 	};
 		
 	public float emitterRadius = 700;
-	public int emitterRadiusColor = 10;
+	public int emitterRadiusColor = 25;
 	public boolean drawEmitterRadius = true;
 
 	public float particleVelocity = 1;

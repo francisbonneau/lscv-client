@@ -31,8 +31,7 @@ public class Particle {
 	
 	public void draw() {
 		p.stroke(0);
-		
-		p.colorMode(p.HSB,360,100,100);
+				
 		p.fill(color, 100, 100);
 		p.ellipse(location.x, location.y, size, size);
 	}
