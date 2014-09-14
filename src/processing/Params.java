@@ -8,14 +8,14 @@ public class Params {
 	
 	// display parameters
 	public boolean fullscreen = false;
-	public int defaultHeight = 900;
-	public int defaultWidth = 900;
+	public int defaultHeight = 800;
+	public int defaultWidth = 800;
 	public int framerate = 30;
 	public boolean fpsCounter = true;
 	public boolean resizable = false; 
 	
 	// data source
-	public String[] hosts = { "10.0.0.60:6379" };
+	public String[] hosts = { "127.0.0.1:6379" };
 	
 	// visualisation parameters
 	
@@ -38,7 +38,7 @@ public class Params {
 		"100 ns", "10 ns", "1 ns"
 	};
 		
-	public float emitterRadius = 700;
+	public float emitterRadius = 500;
 	public int emitterRadiusColor = 25;
 	public boolean drawEmitterRadius = true;
 

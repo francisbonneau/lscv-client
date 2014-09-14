@@ -11,7 +11,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/franck/workspace/PFE/processing2.2.1-core.jar"/>
+	<classpathentry kind="lib" path="/Users/fbonneau/Desktop/pfe-client/processing2.2.1-core.jar"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>

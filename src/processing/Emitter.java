@@ -46,7 +46,7 @@ public class Emitter {
 			float angle = PApplet.map(i, 1, elementsCount, 1, 360);			
 			float angleIncr = 360 / elementsCount;
 			
-			p.line(centerX, centerY, (float) Math.cos(angle) * params.emitterRadius, (float) Math.sin(angle) * params.emitterRadius);			
+			//p.line((float) Math.cos(angle) * params.emitterRadius, (float) Math.sin(angle) * params.emitterRadius, centerX, centerY);			
 			
 			//float randomIncr = p.random(0, 0.5f);
 			
