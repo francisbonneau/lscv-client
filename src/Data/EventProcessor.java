@@ -7,7 +7,8 @@ import java.util.Map;
 
 public class EventProcessor {
 	
-	public ArrayList<Event> processData(Map<String, String> rawData, float latencyRoundup) {		
+	public ArrayList<Event> processData(Map<String, String> rawData,
+			float latencyRoundup) {		
 		
 		ArrayList<Event> processedData = new ArrayList<Event>();
 		

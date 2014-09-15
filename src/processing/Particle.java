@@ -1,4 +1,5 @@
 package processing;
+import data.Event;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -8,10 +9,7 @@ public class Particle {
 	private PApplet p;
 	
 	// particle data
-	public String processName;
-	
-	public Integer eventCount;
-	public Integer latency;
+	public Event event;
 	
 	// particle properties
 	public PVector location;
@@ -20,8 +18,9 @@ public class Particle {
 	public float color;
 	public float size;
 	
-	public Particle(PApplet p) {
+	public Particle(PApplet p, Event event) {
 		this.p = p;		
+		this.event = event;
 	}
 	
 	public void setup(PVector location, Params params) {				

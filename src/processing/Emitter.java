@@ -34,6 +34,8 @@ public class Emitter {
 		
 		int elementsCount = newData.size();
 		
+		
+		
 //		// example of a key : compiz
 //		Iterator<String> keys = newData.keySet().iterator();
 //		// value ex : 5100 => 1, 12400 => 3, 30000 => 2,
@@ -41,14 +43,14 @@ public class Emitter {
 		
 		Iterator<Event> events = newData.iterator();
 		
+		System.out.println(newData.size());
+		
 		int i = 1;
 		// for each process in the list
 		while (events.hasNext()) {
 			
-			Event event = events.next();
-			
-			String processName = event.processName;
-														
+			Event event = events.next();			
+		
 			Iterator<Integer> syscallName = event.latencyBreakdown.keySet().iterator();
 			Iterator<Integer> syscallData = event.latencyBreakdown.values().iterator();
 			
@@ -68,7 +70,7 @@ public class Emitter {
 				int latency = syscallName.next();
 				int eventCount = syscallData.next();
 				
-				Particle newP = new Particle(p);
+				Particle newP = new Particle(p, event);
 				newP.setup(new PVector(centerX, centerY), params);											
 								
 				newP.color = angle;
