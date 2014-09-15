@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import processing.core.PApplet;
-import data.DataAggregator;
+import data.Event;
+import data.SourceAggregator;
 
 public class Hud {
 	
 	private PApplet p;	
-	private DataAggregator da;
+	private SourceAggregator sa;
 		
 	private ArrayList<HashMap<String, HashMap<Integer, Integer>>> displayedData;
 	
@@ -22,13 +23,13 @@ public class Hud {
 		emitters = new ArrayList<>();
 	}
 
-	public void setDataSource(DataAggregator da) {
-		this.da = da;			
+	public void setDataSource(SourceAggregator da) {
+		this.sa = da;			
 	}
 	
 	public void updateDisplayedData(Params params) {
 		
-		HashMap<String, HashMap<Integer, Integer>> newData = da.data.poll();
+		ArrayList<Event> newData = sa.data.poll();
 		while(newData != null) {	
 					
 			//displayedData.add(newData);
@@ -37,7 +38,7 @@ public class Hud {
 			Emitter em = emitters.get(0);
 			em.addParticles(newData, params);
 			
-			newData = da.data.poll();			
+			newData = sa.data.poll();
 		}
 		
 	}

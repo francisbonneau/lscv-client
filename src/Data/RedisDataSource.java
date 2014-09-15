@@ -1,6 +1,7 @@
 package data;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Observable;
 
@@ -17,7 +18,10 @@ public class RedisDataSource extends Observable implements Runnable  {
 	public String ip;
 	public int port;
 	
-	public RedisDataSource(String host, DataAggregator da) {
+	private SourceAggregator sourceAgg;
+	private EventProcessor eventProcessor;
+	
+	public RedisDataSource(String host, SourceAggregator sourceAgg) {
 		
 		// Connect to the Redis instance
 		this.host = host;
@@ -27,7 +31,11 @@ public class RedisDataSource extends Observable implements Runnable  {
 		System.out.println("connected to redis on " + host);	
 		
 		// add the data aggregator as observer
-		this.addObserver(da);		
+		this.sourceAgg = sourceAgg;
+		this.addObserver(sourceAgg);
+		
+		// instanciate a new data processor
+		this.eventProcessor = new EventProcessor();
 	}
 
 	@Override
@@ -67,9 +75,14 @@ public class RedisDataSource extends Observable implements Runnable  {
 				Type mapType = new TypeToken<Map<String, String>>(){}.getType();  
 				Map<String, String> data = new Gson().fromJson(arg1, mapType);
 				
+				
+				// process the data
+				float roundup = sourceAgg.getLatencyRoundup();
+				ArrayList<Event> processedData = eventProcessor.processData(data, roundup);
+
 				// notify the observers				
 				setChanged();
-				notifyObservers(data);
+				notifyObservers(processedData);
 				
 			}
 		};

@@ -10,6 +10,8 @@ import java.util.List;
 
 import org.msgpack.type.RawValue;
 
+import data.Event;
+
 
 public class Emitter {
 	
@@ -18,6 +20,8 @@ public class Emitter {
 	public int centerY;	
 	
 	public List<Particle> particlesList;
+	
+	HashMap<String, Integer> particlesCount;
 
 	public Emitter(PApplet p, int x, int y) {
 		this.p = p;
@@ -26,27 +30,33 @@ public class Emitter {
 		particlesList = new ArrayList<>();
 	}
 	
-	public void addParticles(HashMap<String, HashMap<Integer, Integer>> newData, Params params) {
+	public void addParticles(ArrayList<Event> newData, Params params) {
 		
 		int elementsCount = newData.size();
 		
-		// example of a key : compiz
-		Iterator<String> keys = newData.keySet().iterator();
-		// value ex : 5100 => 1, 12400 => 3, 30000 => 2,
-		Iterator<HashMap<Integer, Integer>> values = newData.values().iterator();
+//		// example of a key : compiz
+//		Iterator<String> keys = newData.keySet().iterator();
+//		// value ex : 5100 => 1, 12400 => 3, 30000 => 2,
+//		Iterator<HashMap<Integer, Integer>> values = newData.values().iterator();
+		
+		Iterator<Event> events = newData.iterator();
 		
 		int i = 1;
-		while (keys.hasNext()) {
-			String key = keys.next();
-			HashMap<Integer, Integer> value = values.next();
+		// for each process in the list
+		while (events.hasNext()) {
 			
-			Iterator<Integer> k = value.keySet().iterator();
-			Iterator<Integer> v = value.values().iterator();
+			Event event = events.next();
+			
+			String processName = event.processName;
+														
+			Iterator<Integer> syscallName = event.latencyBreakdown.keySet().iterator();
+			Iterator<Integer> syscallData = event.latencyBreakdown.values().iterator();
 			
 			float angle = PApplet.map(i, 1, elementsCount, 1, 360);			
 			float angleIncr = 360 / elementsCount;
 			
-			//p.line((float) Math.cos(angle) * params.emitterRadius, (float) Math.sin(angle) * params.emitterRadius, centerX, centerY);			
+			//p.line((float) Math.cos(angle) * params.emitterRadius, 
+			//(float) Math.sin(angle) * params.emitterRadius, centerX, centerY);			
 			
 			//float randomIncr = p.random(0, 0.5f);
 			
@@ -54,9 +64,9 @@ public class Emitter {
 //			p.println("angle" + angle);
 //			p.println("angleincr" + angleIncr);
 						
-			while(k.hasNext()) { 
-				int latency = k.next();
-				int eventCount = v.next();
+			while(syscallName.hasNext()) { 
+				int latency = syscallName.next();
+				int eventCount = syscallData.next();
 				
 				Particle newP = new Particle(p);
 				newP.setup(new PVector(centerX, centerY), params);											

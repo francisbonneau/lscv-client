@@ -36,7 +36,7 @@ public class RenderLoop extends PApplet {
 		colorMode(HSB,360,100,100);
 	 
 		// Data source		
-		DataAggregator da = new DataAggregator(this);
+		SourceAggregator da = new SourceAggregator(this);
 		// Data display
 		hud = new Hud(this);
 		hud.setDataSource(da);

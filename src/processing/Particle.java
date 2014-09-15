@@ -5,13 +5,20 @@ import processing.core.PVector;
 
 public class Particle {
 	
-	private PApplet p;	
+	private PApplet p;
+	
+	// particle data
+	public String processName;
+	
+	public Integer eventCount;
+	public Integer latency;
+	
+	// particle properties
 	public PVector location;
 	public PVector velocity;
 	public PVector acceleration;	
-	
 	public float color;
-	public float size;	
+	public float size;
 	
 	public Particle(PApplet p) {
 		this.p = p;		
