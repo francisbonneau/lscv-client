@@ -82,9 +82,9 @@ public class Emitter {
 		
 		float lastAngle = 0;
 		
-		if (eventDistribution.size() != lastEventDistSize) {
+		//if (eventDistribution.size() != lastEventDistSize) {
 			labelsList = new ArrayList<>();	
-		}		
+		//}		
 		
 		while(eventDistNames.hasNext()) {
 			String procName = eventDistNames.next();
@@ -98,18 +98,18 @@ public class Emitter {
 			
 			// recalculate labels if the number of elements has changed
 			
-			if (eventDistribution.size() != lastEventDistSize) {
-				float angle = (lastAngle + lastAngle + relativeSize)/2;				
-				float radius = params.emitterRadius/2 + 35;
+			//if (eventDistribution.size() != lastEventDistSize) {
+				float angle = p.radians((lastAngle));				
+				float radius = params.emitterRadius/2;
 				float textXposition = (float) Math.cos(angle) * radius + centerX;
 				float textYposition = (float) Math.sin(angle) * radius + centerY;
 				
 				float color = this.eventDistributionColor.get(procName); 				
 				EmitterLabel label = new EmitterLabel(p, procName, 15, color, textXposition, textYposition);
 				labelsList.add(label);
-			}				
+			//}				
 		}
-		lastEventDistSize = eventDistribution.size();
+		//lastEventDistSize = eventDistribution.size();
 			
 		// for each process in the list
 		while (events.hasNext()) {
