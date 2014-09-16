@@ -1,17 +1,13 @@
 package processing;
 
-import processing.core.PApplet;
-import processing.core.PVector;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Random;
 
-import org.msgpack.type.RawValue;
-
+import processing.core.PApplet;
+import processing.core.PVector;
 import data.Event;
 
 
@@ -28,6 +24,10 @@ public class Emitter {
 	public LinkedHashMap<String, Integer> eventDistribution;
 	public long eventsTotalCount;
 	public HashMap<String, Float> eventDistributionColor;
+	
+	int lastSectionsCount;
+	HashMap<String, Float> eventLowerAngle;
+	HashMap<String, Float> eventHigherAngle;
 
 	public Emitter(PApplet p, int x, int y) {
 		this.p = p;
@@ -38,6 +38,10 @@ public class Emitter {
 		eventDistribution = new LinkedHashMap<String, Integer>();
 		eventsTotalCount = 0;
 		eventDistributionColor = new HashMap<String, Float>();
+		
+		lastSectionsCount = 0;
+		eventLowerAngle = new HashMap<String, Float>();
+		eventHigherAngle = new HashMap<String, Float>();
 	}
 	
 	public void addParticles(ArrayList<Event> newData, Params params) {
@@ -68,26 +72,29 @@ public class Emitter {
 		// divide the circle according to the event distribution
 		Iterator<String> eventDistNames = eventDistribution.keySet().iterator();
 		Iterator<Integer> eventsDistCount = eventDistribution.values().iterator();
-		
-		HashMap<String, Float> eventLowerAngle = new HashMap<String, Float>();
-		HashMap<String, Float> eventHigherAngle = new HashMap<String, Float>();
-		
-		float lastAngle = 0;
-		
-		while(eventDistNames.hasNext()) {
-			String procName = eventDistNames.next();
-			int size = eventsDistCount.next();
+						
+		if (eventDistribution.size() != lastSectionsCount) {
 			
-			float relativeSize = PApplet.map(size, 1, eventsTotalCount, 0, 360);
+			eventLowerAngle = new HashMap<String, Float>();
+			eventHigherAngle = new HashMap<String, Float>();
 			
-			eventLowerAngle.put(procName, lastAngle);
-			eventHigherAngle.put(procName, lastAngle + relativeSize);
-			lastAngle = lastAngle + relativeSize;
-		}
+			float lastAngle = 0;
+			
+			while(eventDistNames.hasNext()) {
+				String procName = eventDistNames.next();
+				int size = eventsDistCount.next();
 				
-		//System.out.println(newData.size());
-		
-		int i = 1;
+				float relativeSize = PApplet.map(size, 0, eventsTotalCount, 0, 360);
+							
+				eventLowerAngle.put(procName, lastAngle);
+				eventHigherAngle.put(procName, lastAngle + relativeSize);
+				lastAngle = lastAngle + relativeSize;
+			}
+			
+			lastSectionsCount = eventDistribution.size();
+			
+		}
+ 
 		// for each process in the list
 		while (events.hasNext()) {
 			
@@ -98,24 +105,28 @@ public class Emitter {
 			
 			//float angle = PApplet.map(i, 1, elementsCount, 1, 360);
 			
-			float Min = eventLowerAngle.get(event.processName);
-			float Max = eventHigherAngle.get(event.processName);
+			float Min = eventLowerAngle.get(event.processName) + 10 ;
+			float Max = eventHigherAngle.get(event.processName) - 10;
 			
 			//p.println("processName :" + event.processName);
 			//p.println("Min : " + Min + " Max : " + Max);
-			//float angle = Min + (int)(Math.random() * ((Max - Min) + 1));
-			float angle = Max;
+			
+			//float angle = Min + (int)(Math.random() * ((Max - Min) + 1));			
+			float angle = (Max - Min) /2 ;
+			
 			//p.println("angle :" + angle);
 			//float angleIncr = 360 / elementsCount;
 			
-//			p.println(" l : " + eventLowerAngle.toString());
-//			p.println(" h : " + eventHigherAngle.toString());
-//			p.println(" c : " + eventDistributionColor.toString());
+//			p.println(" l : " + eventLowerAngle.get("redis-server").toString());
+//			p.println(" h : " + eventHigherAngle.get("redis-server").toString());
+//			//p.println(" c : " + eventDistributionColor.toString());
 		
-			//p.line((float) Math.cos(angle) * params.emitterRadius, 
-			//(float) Math.sin(angle) * params.emitterRadius, centerX, centerY);			
+//			p.line((float) Math.cos(angle) * params.emitterRadius, 
+//					(float) Math.sin(angle) * params.emitterRadius, centerX, centerY);			
 			
-			//float randomIncr = p.random(0, 0.5f);
+			float randomIncr = p.random(0, 0.5f);
+			
+			angle = angle + randomIncr;
 						
 			while(syscallName.hasNext()) { 
 				int latency = syscallName.next();
@@ -125,8 +136,8 @@ public class Emitter {
 				newP.setup(new PVector(centerX, centerY), params);											
 								
 				
-				newP.color = angle;
-				//newP.color = (float) eventDistributionColor.get(event.processName);
+				//newP.color = angle;
+				newP.color = (float) eventDistributionColor.get(event.processName);
 				
 				//newP.velocity.rotate(angle);
 				//newP.acceleration.rotate(angle);
@@ -140,8 +151,7 @@ public class Emitter {
 				newP.size = (float) Math.sqrt(newP.size * eventCount);
 				
 				particlesList.add(newP);
-			}
-			i++;
+			}			
 		}
 		
 		//p.map(value, start1, stop1, start2, stop2)		
