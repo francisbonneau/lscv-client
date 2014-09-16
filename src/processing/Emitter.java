@@ -74,7 +74,7 @@ public class Emitter {
 		}
 		
 		// if a new process name appeared, recalculate sections
-		if (eventDistribution.size() != lastSectionsCount) {
+		//if (eventDistribution.size() != lastSectionsCount) {
 								
 			// divide the circle according to the event distribution
 			Iterator<String> eventDistNames = eventDistribution.keySet().iterator();
@@ -98,11 +98,11 @@ public class Emitter {
 				lastAngle = lastAngle + relativeSize;
 				
 				// also add labels
-				float Min = lastAngle + 10;
-				float Max = lastAngle + relativeSize - 10;
-				float angle = p.radians((Max - Min) /2);
-				
-				float radius = params.emitterRadius;
+//				float Min = lastAngle + 10;
+//				float Max = lastAngle + relativeSize - 10;
+				//float angle = p.radians((Max - Min) /2);				
+				float angle = lastAngle + relativeSize;				
+				float radius = 100;
 				float textXposition = (float) Math.cos(angle) * (radius + centerX);
 				float textYposition = (float) Math.sin(angle) * (radius + centerY);				
 				float color = this.eventDistributionColor.get(procName); 				
@@ -111,7 +111,7 @@ public class Emitter {
 			}
 										
 			lastSectionsCount = eventDistribution.size();			
-		}
+		//}
 	
  
 		// for each process in the list
@@ -130,8 +130,9 @@ public class Emitter {
 			//p.println("processName :" + event.processName);
 			//p.println("Min : " + Min + " Max : " + Max);
 			
-			//float angle = Min + (int)(Math.random() * ((Max - Min) + 1));			
-			float angle = (Max - Min) /2 ;
+			float angle = Min + (int)(Math.random() * ((Max - Min) + 1));			
+			//float angle = (Max - Min) /2 ;
+			//float angle = Max;
 			
 			//p.println("angle :" + angle);
 			//float angleIncr = 360 / elementsCount;
@@ -151,20 +152,14 @@ public class Emitter {
 				int eventCount = syscallData.next();
 				
 				Particle newP = new Particle(p, event);
-				newP.setup(new PVector(centerX, centerY), params);											
-								
-				
-				//newP.color = angle;
+				newP.setup(new PVector(centerX, centerY), params);
 				newP.color = (float) eventDistributionColor.get(event.processName);
 				
-				//newP.velocity.rotate(angle);
-				//newP.acceleration.rotate(angle);
-				
 				float newAcceleration = PApplet.map(latency, 1, 1000000, 0.1f, 100);				
-				newP.acceleration = new PVector(newAcceleration,newAcceleration);
+				newP.acceleration = new PVector(newAcceleration, newAcceleration);
 				
-				newP.velocity.rotate(angle);
-				newP.acceleration.rotate(angle);
+				newP.velocity.rotate(PApplet.radians(angle));
+				newP.acceleration.rotate(PApplet.radians(angle));
 																			
 				newP.size = (float) Math.sqrt(newP.size * eventCount);
 				
@@ -197,13 +192,13 @@ public class Emitter {
 	public void drawLabels() { 
 		for (EmitterLabel label : labelsList) {
 			label.drawLabel();
-		}		
+		}
 	}
 	
 	public void drawParticles() {		
 		for (Particle particle : particlesList) {
 			particle.draw();
-		}		
+		}
 	}
 	
 	public void drawRadius(int color, float radius) {
@@ -211,8 +206,7 @@ public class Emitter {
 		p.stroke(0,0,color);
 		p.fill(0,0,10);
 		p.ellipse(centerX, centerY, radius, radius);
-	}
-	
+	}	
 	
 	public void update(Params params) {
 		updateParticles(params);
@@ -225,7 +219,7 @@ public class Emitter {
 				params.emitterRadius);
 					
 		drawParticles();
-		drawLabels();
+		//drawLabels();
 	}
 	
 }
