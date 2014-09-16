@@ -26,10 +26,11 @@ public class Emitter {
 	public LinkedHashMap<String, Integer> eventDistribution;
 	public long eventsTotalCount;
 	public HashMap<String, Float> eventDistributionColor;
-	
-	int lastSectionsCount;
+
 	HashMap<String, Float> eventLowerAngle;
 	HashMap<String, Float> eventHigherAngle;
+	
+	Integer lastEventDistSize;
 
 	public Emitter(PApplet p, int x, int y) {
 		this.p = p;
@@ -40,18 +41,16 @@ public class Emitter {
 		eventDistribution = new LinkedHashMap<String, Integer>();
 		eventsTotalCount = 0;
 		eventDistributionColor = new HashMap<String, Float>();
-		
-		lastSectionsCount = 0;
+
 		eventLowerAngle = new HashMap<String, Float>();
 		eventHigherAngle = new HashMap<String, Float>();
 		
 		labelsList = new ArrayList<>();
+		lastEventDistSize = 0;
 	}
 	
 	public void addParticles(ArrayList<Event> newData, Params params) {
 		
-		int elementsCount = newData.size();
- 
 		Iterator<Event> events = newData.iterator();
 		
 		// the filtering ordering should be by username, process name, then syscall
@@ -73,80 +72,56 @@ public class Emitter {
 			eventsTotalCount = eventsTotalCount + 1;
 		}
 		
-		// if a new process name appeared, recalculate sections
-		//if (eventDistribution.size() != lastSectionsCount) {
-								
-			// divide the circle according to the event distribution
-			Iterator<String> eventDistNames = eventDistribution.keySet().iterator();
-			Iterator<Integer> eventsDistCount = eventDistribution.values().iterator();
-			
-			eventLowerAngle = new HashMap<String, Float>();
-			eventHigherAngle = new HashMap<String, Float>();
-			
-			float lastAngle = 0;
-			
-			labelsList = new ArrayList<>();
-			
-			while(eventDistNames.hasNext()) {
-				String procName = eventDistNames.next();
-				int size = eventsDistCount.next();
-				
-				float relativeSize = PApplet.map(size, 0, eventsTotalCount, 0, 360);
 							
-				eventLowerAngle.put(procName, lastAngle);
-				eventHigherAngle.put(procName, lastAngle + relativeSize);
-				lastAngle = lastAngle + relativeSize;
+		// divide the circle according to the event distribution
+		Iterator<String> eventDistNames = eventDistribution.keySet().iterator();
+		Iterator<Integer> eventsDistCount = eventDistribution.values().iterator();
+		
+		eventLowerAngle = new HashMap<String, Float>();
+		eventHigherAngle = new HashMap<String, Float>();
+		
+		float lastAngle = 0;
+		
+		if (eventDistribution.size() != lastEventDistSize) {
+			labelsList = new ArrayList<>();	
+		}		
+		
+		while(eventDistNames.hasNext()) {
+			String procName = eventDistNames.next();
+			int size = eventsDistCount.next();
+			
+			float relativeSize = PApplet.map(size, 0, eventsTotalCount, 0, 360);
+						
+			eventLowerAngle.put(procName, lastAngle);
+			eventHigherAngle.put(procName, lastAngle + relativeSize);
+			lastAngle = lastAngle + relativeSize;
+			
+			// recalculate labels if the number of elements has changed
+			
+			if (eventDistribution.size() != lastEventDistSize) {
+				float angle = (lastAngle + lastAngle + relativeSize)/2;				
+				float radius = params.emitterRadius/2 + 35;
+				float textXposition = (float) Math.cos(angle) * radius + centerX;
+				float textYposition = (float) Math.sin(angle) * radius + centerY;
 				
-				// also add labels
-//				float Min = lastAngle + 10;
-//				float Max = lastAngle + relativeSize - 10;
-				//float angle = p.radians((Max - Min) /2);				
-				float angle = lastAngle + relativeSize;				
-				float radius = 100;
-				float textXposition = (float) Math.cos(angle) * (radius + centerX);
-				float textYposition = (float) Math.sin(angle) * (radius + centerY);				
 				float color = this.eventDistributionColor.get(procName); 				
 				EmitterLabel label = new EmitterLabel(p, procName, 15, color, textXposition, textYposition);
 				labelsList.add(label);
-			}
-										
-			lastSectionsCount = eventDistribution.size();			
-		//}
-	
- 
+			}				
+		}
+		lastEventDistSize = eventDistribution.size();
+			
 		// for each process in the list
 		while (events.hasNext()) {
+			Event event = events.next();		
 			
-			Event event = events.next();			
-		
 			Iterator<Integer> syscallName = event.latencyBreakdown.keySet().iterator();
 			Iterator<Integer> syscallData = event.latencyBreakdown.values().iterator();
 			
-			//float angle = PApplet.map(i, 1, elementsCount, 1, 360);
-			
 			float Min = eventLowerAngle.get(event.processName) + 10 ;
-			float Max = eventHigherAngle.get(event.processName) - 10;
-			
-			//p.println("processName :" + event.processName);
-			//p.println("Min : " + Min + " Max : " + Max);
-			
+			float Max = eventHigherAngle.get(event.processName) - 10;			
 			float angle = Min + (int)(Math.random() * ((Max - Min) + 1));			
-			//float angle = (Max - Min) /2 ;
-			//float angle = Max;
-			
-			//p.println("angle :" + angle);
-			//float angleIncr = 360 / elementsCount;
-			
-//			p.println(" l : " + eventLowerAngle.get("redis-server").toString());
-//			p.println(" h : " + eventHigherAngle.get("redis-server").toString());
-//			//p.println(" c : " + eventDistributionColor.toString());
 		
-//			p.line((float) Math.cos(angle) * params.emitterRadius, 
-//					(float) Math.sin(angle) * params.emitterRadius, centerX, centerY);			
-			
-			//float randomIncr = p.random(0, 0.5f);		
-			//angle = angle + randomIncr;
-						
 			while(syscallName.hasNext()) { 
 				int latency = syscallName.next();
 				int eventCount = syscallData.next();
@@ -165,9 +140,7 @@ public class Emitter {
 				
 				particlesList.add(newP);
 			}
-		}
-		
-		//p.map(value, start1, stop1, start2, stop2)		
+		}		
 	}
 	
 	public void updateParticles(Params params) {
@@ -219,7 +192,7 @@ public class Emitter {
 				params.emitterRadius);
 					
 		drawParticles();
-		//drawLabels();
+		drawLabels();
 	}
 	
 }
