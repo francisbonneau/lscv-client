@@ -19,6 +19,8 @@ public class Emitter {
 	
 	public List<Particle> particlesList;
 	
+	public List<EmitterLabel> labelsList;
+	
 	// It is exactly like HashMap, except that when you iterate over it,
 	// it presents the items in the insertion order.
 	public LinkedHashMap<String, Integer> eventDistribution;
@@ -42,6 +44,8 @@ public class Emitter {
 		lastSectionsCount = 0;
 		eventLowerAngle = new HashMap<String, Float>();
 		eventHigherAngle = new HashMap<String, Float>();
+		
+		labelsList = new ArrayList<>();
 	}
 	
 	public void addParticles(ArrayList<Event> newData, Params params) {
@@ -69,16 +73,19 @@ public class Emitter {
 			eventsTotalCount = eventsTotalCount + 1;
 		}
 		
-		// divide the circle according to the event distribution
-		Iterator<String> eventDistNames = eventDistribution.keySet().iterator();
-		Iterator<Integer> eventsDistCount = eventDistribution.values().iterator();
-						
+		// if a new process name appeared, recalculate sections
 		if (eventDistribution.size() != lastSectionsCount) {
+								
+			// divide the circle according to the event distribution
+			Iterator<String> eventDistNames = eventDistribution.keySet().iterator();
+			Iterator<Integer> eventsDistCount = eventDistribution.values().iterator();
 			
 			eventLowerAngle = new HashMap<String, Float>();
 			eventHigherAngle = new HashMap<String, Float>();
 			
 			float lastAngle = 0;
+			
+			labelsList = new ArrayList<>();
 			
 			while(eventDistNames.hasNext()) {
 				String procName = eventDistNames.next();
@@ -89,11 +96,23 @@ public class Emitter {
 				eventLowerAngle.put(procName, lastAngle);
 				eventHigherAngle.put(procName, lastAngle + relativeSize);
 				lastAngle = lastAngle + relativeSize;
+				
+				// also add labels
+				float Min = lastAngle + 10;
+				float Max = lastAngle + relativeSize - 10;
+				float angle = p.radians((Max - Min) /2);
+				
+				float radius = params.emitterRadius;
+				float textXposition = (float) Math.cos(angle) * (radius + centerX);
+				float textYposition = (float) Math.sin(angle) * (radius + centerY);				
+				float color = this.eventDistributionColor.get(procName); 				
+				EmitterLabel label = new EmitterLabel(p, procName, 15, color, textXposition, textYposition);
+				labelsList.add(label);
 			}
-			
-			lastSectionsCount = eventDistribution.size();
-			
+										
+			lastSectionsCount = eventDistribution.size();			
 		}
+	
  
 		// for each process in the list
 		while (events.hasNext()) {
@@ -124,9 +143,8 @@ public class Emitter {
 //			p.line((float) Math.cos(angle) * params.emitterRadius, 
 //					(float) Math.sin(angle) * params.emitterRadius, centerX, centerY);			
 			
-			float randomIncr = p.random(0, 0.5f);
-			
-			angle = angle + randomIncr;
+			//float randomIncr = p.random(0, 0.5f);		
+			//angle = angle + randomIncr;
 						
 			while(syscallName.hasNext()) { 
 				int latency = syscallName.next();
@@ -151,7 +169,7 @@ public class Emitter {
 				newP.size = (float) Math.sqrt(newP.size * eventCount);
 				
 				particlesList.add(newP);
-			}			
+			}
 		}
 		
 		//p.map(value, start1, stop1, start2, stop2)		
@@ -174,6 +192,12 @@ public class Emitter {
 			}
 		}
 		
+	}
+	
+	public void drawLabels() { 
+		for (EmitterLabel label : labelsList) {
+			label.drawLabel();
+		}		
 	}
 	
 	public void drawParticles() {		
@@ -201,6 +225,7 @@ public class Emitter {
 				params.emitterRadius);
 					
 		drawParticles();
+		drawLabels();
 	}
 	
 }
