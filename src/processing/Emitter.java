@@ -99,15 +99,20 @@ public class Emitter {
 			// recalculate labels if the number of elements has changed
 			
 			//if (eventDistribution.size() != lastEventDistSize) {
-				float angle = p.radians((lastAngle));				
-				float radius = params.emitterRadius/2;
-				float textXposition = (float) Math.cos(angle) * radius + centerX;
-				float textYposition = (float) Math.sin(angle) * radius + centerY;
+			
+				float Min = eventLowerAngle.get(procName);
+				float Max = eventHigherAngle.get(procName);
+				float angle = (Min + Max)/2 + 45;
+				float radius = params.emitterRadius/2 + 35;
+				float textXposition = (float) Math.cos(p.radians(angle)) * radius + centerX;
+				float textYposition = (float) Math.sin(p.radians(angle)) * radius + centerY;
 				
 				float color = this.eventDistributionColor.get(procName); 				
 				EmitterLabel label = new EmitterLabel(p, procName, 15, color, textXposition, textYposition);
 				labelsList.add(label);
-			//}				
+			//}
+				
+			
 		}
 		//lastEventDistSize = eventDistribution.size();
 			
@@ -118,8 +123,8 @@ public class Emitter {
 			Iterator<Integer> syscallName = event.latencyBreakdown.keySet().iterator();
 			Iterator<Integer> syscallData = event.latencyBreakdown.values().iterator();
 			
-			float Min = eventLowerAngle.get(event.processName) + 10 ;
-			float Max = eventHigherAngle.get(event.processName) - 10;			
+			float Min = eventLowerAngle.get(event.processName);
+			float Max = eventHigherAngle.get(event.processName);			
 			float angle = Min + (int)(Math.random() * ((Max - Min) + 1));			
 		
 			while(syscallName.hasNext()) { 
