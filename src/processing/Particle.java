@@ -1,8 +1,8 @@
 package processing;
 import data.Event;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PVector;
-
 
 public class Particle {
 	
@@ -37,7 +37,7 @@ public class Particle {
 	
 	public void draw() {
 		p.stroke(0);
-		p.colorMode(p.HSB, 360, 100, 100);
+		p.colorMode(PConstants.HSB, 360, 100, 100);
 		p.fill(color, 100, 100);
 		p.ellipse(location.x, location.y, size, size);
 	}

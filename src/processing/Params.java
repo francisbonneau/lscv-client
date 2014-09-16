@@ -1,6 +1,5 @@
 package processing;
 
-import processing.core.PVector;
 
 public class Params {
 	
@@ -8,8 +7,8 @@ public class Params {
 	
 	// display parameters
 	public boolean fullscreen = false;
-	public int defaultHeight = 1200;
-	public int defaultWidth = 1200;
+	public int defaultHeight = 900;
+	public int defaultWidth = 900;
 	public int framerate = 30;
 	public boolean fpsCounter = true;
 	public boolean resizable = false; 

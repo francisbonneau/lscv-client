@@ -1,6 +1,7 @@
 package processing;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 
 public class EmitterLabel {
 	
@@ -25,7 +26,7 @@ public class EmitterLabel {
 	
 	public void drawLabel() {
 		
-		p.colorMode(p.HSB, 360, 100, 100);		
+		p.colorMode(PConstants.HSB, 360, 100, 100);		
 		p.textSize(textSize);		
 		p.fill(this.color, 100, 100);
 		p.text(text, positionX, positionY);
