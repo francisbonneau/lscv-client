@@ -15,7 +15,7 @@ public class Params {
 	public boolean resizable = false; 
 	
 	// data source
-	public String[] hosts = { "127.0.0.1:6379" };
+	public String[] hosts = { "10.0.0.60:6379" };
 	
 	// visualisation parameters
 	
@@ -45,5 +45,7 @@ public class Params {
 	public float particleVelocity = 1;
 	public float particleAcceleration = 0.25f;
 	public float particleSize = 10;
+	
+	
 	
 }

@@ -6,7 +6,9 @@ import processing.core.PVector;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Random;
 
 import org.msgpack.type.RawValue;
 
@@ -21,29 +23,69 @@ public class Emitter {
 	
 	public List<Particle> particlesList;
 	
-	HashMap<String, Integer> particlesCount;
+	// It is exactly like HashMap, except that when you iterate over it,
+	// it presents the items in the insertion order.
+	public LinkedHashMap<String, Integer> eventDistribution;
+	public long eventsTotalCount;
+	public HashMap<String, Float> eventDistributionColor;
 
 	public Emitter(PApplet p, int x, int y) {
 		this.p = p;
 		this.centerX = x;
 		this.centerY = y;
 		particlesList = new ArrayList<>();
+		
+		eventDistribution = new LinkedHashMap<String, Integer>();
+		eventsTotalCount = 0;
+		eventDistributionColor = new HashMap<String, Float>();
 	}
 	
 	public void addParticles(ArrayList<Event> newData, Params params) {
 		
 		int elementsCount = newData.size();
-		
-		
-		
-//		// example of a key : compiz
-//		Iterator<String> keys = newData.keySet().iterator();
-//		// value ex : 5100 => 1, 12400 => 3, 30000 => 2,
-//		Iterator<HashMap<Integer, Integer>> values = newData.values().iterator();
-		
+ 
 		Iterator<Event> events = newData.iterator();
 		
-		System.out.println(newData.size());
+		// the filtering ordering should be by username, process name, then syscall
+		// but pocess name is a good default
+		for (Event e : newData) {
+			if (eventDistribution.containsKey(e.processName)) { 
+				int lastVal = eventDistribution.get(e.processName);
+				eventDistribution.put(e.processName, lastVal + 1);
+			}					
+			else {				
+				// new process
+				eventDistribution.put(e.processName, 1);
+										
+				//Random randomno = new Random();				
+				//float hue = randomno.nextFloat() * 200;
+				float hue = 0 + (int)(Math.random() * ((255 - 0) + 1));
+				eventDistributionColor.put(e.processName, hue);
+			}
+			eventsTotalCount = eventsTotalCount + 1;
+		}
+		
+		// divide the circle according to the event distribution
+		Iterator<String> eventDistNames = eventDistribution.keySet().iterator();
+		Iterator<Integer> eventsDistCount = eventDistribution.values().iterator();
+		
+		HashMap<String, Float> eventLowerAngle = new HashMap<String, Float>();
+		HashMap<String, Float> eventHigherAngle = new HashMap<String, Float>();
+		
+		float lastAngle = 0;
+		
+		while(eventDistNames.hasNext()) {
+			String procName = eventDistNames.next();
+			int size = eventsDistCount.next();
+			
+			float relativeSize = PApplet.map(size, 1, eventsTotalCount, 0, 360);
+			
+			eventLowerAngle.put(procName, lastAngle);
+			eventHigherAngle.put(procName, lastAngle + relativeSize);
+			lastAngle = lastAngle + relativeSize;
+		}
+				
+		//System.out.println(newData.size());
 		
 		int i = 1;
 		// for each process in the list
@@ -54,17 +96,26 @@ public class Emitter {
 			Iterator<Integer> syscallName = event.latencyBreakdown.keySet().iterator();
 			Iterator<Integer> syscallData = event.latencyBreakdown.values().iterator();
 			
-			float angle = PApplet.map(i, 1, elementsCount, 1, 360);			
-			float angleIncr = 360 / elementsCount;
+			//float angle = PApplet.map(i, 1, elementsCount, 1, 360);
 			
+			float Min = eventLowerAngle.get(event.processName);
+			float Max = eventHigherAngle.get(event.processName);
+			
+			//p.println("processName :" + event.processName);
+			//p.println("Min : " + Min + " Max : " + Max);
+			//float angle = Min + (int)(Math.random() * ((Max - Min) + 1));
+			float angle = Max;
+			//p.println("angle :" + angle);
+			//float angleIncr = 360 / elementsCount;
+			
+//			p.println(" l : " + eventLowerAngle.toString());
+//			p.println(" h : " + eventHigherAngle.toString());
+//			p.println(" c : " + eventDistributionColor.toString());
+		
 			//p.line((float) Math.cos(angle) * params.emitterRadius, 
 			//(float) Math.sin(angle) * params.emitterRadius, centerX, centerY);			
 			
 			//float randomIncr = p.random(0, 0.5f);
-			
-//			p.println("elementsCount" + elementsCount);
-//			p.println("angle" + angle);
-//			p.println("angleincr" + angleIncr);
 						
 			while(syscallName.hasNext()) { 
 				int latency = syscallName.next();
@@ -73,7 +124,9 @@ public class Emitter {
 				Particle newP = new Particle(p, event);
 				newP.setup(new PVector(centerX, centerY), params);											
 								
+				
 				newP.color = angle;
+				//newP.color = (float) eventDistributionColor.get(event.processName);
 				
 				//newP.velocity.rotate(angle);
 				//newP.acceleration.rotate(angle);
