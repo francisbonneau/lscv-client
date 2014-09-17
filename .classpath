@@ -16,6 +16,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="processing2.2.1-core.jar"/>
+	<classpathentry kind="lib" path="lib/controlP5.jar"/>
+	<classpathentry kind="lib" path="lib/processing2.2.1-core.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

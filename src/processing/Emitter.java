@@ -64,9 +64,8 @@ public class Emitter {
 				// new process
 				eventDistribution.put(e.processName, 1);
 										
-				//Random randomno = new Random();				
-				//float hue = randomno.nextFloat() * 200;
-				float hue = 0 + (int)(Math.random() * ((255 - 0) + 1));
+				// Generate a new color randomly
+				float hue = 0 + (int)(Math.random() * ((360 - 0) + 1));				
 				eventDistributionColor.put(e.processName, hue);
 			}
 			eventsTotalCount = eventsTotalCount + 1;
