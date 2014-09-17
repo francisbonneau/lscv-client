@@ -1,70 +1,82 @@
 package processing;
-import data.*;
-import processing.core.*;
-
 import java.awt.Frame;
-import java.awt.BorderLayout;
 
-import controlP5.*;
+import processing.core.PApplet;
+import controlP5.ControlP5;
+import data.SourceAggregator;
 
 public class RenderLoop extends PApplet {
 	
-	private static final long serialVersionUID = 1L;
-	
-	public Params params;
-	
+	private static final long serialVersionUID = 1L;	
+	public Params params;	
 	public Hud hud;
 	
-	public static void main(String args[]) {
-		
-		// fullscreen on 
-		//PApplet.main(new String[] { "--present", "processing.RenderLoop" });
-		
-		// fullscreen off
-		PApplet.main(new String[] { "processing.RenderLoop" });
+	// Single parameter outside of the Params class for the static context
+	public static boolean fullscreenMode = true;
+	
+	// Main method for starting the PApplet
+	public static void main(String args[]) {		
+		if (fullscreenMode) {
+			PApplet.main(new String[] { "--present", "processing.RenderLoop" });
+		} else {
+			PApplet.main(new String[] { "processing.RenderLoop" });
+		}			
 	}
 
+	// Setup the application
 	public void setup() {
 		
-		params = new Params(); // default parameters			
+		params = new Params(); // default parameters initialisation	
+		params.fullscreen = fullscreenMode;
 		
 		if (params.fullscreen) // screen settings
 			size(displayWidth, displayHeight);
 		else
 			size(params.defaultWidth, params.defaultHeight);
-					
-		frameRate(params.framerate);
+		
+		frameRate(params.framerate);  // frames per second limit
 		
 		if (this.params.resizable)
-			frame.setResizable(true);
-									
-		colorMode(HSB,360,100,100);
+			frame.setResizable(true); // resizable window (non-fullscreen)
+		
+		colorMode(HSB,360,100,100);   // default color mode 
 	 
-		// Data source		
-		SourceAggregator da = new SourceAggregator(this);
-		// Data display
+		// Data source setup
+		SourceAggregator dataSourceAgg = new SourceAggregator(this);
+		
+		// Data visualisation setup
 		hud = new Hud(this);
-		hud.setDataSource(da);
+		hud.setDataSource(dataSourceAgg);
 		hud.addEmitter();
 		
-		// -------------------------------- CONTROLP5 SETUP              
+		// User interface controls setup              
 		ControlP5 cp5 = new ControlP5(this);
-		ControlFrame cf = addControlFrame("Settings", 600,400);
+		//ControlFrame cf = addControlFrame("Settings", 600,400);
 		
-	}
-	
-	ControlFrame addControlFrame(String theName, int theWidth, int theHeight) {
-		Frame f = new Frame(theName);
-		ControlFrame p = new ControlFrame(this, theWidth, theHeight);
-		f.add(p);
-		p.init();
-		f.setTitle(theName);
-		f.setSize(p.w, p.h);
+		Frame f = new Frame("Settings");
+		ControlFrame cf = new ControlFrame(this, 600, 400);
+		f.add(cf);
+		cf.init();
+		f.setTitle("Settings");
+		f.setSize(cf.w, cf.h);
 		f.setLocation(100, 100);
 		f.setResizable(false);
 		f.setVisible(true);
-		return p;
 	}
+	
+	// User interface controls are in separate window, configured here
+//	ControlFrame addControlFrame(String theName, int theWidth, int theHeight) {
+//		Frame f = new Frame(theName);
+//		ControlFrame p = new ControlFrame(this, theWidth, theHeight);
+//		f.add(p);
+//		p.init();
+//		f.setTitle(theName);
+//		f.setSize(p.w, p.h);
+//		f.setLocation(100, 100);
+//		f.setResizable(false);
+//		f.setVisible(true);
+//		return p;
+//	}
 
 	public void draw() {
 	 
