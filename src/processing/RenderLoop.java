@@ -49,47 +49,28 @@ public class RenderLoop extends PApplet {
 		hud.setDataSource(dataSourceAgg);
 		hud.addEmitter();
 		
-		// User interface controls setup              
-		ControlP5 cp5 = new ControlP5(this);
-		//ControlFrame cf = addControlFrame("Settings", 600,400);
-		
+		// UI controls are in separate window, configured here
+		ControlP5 cp5 = new ControlP5(this);			
 		Frame f = new Frame("Settings");
 		ControlFrame cf = new ControlFrame(this, 600, 400);
 		f.add(cf);
 		cf.init();
 		f.setTitle("Settings");
-		f.setSize(cf.w, cf.h);
+		f.setSize(cf.width, cf.height);
 		f.setLocation(100, 100);
 		f.setResizable(false);
 		f.setVisible(true);
 	}
 	
-	// User interface controls are in separate window, configured here
-//	ControlFrame addControlFrame(String theName, int theWidth, int theHeight) {
-//		Frame f = new Frame(theName);
-//		ControlFrame p = new ControlFrame(this, theWidth, theHeight);
-//		f.add(p);
-//		p.init();
-//		f.setTitle(theName);
-//		f.setSize(p.w, p.h);
-//		f.setLocation(100, 100);
-//		f.setResizable(false);
-//		f.setVisible(true);
-//		return p;
-//	}
-
-	public void draw() {
-	 
+	// Main screen refresh function
+	public void draw() {		
+		
 		background(0,0,10);
 		smooth();
-
-		stroke(255);
+		noStroke();
 		
 		if (params.fpsCounter)
 			displayFPSCounter();
-		
-		if (mousePressed)
-			line(mouseX, mouseY, pmouseX, pmouseY);
 		
 		hud.updateDisplayedData(params);
 		hud.draw(params);
