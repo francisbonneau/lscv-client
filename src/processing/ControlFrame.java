@@ -37,7 +37,9 @@ public class ControlFrame extends PApplet {
 //        int theY,
 //        int theW,
 //        int theH)
- 		cp5.addSlider("Emitter Radius", 100, 2000, 10, 50, 300, 20).setDefaultValue(500).setId(1);
+ 		cp5.addSlider("Emitter Radius", 100, 2000, 10, 50, 300, 20).setId(1).setValue(rl.params.emitterRadius);
+ 		
+ 		
  		
  		//cp5.addSlider("emitterRadius2", 100, 1000, 10, 90, 300, 20).setDefaultValue(500).setId(2);
  		
@@ -64,11 +66,8 @@ public class ControlFrame extends PApplet {
 		background(0,0,10);		
 	}
 
-
 	public ControlP5 control() {
 		return cp5;
 	}
-
-
 
 }
