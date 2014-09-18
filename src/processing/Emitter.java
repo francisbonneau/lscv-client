@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PVector;
 import data.Event;
 
@@ -134,8 +135,11 @@ public class Emitter {
 				newP.setup(new PVector(centerX, centerY), params);
 				newP.color = (float) eventDistributionColor.get(event.processName);
 				
-				float newAcceleration = PApplet.map(latency, 1, 1000000, 0.1f, 100);				
-				newP.acceleration = new PVector(newAcceleration, newAcceleration);
+				float newVelocity = PApplet.map(latency, 1, 1000000,
+						params.particleCurrentMinVelocity, params.particleCurrentMaxVelocity);
+				
+				newP.velocity = new PVector(newVelocity, newVelocity);
+				newP.acceleration = new PVector(params.particleAcceleration, params.particleAcceleration);
 				
 				newP.velocity.rotate(PApplet.radians(angle));
 				newP.acceleration.rotate(PApplet.radians(angle));
@@ -178,10 +182,12 @@ public class Emitter {
 		}
 	}
 	
-	public void drawRadius(int color, float radius) {
+	public void drawRadius(float backgroundBrightness, float emitterRadiusColor, 
+			float radius) {
 		// draw emitters radius
-		p.stroke(0,0,color);
-		p.fill(0,0,10);
+		p.colorMode(PConstants.HSB,360,100,100);
+		p.stroke(0,0,emitterRadiusColor);
+		p.fill(0,0,backgroundBrightness);
 		p.ellipse(centerX, centerY, radius, radius);
 	}	
 	
@@ -192,8 +198,8 @@ public class Emitter {
 	public void draw(Params params) {
 		
 		if (params.drawEmitterRadius)
-			drawRadius(params.emitterRadiusColor, 
-				params.emitterRadius);
+			drawRadius(params.backgroundBrightness, 
+					params.emitterRadiusBrightness, params.emitterRadius);
 					
 		drawParticles();
 		drawLabels();

@@ -1,0 +1,105 @@
+package processing;
+
+import processing.core.PApplet;
+import processing.core.PFont;
+import controlP5.ControlEvent;
+import controlP5.ControlP5;
+import controlP5.Textlabel;
+
+//the ControlFrame class extends PApplet, so we
+// are creating a new processing applet inside a
+// new frame with a controlP5 object loaded
+public class ControlPanel extends PApplet {
+ 
+	private static final long serialVersionUID = 1L;
+
+	ControlP5 cp5;
+	private RenderLoop rl;
+	
+	int width, height;
+	int abc = 100;
+	
+	public ControlPanel(RenderLoop rl, int width, int height) {
+		this.rl = rl;
+		this.width = width;
+		this.height = height;
+	}
+
+	public void setup() {
+		size(width, height);
+		frameRate(25);
+		cp5 = new ControlP5(this);
+		
+//		java.lang.Object theObject,
+//        java.lang.String theIndex,
+//        java.lang.String theName,
+//        float theMin,
+//        float theMax,
+//        int theX,
+//        int theY,
+//        int theW,
+//        int theH)
+		
+		PFont pfont = loadFont("OpenSans-14.vlw");
+		cp5.setFont(pfont);
+		
+		cp5.addTextlabel("label", "GLOBAL SETTINGS",20,20);
+ 				
+		
+		cp5.addSlider("Background brightness", 0, 100, 30, 50, 500, 15).setId(1).setValue(rl.params.backgroundBrightness);
+		
+		cp5.addSlider("Emitter radius", 100, 2000, 30, 75, 500, 15).setId(2).setValue(rl.params.emitterRadius);
+		
+		cp5.addSlider("Radius brightness", 0, 100, 30, 100, 500, 15).setId(3).setValue(rl.params.emitterRadiusBrightness);
+		
+		cp5.addSlider("Particle size", 1, 400, 30, 125, 500, 15).setId(4).setValue(rl.params.particleSize);
+		
+		
+		cp5.addRange("Particle velocity", rl.params.particleMinVelocity, rl.params.particleMaxVelocity,
+				rl.params.particleCurrentMinVelocity, rl.params.particleCurrentMaxVelocity, 30, 150, 500, 15).setId(5);
+		
+		//cp5.addSlider("Particle Max velocity", 1, 10000, 30, 150, 500, 15).setId(5).setValue(rl.params.particleMaxVelocity);
+		
+		cp5.addSlider("Particle acceleration", 0, 1, 30, 175, 500, 15).setId(6).setValue(rl.params.particleAcceleration);
+		
+		
+	}
+	
+	public void controlEvent(ControlEvent theEvent) {
+		println("got a control event from controller with id " + theEvent.getController().getId());
+
+		float newValue = theEvent.getController().getValue();
+		
+		switch (theEvent.getController().getId()) {
+		case (1):
+			rl.params.backgroundBrightness = newValue;			
+			break;
+		case (2):
+			rl.params.emitterRadius = newValue;			
+			break;
+		case (3):
+			rl.params.emitterRadiusBrightness = newValue;
+			break;
+		case (4):
+			rl.params.particleSize = newValue;
+			break;
+		case (5):
+			rl.params.particleCurrentMinVelocity = theEvent.getController().getArrayValue(0);
+			rl.params.particleCurrentMaxVelocity = theEvent.getController().getArrayValue(1);
+			break;
+		case (6):
+			rl.params.particleAcceleration = newValue;
+			break;
+		}
+	}
+
+	public void draw() {
+		colorMode(HSB,360,100,100);
+		background(0,0,0);		
+	}
+
+	public ControlP5 control() {
+		return cp5;
+	}
+
+}

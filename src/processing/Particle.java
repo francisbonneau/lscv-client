@@ -25,7 +25,7 @@ public class Particle {
 	
 	public void setup(PVector location, Params params) {				
 		this.location = location.get();
-		velocity = new PVector(params.particleVelocity, params.particleVelocity);
+		velocity = new PVector(params.particleMaxVelocity, params.particleMaxVelocity);
 		acceleration = new PVector(params.particleAcceleration, params.particleAcceleration);
 		size = params.particleSize;
 	}

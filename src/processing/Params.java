@@ -12,12 +12,12 @@ public class Params {
 	public int framerate = 30;
 	public boolean fpsCounter = true;
 	public boolean resizable = false; 
-	
+		
 	// data source
 	public String[] hosts = { "10.0.0.60:6379" };
 	
 	// visualisation parameters
-	
+		
 	// between 1 and 8, used to control the number of particles
 	// displayed by rounding up the events lat. in buckets (heat map)
 	// 10^−1 s	100 ms millisecond
@@ -36,15 +36,18 @@ public class Params {
 		"100 µs", "10 µs", "1 µs",
 		"100 ns", "10 ns", "1 ns"
 	};
-		
+	
+	public float backgroundBrightness = 10;	
 	public float emitterRadius = 500;
-	public int emitterRadiusColor = 15;
+	public float emitterRadiusBrightness = 15;
 	public boolean drawEmitterRadius = true;
 
-	public float particleVelocity = 1;
-	public float particleAcceleration = 0.25f;
-	public float particleSize = 10;
-	
+	public float particleSize = 10;		
+	public float particleMinVelocity = 1;
+	public float particleCurrentMinVelocity = 5;	
+	public float particleCurrentMaxVelocity = 80;
+	public float particleMaxVelocity = 100;	
+	public float particleAcceleration = 0;	
 	
 	
 }

@@ -52,7 +52,7 @@ public class RenderLoop extends PApplet {
 		// UI controls are in separate window, configured here
 		ControlP5 cp5 = new ControlP5(this);			
 		Frame f = new Frame("Settings");
-		ControlFrame cf = new ControlFrame(this, 600, 400);
+		ControlPanel cf = new ControlPanel(this, 800, 700);
 		f.add(cf);
 		cf.init();
 		f.setTitle("Settings");
@@ -65,7 +65,7 @@ public class RenderLoop extends PApplet {
 	// Main screen refresh function
 	public void draw() {		
 		
-		background(0,0,10);
+		background(0, 0, params.backgroundBrightness);
 		smooth();
 		noStroke();
 		
