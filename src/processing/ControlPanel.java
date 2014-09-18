@@ -30,51 +30,39 @@ public class ControlPanel extends PApplet {
 		frameRate(25);
 		cp5 = new ControlP5(this);
 		
-//		java.lang.Object theObject,
-//        java.lang.String theIndex,
-//        java.lang.String theName,
-//        float theMin,
-//        float theMax,
-//        int theX,
-//        int theY,
-//        int theW,
-//        int theH)
-		
-		PFont openSans14 = loadFont("OpenSans-14.vlw");
+ 		PFont openSans14 = loadFont("OpenSans-14.vlw");
 		PFont openSans15 = loadFont("OpenSans-15.vlw");
 		cp5.setFont(openSans14);
 		
 		cp5.addTextlabel("label1", "GLOBAL SETTINGS",20,20);
- 				
 		
 		cp5.addSlider("Background brightness", 0, 100, 30, 50, 500, 15).setId(1).setValue(rl.params.backgroundBrightness);
 		
-		cp5.addSlider("Emitter radius", 100, 2000, 30, 75, 500, 15).setId(2).setValue(rl.params.emitterRadius);
+		cp5.addSlider("Emitter radius", 100, 2000, 30, 80, 500, 15).setId(2).setValue(rl.params.emitterRadius);
 		
-		cp5.addSlider("Radius brightness", 0, 100, 30, 100, 500, 15).setId(3).setValue(rl.params.emitterRadiusBrightness);
+		cp5.addSlider("Radius brightness", 0, 100, 30, 110, 500, 15).setId(3).setValue(rl.params.emitterRadiusBrightness);
 		
-		cp5.addSlider("Particle size", 1, 400, 30, 125, 500, 15).setId(4).setValue(rl.params.particleSize);
+		cp5.addSlider("Particle size", 1, 400, 30, 140, 500, 15).setId(4).setValue(rl.params.particleSize);
 		
 		
 		cp5.addRange("Particle velocity", rl.params.particleMinVelocity, rl.params.particleMaxVelocity,
-				rl.params.particleCurrentMinVelocity, rl.params.particleCurrentMaxVelocity, 30, 150, 500, 15).setId(5);
+				rl.params.particleCurrentMinVelocity, rl.params.particleCurrentMaxVelocity, 30, 170, 500, 15).setId(5);
 		
 		//cp5.addSlider("Particle Max velocity", 1, 10000, 30, 150, 500, 15).setId(5).setValue(rl.params.particleMaxVelocity);
 		
-		cp5.addSlider("Particle acceleration", 0, 1, 30, 175, 500, 15).setId(6).setValue(rl.params.particleAcceleration);
+		cp5.addSlider("Particle acceleration", 0, 1, 30, 200, 500, 15).setId(6).setValue(rl.params.particleAcceleration);
 		
-		cp5.addSlider("Latency rounding", 1, 8, 30, 210, 500, 15).setId(7).setValue(rl.params.latencyRoundup).setNumberOfTickMarks(8).showTickMarks(true);
+		cp5.addSlider("Latency rounding", 1, 8, 30, 230, 500, 15).setId(7).setValue(rl.params.latencyRoundup).setNumberOfTickMarks(8).showTickMarks(true);
 		
 //		cp5.addTextlabel("label2", "Current event latency precision : " + 
 //				rl.params.latencyRoundupLegend[rl.params.latencyRoundup],25,245);
 		
-		cp5.addTextlabel("label2", "( " + rl.params.latencyRoundupLegend[rl.params.latencyRoundup] + " )",
-				680, 210).setFont(openSans15);
+		cp5.addTextlabel("label2", "( " + rl.params.latencyRoundupLegend[rl.params.latencyRoundup - 1] + " )",
+				680, 230).setFont(openSans15);
 	}
 	
 	public void controlEvent(ControlEvent theEvent) {
-		println("got a control event from controller with id " + theEvent.getController().getId());
-
+		
 		float newValue = theEvent.getController().getValue();
 		
 		switch (theEvent.getController().getId()) {
@@ -99,7 +87,7 @@ public class ControlPanel extends PApplet {
 			break;
 		case (7):
 			rl.params.latencyRoundup = (int) newValue;
-			cp5.get("label2").setStringValue( "( " + rl.params.latencyRoundupLegend[rl.params.latencyRoundup] + " )");			
+			cp5.get("label2").setStringValue( "( " + rl.params.latencyRoundupLegend[rl.params.latencyRoundup - 1] + " )");			
 		}
 	}
 

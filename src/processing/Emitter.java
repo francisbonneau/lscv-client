@@ -104,8 +104,8 @@ public class Emitter {
 				float Max = eventHigherAngle.get(procName);
 				float angle = (Min + Max)/2 + 45;
 				float radius = params.emitterRadius/2 + 35;
-				float textXposition = (float) Math.cos(p.radians(angle)) * radius + centerX;
-				float textYposition = (float) Math.sin(p.radians(angle)) * radius + centerY;
+				float textXposition = (float) Math.cos(PApplet.radians(angle)) * radius + centerX;
+				float textYposition = (float) Math.sin(PApplet.radians(angle)) * radius + centerY;
 				
 				float color = this.eventDistributionColor.get(procName); 				
 				EmitterLabel label = new EmitterLabel(p, procName, 15, color, textXposition, textYposition);
