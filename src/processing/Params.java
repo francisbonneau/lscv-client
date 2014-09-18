@@ -29,7 +29,7 @@ public class Params {
 	// 10^−7 s	100 ns nanosecond
 	// 10^−8 s	10  ns nanosecond
 	// 10^−9 s	1   ns nanosecond
-	public float latencyRoundup = 6;
+	public int latencyRoundup = 6;
 	
 	public String[] latencyRoundupLegend = {
 		"100 ms", "10 ms", "1 ms",

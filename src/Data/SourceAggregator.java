@@ -39,7 +39,7 @@ public class SourceAggregator implements Observer {
 		data.add(newData);
 	}
 	
-	public float getLatencyRoundup() { 
+	public int getLatencyRoundup() { 
 		return renderLoop.params.latencyRoundup;
 	}
 

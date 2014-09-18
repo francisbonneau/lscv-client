@@ -40,10 +40,11 @@ public class ControlPanel extends PApplet {
 //        int theW,
 //        int theH)
 		
-		PFont pfont = loadFont("OpenSans-14.vlw");
-		cp5.setFont(pfont);
+		PFont openSans14 = loadFont("OpenSans-14.vlw");
+		PFont openSans15 = loadFont("OpenSans-15.vlw");
+		cp5.setFont(openSans14);
 		
-		cp5.addTextlabel("label", "GLOBAL SETTINGS",20,20);
+		cp5.addTextlabel("label1", "GLOBAL SETTINGS",20,20);
  				
 		
 		cp5.addSlider("Background brightness", 0, 100, 30, 50, 500, 15).setId(1).setValue(rl.params.backgroundBrightness);
@@ -62,7 +63,13 @@ public class ControlPanel extends PApplet {
 		
 		cp5.addSlider("Particle acceleration", 0, 1, 30, 175, 500, 15).setId(6).setValue(rl.params.particleAcceleration);
 		
+		cp5.addSlider("Latency rounding", 1, 8, 30, 210, 500, 15).setId(7).setValue(rl.params.latencyRoundup).setNumberOfTickMarks(8).showTickMarks(true);
 		
+//		cp5.addTextlabel("label2", "Current event latency precision : " + 
+//				rl.params.latencyRoundupLegend[rl.params.latencyRoundup],25,245);
+		
+		cp5.addTextlabel("label2", "( " + rl.params.latencyRoundupLegend[rl.params.latencyRoundup] + " )",
+				680, 210).setFont(openSans15);
 	}
 	
 	public void controlEvent(ControlEvent theEvent) {
@@ -75,7 +82,7 @@ public class ControlPanel extends PApplet {
 			rl.params.backgroundBrightness = newValue;			
 			break;
 		case (2):
-			rl.params.emitterRadius = newValue;			
+			rl.params.emitterRadius = newValue;
 			break;
 		case (3):
 			rl.params.emitterRadiusBrightness = newValue;
@@ -85,11 +92,14 @@ public class ControlPanel extends PApplet {
 			break;
 		case (5):
 			rl.params.particleCurrentMinVelocity = theEvent.getController().getArrayValue(0);
-			rl.params.particleCurrentMaxVelocity = theEvent.getController().getArrayValue(1);
+			rl.params.particleCurrentMaxVelocity = theEvent.getController().getArrayValue(1);			
 			break;
 		case (6):
 			rl.params.particleAcceleration = newValue;
 			break;
+		case (7):
+			rl.params.latencyRoundup = (int) newValue;
+			cp5.get("label2").setStringValue( "( " + rl.params.latencyRoundupLegend[rl.params.latencyRoundup] + " )");			
 		}
 	}
 
