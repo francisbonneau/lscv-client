@@ -18,7 +18,11 @@ public class ControlPanel extends PApplet {
 	private RenderLoop rl;
 	
 	int width, height;
-	int abc = 100;
+	
+	PFont openSans12;
+	PFont openSans13;
+	PFont openSans14;
+	PFont openSans15;
 	
 	public ControlPanel(RenderLoop rl, int width, int height) {
 		this.rl = rl;
@@ -31,8 +35,11 @@ public class ControlPanel extends PApplet {
 		frameRate(25);
 		cp5 = new ControlP5(this);
 		
- 		PFont openSans14 = loadFont("OpenSans-14.vlw");
-		PFont openSans15 = loadFont("OpenSans-15.vlw");
+		openSans12 = loadFont("OpenSans-12.vlw");
+		openSans13 = loadFont("OpenSans-13.vlw");
+ 		openSans14 = loadFont("OpenSans-14.vlw");
+		openSans15 = loadFont("OpenSans-15.vlw");
+		
 		cp5.setFont(openSans14);
 		
 		cp5.addTextlabel("label1", "GLOBAL SETTINGS", 20, 20);
@@ -128,13 +135,23 @@ public class ControlPanel extends PApplet {
 		colorMode(HSB,360,100,100);
 		background(0,0,0);
 		
+		noFill();
+		stroke(255);
 		// draw emitters circles in the data source section
-		float circlesDistanceX = 62f;
-		float circlesDistanceY = 45f;
-		for (int i = rl.params.numberOfEmittersX; i > 0; i--) {		
-			// ellipse(30 + ( j * circlesDistanceX), 355, 20, 20);		
+		int circlesDistanceX = 62;
+		int circlesDistanceY = 45;
+		int numberOfEmitters = 1;
+		for (int i = rl.params.numberOfEmittersX; i > 0; i--) {	
 			for (int j = rl.params.numberOfEmittersY; j > 0; j--) {		
-				ellipse(23 + ( i * circlesDistanceX), 305 + (j * circlesDistanceY), 20, 20);
+				ellipse(23 + ( i * circlesDistanceX), 305 + (j * circlesDistanceY), 25, 25);				
+				textFont(openSans12);
+				
+				int ajustedXPos = 20; // ajust the X position of the text to center double digits
+				if (numberOfEmitters > 9 ) { 
+					ajustedXPos = 17;
+				}				
+				text("" + numberOfEmitters, ajustedXPos + ( i * circlesDistanceX), 310 + (j * circlesDistanceY));				
+				numberOfEmitters++;
 			}
 		}
 		
