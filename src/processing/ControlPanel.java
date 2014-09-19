@@ -70,20 +70,18 @@ public class ControlPanel extends PApplet {
 						+ rl.params.latencyRoundupLegend[rl.params.latencyRoundup - 1]
 						+ " )", 680, 230).setFont(openSans15);
 		
-		cp5.addTextlabel("label3", "DATA SOURCES", 20, 275);
-		
+		cp5.addTextlabel("label3", "DATA DISPLAY", 20, 275);
 		
 		cp5.addSlider("Number of Emitters", 1, 8, 1, 80, 305, 450, 10).setId(8)
 				.setNumberOfTickMarks(8).showTickMarks(true)
 				.setSliderMode(Slider.FLEXIBLE).valueLabel().setVisible(false);
-		
-		
+				
 		// trick to place the slider at the correct val ( on top )				
 		cp5.addSlider(" ", 1, 4, 4, 40, 345, 10, 150).setId(9)
 				.setNumberOfTickMarks(4).showTickMarks(true)
 				.setSliderMode(Slider.FLEXIBLE).valueLabel().setVisible(false);
 		
-		
+		cp5.addTextlabel("label4", "DATA SOURCES", 20, 515);
 		
 	}
 	
