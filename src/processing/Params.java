@@ -7,14 +7,14 @@ public class Params {
 	
 	// display parameters
 	public boolean fullscreen = false;
-	public int defaultHeight = 900;
-	public int defaultWidth = 900;
+	public int defaultHeight = 800;
+	public int defaultWidth = 800;
 	public int framerate = 30;
 	public boolean fpsCounter = true;
 	public boolean resizable = false; 
 		
 	// data source
-	public String[] hosts = { "10.0.0.60:6379" };
+	public String[] hosts = { "127.0.0.1:6379" };
 	
 	// visualisation parameters
 		
@@ -48,6 +48,8 @@ public class Params {
 	public float particleCurrentMaxVelocity = 100;
 	public float particleMaxVelocity = 500;	
 	public float particleAcceleration = 0;	
-	
+		
+	public int numberOfEmittersX = 1;
+	public int numberOfEmittersY = 1;
 	
 }

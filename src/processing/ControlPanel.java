@@ -37,6 +37,10 @@ public class ControlPanel extends PApplet {
 		
 		cp5.addTextlabel("label1", "GLOBAL SETTINGS", 20, 20);
 
+		// http://www.sojamo.de/libraries/controlP5/reference/controlP5/ControlP5.html
+  		// addSlider(String theName, float theMin, float theMax, float theDefaultValue,
+        //          int theX, int theY, int theW,int theH)
+		
 		cp5.addSlider("Background brightness", 0, 100, 30, 50, 500, 15)
 				.setId(1).setValue(rl.params.backgroundBrightness);
 
@@ -68,14 +72,16 @@ public class ControlPanel extends PApplet {
 		
 		cp5.addTextlabel("label3", "DATA SOURCES", 20, 275);
 		
+		
 		cp5.addSlider("Number of Emitters", 1, 8, 1, 80, 305, 450, 10).setId(8)
 				.setNumberOfTickMarks(8).showTickMarks(true)
-				.setSliderMode(Slider.FLEXIBLE).valueLabel().setVisible(false);		
-
-		cp5.addSlider(" ", 1, 4, 1, 40, 335, 10, 150).setId(9)
-				.setNumberOfTickMarks(4).showTickMarks(true)
 				.setSliderMode(Slider.FLEXIBLE).valueLabel().setVisible(false);
 		
+		
+		// trick to place the slider at the correct val ( on top )				
+		cp5.addSlider(" ", 1, 4, 4, 40, 345, 10, 150).setId(9)
+				.setNumberOfTickMarks(4).showTickMarks(true)
+				.setSliderMode(Slider.FLEXIBLE).valueLabel().setVisible(false);
 		
 		
 		
@@ -107,13 +113,33 @@ public class ControlPanel extends PApplet {
 			break;
 		case (7):
 			rl.params.latencyRoundup = (int) newValue;
-			cp5.get("label2").setStringValue( "( " + rl.params.latencyRoundupLegend[rl.params.latencyRoundup - 1] + " )");			
+			cp5.get("label2").setStringValue( "( " + rl.params.latencyRoundupLegend[rl.params.latencyRoundup - 1] + " )");
+		case (8):
+			rl.params.numberOfEmittersX = (int) newValue;
+			break;			
+		case (9):
+			// trick to place the slider at the correct val ( on top )
+			float correctedVal = Math.abs(5 - newValue);			
+			rl.params.numberOfEmittersY = (int) correctedVal;
+			break;
 		}
 	}
-
+	
 	public void draw() {
+		
 		colorMode(HSB,360,100,100);
-		background(0,0,0);		
+		background(0,0,0);
+		
+		// draw emitters circles in the data source section
+		float circlesDistanceX = 62f;
+		float circlesDistanceY = 45f;
+		for (int i = rl.params.numberOfEmittersX; i > 0; i--) {		
+			// ellipse(30 + ( j * circlesDistanceX), 355, 20, 20);		
+			for (int j = rl.params.numberOfEmittersY; j > 0; j--) {		
+				ellipse(23 + ( i * circlesDistanceX), 305 + (j * circlesDistanceY), 20, 20);
+			}
+		}
+		
 	}
 
 	public ControlP5 control() {
