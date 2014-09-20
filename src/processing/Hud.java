@@ -64,7 +64,7 @@ public class Hud {
 		
 		if (params.displayGrid == true) {
 			drawGrid();
-		}		
+		}
 		
 		for (Emitter em : emitters) {
 			em.update(params);
@@ -73,7 +73,8 @@ public class Hud {
 	}
 	
 	
-	public void drawGrid() {		
+	public void drawGrid() {	
+		
 		int gridSquareSize = 45;		
 		int cols = p.width / gridSquareSize;
 		int rows = p.height / gridSquareSize;

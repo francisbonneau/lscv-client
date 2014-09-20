@@ -7,8 +7,13 @@ public class Params {
 	
 	// display parameters
 	public boolean fullscreen = false;
-	public int defaultHeight = 800;
-	public int defaultWidth = 1200;
+	
+	public int mainWindowHeight = 800;
+	public int mainWindowWidth = 1200;
+	
+	public int controlsWindowHeight = 800;
+	public int controlsWindowWindowWidth = 800;
+	
 	public int framerate = 30;	
 	public boolean resizable = false;
 	
