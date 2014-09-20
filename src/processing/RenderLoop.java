@@ -12,7 +12,7 @@ public class RenderLoop extends PApplet {
 	public Hud hud;
 	
 	// Single parameter outside of the Params class for the static context
-	public static boolean fullscreenMode = false;
+	public static boolean fullscreenMode = true;
 	
 	// Main method for starting the PApplet
 	public static void main(String args[]) {		
@@ -69,7 +69,7 @@ public class RenderLoop extends PApplet {
 		smooth();
 		noStroke();
 		
-		if (params.fpsCounter)
+		if (params.displayFPSCounter)
 			displayFPSCounter();
 		
 		hud.updateDisplayedData(params);

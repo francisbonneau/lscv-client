@@ -9,12 +9,14 @@ public class Params {
 	public boolean fullscreen = false;
 	public int defaultHeight = 800;
 	public int defaultWidth = 800;
-	public int framerate = 30;
-	public boolean fpsCounter = true;
-	public boolean resizable = false; 
+	public int framerate = 30;	
+	public boolean resizable = false;
+	
+	public boolean displayFPSCounter = true;	
+	public boolean displayGrid = true;
 		
 	// data source
-	public String[] hosts = { "127.0.0.1:6379" };
+	public String[] hosts = { "10.0.0.60:6379" };
 	
 	// visualisation parameters
 		
@@ -40,7 +42,8 @@ public class Params {
 	public float backgroundBrightness = 10;	
 	public float emitterRadius = 500;
 	public float emitterRadiusBrightness = 15;
-	public boolean drawEmitterRadius = true;
+	public boolean displayEmitterRadius = true;
+	public boolean displayEmitterLabels = true;
 
 	public float particleSize = 10;		
 	public float particleMinVelocity = 1;

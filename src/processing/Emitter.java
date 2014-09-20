@@ -187,7 +187,10 @@ public class Emitter {
 		// draw emitters radius
 		p.colorMode(PConstants.HSB,360,100,100);
 		p.stroke(0,0,emitterRadiusColor);
-		p.fill(0,0,backgroundBrightness);
+		
+		//p.fill(0,0,backgroundBrightness);
+		p.noFill();
+		
 		p.ellipse(centerX, centerY, radius, radius);
 	}	
 	
@@ -197,7 +200,7 @@ public class Emitter {
 	
 	public void draw(Params params) {
 		
-		if (params.drawEmitterRadius)
+		if (params.displayEmitterRadius)
 			drawRadius(params.backgroundBrightness, 
 					params.emitterRadiusBrightness, params.emitterRadius);
 					

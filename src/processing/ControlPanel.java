@@ -121,7 +121,11 @@ public class ControlPanel extends PApplet {
 			break;
 		case (7):
 			rl.params.latencyRoundup = (int) newValue;
-			cp5.get("label2").setStringValue( "( " + rl.params.latencyRoundupLegend[rl.params.latencyRoundup - 1] + " )");
+			Textlabel label = (Textlabel) cp5.get("label2");
+			if (label != null) {
+				label.setStringValue( "( " +
+					rl.params.latencyRoundupLegend[rl.params.latencyRoundup - 1] + " )");
+			}			
 			break;
 		case (8):
 			rl.params.numberOfEmittersX = (int) newValue;

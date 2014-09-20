@@ -60,11 +60,38 @@ public class Hud {
 	/**
 	 * Draw the hud (the particles emitters)
 	 */
-	public void draw(Params params) {		
+	public void draw(Params params) {
+		
+		if (params.displayGrid == true) {
+			drawGrid();
+		}		
+		
 		for (Emitter em : emitters) {
 			em.update(params);
 			em.draw(params);
+		}				
+	}
+	
+	
+	public void drawGrid() {		
+		int gridSquareSize = 40;		
+		int cols = p.width / gridSquareSize;
+		int rows = p.height / gridSquareSize;
+		
+		for (int i = 0; i < cols; i++) {
+		  for (int j = 0; j < rows; j++) {
+			  int x = i * gridSquareSize;
+			  int y = j * gridSquareSize;
+			  
+			  p.noFill();
+		      p.stroke(40);
+		      p.rect(x,y,gridSquareSize,gridSquareSize);
+		      
+		      p.fill(120);
+		      p.rect(x - 1, y - 1, 2, 2); 		      
+		  }
 		}
+		
 	}
 
 }
