@@ -52,8 +52,8 @@ public class RenderLoop extends PApplet {
 		// UI controls are in separate window, configured here
 		new ControlP5(this);			
 		Frame f = new Frame("Settings");
-		ControlPanel cf = new ControlPanel(this, params.controlsWindowHeight, 
-				params.controlsWindowWindowWidth);
+		ControlPanel cf = new ControlPanel(this, params.controlsWindowWidth, 
+				params.controlsWindowHeight);
 		f.add(cf);
 		cf.init();
 		f.setTitle("Settings");
