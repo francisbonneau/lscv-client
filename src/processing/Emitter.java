@@ -81,10 +81,7 @@ public class Emitter {
 		eventHigherAngle = new HashMap<String, Float>();
 		
 		float lastAngle = 0;
-		
-		//if (eventDistribution.size() != lastEventDistSize) {
-			labelsList = new ArrayList<>();	
-		//}		
+		labelsList = new ArrayList<>();	
 		
 		while(eventDistNames.hasNext()) {
 			String procName = eventDistNames.next();
@@ -96,25 +93,17 @@ public class Emitter {
 			eventHigherAngle.put(procName, lastAngle + relativeSize);
 			lastAngle = lastAngle + relativeSize;
 			
-			// recalculate labels if the number of elements has changed
+			float Min = eventLowerAngle.get(procName);
+			float Max = eventHigherAngle.get(procName);
+			float angle = (Min + Max)/2 + 45;
+			float radius = params.emitterRadius/2 + 35;
+			float textXposition = (float) Math.cos(PApplet.radians(angle)) * radius + centerX;
+			float textYposition = (float) Math.sin(PApplet.radians(angle)) * radius + centerY;
 			
-			//if (eventDistribution.size() != lastEventDistSize) {
-			
-				float Min = eventLowerAngle.get(procName);
-				float Max = eventHigherAngle.get(procName);
-				float angle = (Min + Max)/2 + 45;
-				float radius = params.emitterRadius/2 + 35;
-				float textXposition = (float) Math.cos(PApplet.radians(angle)) * radius + centerX;
-				float textYposition = (float) Math.sin(PApplet.radians(angle)) * radius + centerY;
-				
-				float color = this.eventDistributionColor.get(procName); 				
-				EmitterLabel label = new EmitterLabel(p, procName, 15, color, textXposition, textYposition);
-				labelsList.add(label);
-			//}
-				
-			
+			float color = this.eventDistributionColor.get(procName); 				
+			EmitterLabel label = new EmitterLabel(p, procName, 15, color, textXposition, textYposition);
+			labelsList.add(label);
 		}
-		//lastEventDistSize = eventDistribution.size();
 			
 		// for each process in the list
 		while (events.hasNext()) {
@@ -148,7 +137,7 @@ public class Emitter {
 				
 				particlesList.add(newP);
 			}
-		}		
+		}
 	}
 	
 	public void updateParticles(Params params) {
@@ -182,15 +171,12 @@ public class Emitter {
 		}
 	}
 	
+	// Draw the Emitter radius circle
 	public void drawRadius(float backgroundBrightness, float emitterRadiusColor, 
 			float radius) {
-		// draw emitters radius
 		p.colorMode(PConstants.HSB,360,100,100);
 		p.stroke(0,0,emitterRadiusColor);
-		
-		//p.fill(0,0,backgroundBrightness);
 		p.noFill();
-		
 		p.ellipse(centerX, centerY, radius, radius);
 	}	
 	

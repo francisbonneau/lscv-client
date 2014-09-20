@@ -32,6 +32,7 @@ public class ControlPanel extends PApplet {
 		this.height = height;
 	}
 
+	@SuppressWarnings("deprecation")
 	public void setup() {
 		size(width, height);
 		frameRate(25);

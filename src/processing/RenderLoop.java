@@ -32,7 +32,7 @@ public class RenderLoop extends PApplet {
 		if (params.fullscreen) // screen settings
 			size(displayWidth, displayHeight);
 		else
-			size(params.defaultWidth, params.defaultHeight);
+			size(params.mainWindowWidth, params.mainWindowHeight);
 		
 		frameRate(params.framerate);  // frames per second limit
 		
@@ -50,9 +50,10 @@ public class RenderLoop extends PApplet {
 		hud.addEmitter();
 		
 		// UI controls are in separate window, configured here
-		ControlP5 cp5 = new ControlP5(this);			
+		new ControlP5(this);			
 		Frame f = new Frame("Settings");
-		ControlPanel cf = new ControlPanel(this, 800, 700);
+		ControlPanel cf = new ControlPanel(this, params.controlsWindowHeight, 
+				params.controlsWindowWindowWidth);
 		f.add(cf);
 		cf.init();
 		f.setTitle("Settings");
@@ -80,7 +81,7 @@ public class RenderLoop extends PApplet {
 		if (keyCode == TAB) {		
 			if (params.fullscreen) {
 				frame.setResizable(true);
-				frame.setBounds(400, 400, params.defaultWidth, params.defaultHeight);				
+				frame.setBounds(400, 400, params.mainWindowWidth, params.mainWindowHeight);				
 				params.fullscreen = false;
 			} else {				
 				frame.setResizable(true);
@@ -92,15 +93,15 @@ public class RenderLoop extends PApplet {
 	
 	// Display the FPS counter
 	public void displayFPSCounter() {		
-		fill(200); // gray color	
+		fill(200); // gray color
 		int x, y;
 		
 		if (params.fullscreen) {			
 			x = displayWidth - 75;
 			y = displayHeight - 25; 
 		} else {
-			x = params.defaultWidth - 75;
-			y = params.defaultHeight - 25;			
+			x = params.mainWindowWidth - 75;
+			y = params.mainWindowHeight - 25;			
 		}
 		text(frameRate, x, y);
 	}
