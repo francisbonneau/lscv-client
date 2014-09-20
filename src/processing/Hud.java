@@ -74,7 +74,7 @@ public class Hud {
 	
 	
 	public void drawGrid() {		
-		int gridSquareSize = 40;		
+		int gridSquareSize = 45;		
 		int cols = p.width / gridSquareSize;
 		int rows = p.height / gridSquareSize;
 		
