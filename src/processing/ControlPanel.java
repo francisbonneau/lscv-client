@@ -24,6 +24,8 @@ public class ControlPanel extends PApplet {
 	PFont openSans14;
 	PFont openSans15;
 	
+	PFont eurostile15;
+	
 	public ControlPanel(RenderLoop rl, int width, int height) {
 		this.rl = rl;
 		this.width = width;
@@ -35,12 +37,13 @@ public class ControlPanel extends PApplet {
 		frameRate(25);
 		cp5 = new ControlP5(this);
 		
+		eurostile15 = loadFont("EurostileLTStd-15.vlw");		
 		openSans12 = loadFont("OpenSans-12.vlw");
 		openSans13 = loadFont("OpenSans-13.vlw");
  		openSans14 = loadFont("OpenSans-14.vlw");
 		openSans15 = loadFont("OpenSans-15.vlw");
 		
-		cp5.setFont(openSans14);
+		cp5.setFont(openSans15);
 		
 		cp5.addTextlabel("label1", "GLOBAL SETTINGS", 20, 20);
 
@@ -119,6 +122,7 @@ public class ControlPanel extends PApplet {
 		case (7):
 			rl.params.latencyRoundup = (int) newValue;
 			cp5.get("label2").setStringValue( "( " + rl.params.latencyRoundupLegend[rl.params.latencyRoundup - 1] + " )");
+			break;
 		case (8):
 			rl.params.numberOfEmittersX = (int) newValue;
 			break;			
@@ -148,7 +152,7 @@ public class ControlPanel extends PApplet {
 				
 				int ajustedXPos = 20; // ajust the X position of the text to center double digits
 				if (numberOfEmitters > 9 ) { 
-					ajustedXPos = 17;
+					ajustedXPos = 16;
 				}				
 				text("" + numberOfEmitters, ajustedXPos + ( i * circlesDistanceX), 310 + (j * circlesDistanceY));				
 				numberOfEmitters++;
