@@ -185,13 +185,14 @@ public class Emitter {
 	}
 	
 	public void draw(Params params) {
+		drawParticles();
+		
+		if (params.displayEmitterLabels)
+			drawLabels();
 		
 		if (params.displayEmitterRadius)
 			drawRadius(params.backgroundBrightness, 
 					params.emitterRadiusBrightness, params.emitterRadius);
-					
-		drawParticles();
-		drawLabels();
 	}
 	
 }
