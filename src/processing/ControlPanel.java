@@ -117,8 +117,15 @@ public class ControlPanel extends PApplet {
 		
 		// fifth tab content
 		
-		cp5.addTextlabel("tab5Label", "ABOUT", 20, 60).moveTo(cp5.getTab("About"));
+		cp5.addTextlabel("tab5Label", "ABOUT", 20, 60).moveTo(cp5.getTab("About"));		
 		
+		cp5.addTextlabel("about1", "Project created for the course GTI719 at l'École de technologie supérieure (ETS) in " , 20, 90).moveTo(cp5.getTab("About"));
+		cp5.addTextlabel("about2", "Montréal, by Francis Bonneau under the supervision of Professor Michael J. McGuffin, Ph.D." , 20, 115).moveTo(cp5.getTab("About"));		
+		cp5.addTextlabel("about3", "using the following open source projects : Sysdig ( http://www.sysdig.org/ ), " , 20, 140).moveTo(cp5.getTab("About"));
+		cp5.addTextlabel("about4", "Redis ( http://redis.io/ ), Processing ( http://www.processing.org/ )" , 20, 165).moveTo(cp5.getTab("About"));
+		cp5.addTextlabel("about5", "and ControlP5 ( http://www.sojamo.de/libraries/controlP5/ )" , 20, 190).moveTo(cp5.getTab("About"));		
+		cp5.addTextlabel("license", rl.params.softwareLicense, 20, 250).
+			setFont(openSans14).moveTo(cp5.getTab("About"));
 		
 	}
 	
