@@ -8,7 +8,7 @@ public class Params {
 	// display parameters
 	public boolean fullscreen = false;
 	public int defaultHeight = 800;
-	public int defaultWidth = 800;
+	public int defaultWidth = 1200;
 	public int framerate = 30;	
 	public boolean resizable = false;
 	
