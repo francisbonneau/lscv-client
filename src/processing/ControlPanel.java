@@ -70,11 +70,17 @@ public class ControlPanel extends PApplet {
 		// second tab content
 		
 		cp5.addTextlabel("tab2Label", "DATA DISPLAY", 20, 60).moveTo(cp5.getTab("Data display settings"));
+		cp5.addTextlabel("tab2Legend", "Ajust the sliders to subdivide "
+				+ " the screen in multiples sections, each containing a circle.", 20, 90)
+				.moveTo(cp5.getTab("Data display settings"));
 		
-		cp5.addSlider("Number of Emitters", 1, 8, 1, 80, 305, 450, 10).setId(8).moveTo(cp5.getTab("Data display settings")).setNumberOfTickMarks(8).showTickMarks(false).setSliderMode(Slider.FLEXIBLE).valueLabel().setVisible(false);
+		cp5.addSlider("  ", 1, 8, 1, 80, 125, 450, 10).setId(8)
+				.moveTo(cp5.getTab("Data display settings"))
+				.setNumberOfTickMarks(8).showTickMarks(false)				
+				.setSliderMode(Slider.FLEXIBLE).valueLabel().setVisible(false);
 				
 		// trick to place the slider at the correct val ( on top )				
-		cp5.addSlider(" ", 1, 4, 4, 40, 345, 10, 150).setId(9).moveTo(cp5.getTab("Data display settings"))
+		cp5.addSlider(" ", 1, 4, 4, 40, 165, 10, 150).setId(9).moveTo(cp5.getTab("Data display settings"))
 				.setNumberOfTickMarks(4).showTickMarks(false)
 				.setSliderMode(Slider.FLEXIBLE).valueLabel().setVisible(false);
 		
@@ -111,21 +117,37 @@ public class ControlPanel extends PApplet {
 						+ rl.params.latencyRoundupLegend[rl.params.latencyRoundup - 1]
 						+ " )", 580, 270).setFont(openSans15).moveTo(cp5.getTab("Global settings"));
 		
+		cp5.addToggle("Display Grid").setPosition(30,310).setSize(40,20).setValue(rl.params.displayGrid).setId(10).moveTo(cp5.getTab("Global settings"));
+		cp5.addToggle("Display Circle Radius").setPosition(230,310).setSize(40,20).setValue(rl.params.displayEmitterRadius).setId(11).moveTo(cp5.getTab("Global settings"));
+		cp5.addToggle("Display Labels").setPosition(30,360).setSize(40,20).setValue(rl.params.displayEmitterRadius).setId(12).moveTo(cp5.getTab("Global settings"));
+		cp5.addToggle("Display FPS counter").setPosition(230,360).setSize(40,20).setValue(rl.params.displayFPSCounter).setId(13).moveTo(cp5.getTab("Global settings"));
+		
 		// fourth tab content
 		
 		cp5.addTextlabel("tab4Label", "STATISTICS", 20, 60).moveTo(cp5.getTab("Statistics"));
 		
 		// fifth tab content
 		
-		cp5.addTextlabel("tab5Label", "ABOUT", 20, 60).moveTo(cp5.getTab("About"));		
+		cp5.addTextlabel("tab5Label", "ABOUT", 20, 60).moveTo(
+				cp5.getTab("About"));
+		cp5.addTextlabel("about1",
+				"Project created for the course GTI719 at l'École de technologie supérieure (ETS) in ",
+				20, 90).moveTo(cp5.getTab("About"));
+		cp5.addTextlabel("about2",
+				"Montréal, by Francis Bonneau under the supervision of Professor Michael J. McGuffin, Ph.D.",
+				20, 115).moveTo(cp5.getTab("About"));
+		cp5.addTextlabel("about3",
+				"using the following open source projects : Sysdig ( http://www.sysdig.org/ ), ",
+				20, 140).moveTo(cp5.getTab("About"));
+		cp5.addTextlabel("about4",
+				"Redis ( http://redis.io/ ), Processing ( http://www.processing.org/ )",
+				20, 165).moveTo(cp5.getTab("About"));
+		cp5.addTextlabel("about5",
+				"and ControlP5 ( http://www.sojamo.de/libraries/controlP5/ )",
+				20, 190).moveTo(cp5.getTab("About"));
 		
-		cp5.addTextlabel("about1", "Project created for the course GTI719 at l'École de technologie supérieure (ETS) in " , 20, 90).moveTo(cp5.getTab("About"));
-		cp5.addTextlabel("about2", "Montréal, by Francis Bonneau under the supervision of Professor Michael J. McGuffin, Ph.D." , 20, 115).moveTo(cp5.getTab("About"));		
-		cp5.addTextlabel("about3", "using the following open source projects : Sysdig ( http://www.sysdig.org/ ), " , 20, 140).moveTo(cp5.getTab("About"));
-		cp5.addTextlabel("about4", "Redis ( http://redis.io/ ), Processing ( http://www.processing.org/ )" , 20, 165).moveTo(cp5.getTab("About"));
-		cp5.addTextlabel("about5", "and ControlP5 ( http://www.sojamo.de/libraries/controlP5/ )" , 20, 190).moveTo(cp5.getTab("About"));		
-		cp5.addTextlabel("license", rl.params.softwareLicense, 20, 250).
-			setFont(openSans14).moveTo(cp5.getTab("About"));
+		cp5.addTextlabel("license", rl.params.softwareLicense, 20, 250)
+				.setFont(openSans14).moveTo(cp5.getTab("About"));
 		
 	}
 	
@@ -166,10 +188,8 @@ public class ControlPanel extends PApplet {
 			case (7):
 				rl.params.latencyRoundup = (int) newValue;
 				Textlabel label = (Textlabel) cp5.get("label2");
-				if (label != null) {
-					label.setStringValue( "( " +
-						rl.params.latencyRoundupLegend[rl.params.latencyRoundup - 1] + " )");
-				}			
+				if (label != null)
+					label.setStringValue( "( " + rl.params.latencyRoundupLegend[rl.params.latencyRoundup - 1] + " )");			
 				break;
 			case (8):
 				rl.params.numberOfEmittersX = (int) newValue;
@@ -178,6 +198,34 @@ public class ControlPanel extends PApplet {
 				// trick to place the slider at the correct val ( on top )
 				float correctedVal = Math.abs(5 - newValue);			
 				rl.params.numberOfEmittersY = (int) correctedVal;
+				break;
+			case (10):
+				if (newValue == 0.0) {
+					rl.params.displayGrid = false;
+				} else {
+					rl.params.displayGrid = true;
+				}
+				break;
+			case (11):
+				if (newValue == 0.0) {
+					rl.params.displayEmitterRadius = false;
+				} else {
+					rl.params.displayEmitterRadius = true;
+				}
+				break;
+			case (12):
+				if (newValue == 0.0) {
+					rl.params.displayEmitterLabels = false;
+				} else {
+					rl.params.displayEmitterLabels = true;
+				}
+				break;
+			case (13):
+				if (newValue == 0.0) {
+					rl.params.displayFPSCounter = false;
+				} else {
+					rl.params.displayFPSCounter = true;
+				}
 				break;
 			}
 			
@@ -200,14 +248,14 @@ public class ControlPanel extends PApplet {
 			int numberOfEmitters = 1;
 			for (int i = rl.params.numberOfEmittersX; i > 0; i--) {	
 				for (int j = rl.params.numberOfEmittersY; j > 0; j--) {		
-					ellipse(23 + ( i * circlesDistanceX), 305 + (j * circlesDistanceY), 25, 25);				
+					ellipse(23 + ( i * circlesDistanceX), 125 + (j * circlesDistanceY), 25, 25);				
 					textFont(openSans12);
 					
 					int ajustedXPos = 20; // ajust the X position of the text to center double digits
 					if (numberOfEmitters > 9 ) { 
 						ajustedXPos = 16;
 					}				
-					text("" + numberOfEmitters, ajustedXPos + ( i * circlesDistanceX), 310 + (j * circlesDistanceY));				
+					text("" + numberOfEmitters, ajustedXPos + ( i * circlesDistanceX), 130 + (j * circlesDistanceY));				
 					numberOfEmitters++;
 				}
 			}			
