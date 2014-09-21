@@ -4,6 +4,7 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
+import controlP5.DropdownList;
 import controlP5.Slider;
 import controlP5.Textarea;
 import controlP5.Textlabel;
@@ -73,7 +74,7 @@ public class ControlPanel extends PApplet {
 		// Name, X, Y, W, H		
 		cp5.addTextfield("Server address - IP:PORT", 85, 135, 360, 25).setText("127.0.0.1:6379");
 		// Name, Value, X, Y, W, H
-		cp5.addButton("Connect to server", 1, 460, 135, 165, 25);
+		cp5.addButton("Connect to server", 1, 470, 135, 165, 25);
 		
 		Textarea myTextarea = cp5.addTextarea("txt", "", 85, 205, 550, 250)                  
                   .setFont(openSans14)                  
@@ -102,6 +103,15 @@ public class ControlPanel extends PApplet {
 		cp5.addSlider(" ", 1, 4, 4, 90, 175, 10, 150).setId(9).moveTo(cp5.getTab("Data display settings"))
 				.setNumberOfTickMarks(4).showTickMarks(false)
 				.setSliderMode(Slider.FLEXIBLE).valueLabel().setVisible(false);
+		
+		cp5.addTextlabel("tab2Legend2", "Then select the data source that each circle should display :", 50, 350)
+				.moveTo(cp5.getTab("Data display settings"));
+		
+		DropdownList d1, d2;		
+		d1 = cp5.addDropdownList("myList-d1", 90, 390, 200, 35).moveTo(cp5.getTab("Data display settings"));
+		cp5.addTextlabel("tab2Legend3", " => ", 310, 380).moveTo(cp5.getTab("Data display settings"));		
+		d2 = cp5.addDropdownList("myList-d2", 350, 390, 200, 35).moveTo(cp5.getTab("Data display settings"));
+		cp5.addButton("Select", 1, 570, 375, 60, 20).moveTo(cp5.getTab("Data display settings"));
 		
 		cp5.getTab("Data display settings").add(cp5.getController("Load Config"));
 		cp5.getTab("Data display settings").add(cp5.getController("Save Config"));
@@ -142,9 +152,9 @@ public class ControlPanel extends PApplet {
 				.setValue(rl.params.latencyRoundup).setNumberOfTickMarks(8)
 				.showTickMarks(false).moveTo(cp5.getTab("Global settings"));
 		
-		cp5.addTextlabel("label2", "( "
+		cp5.addTextlabel("latencyLabel", "( "
 						+ rl.params.latencyRoundupLegend[rl.params.latencyRoundup - 1]
-						+ " )", 600, 270).setFont(openSans15).moveTo(cp5.getTab("Global settings"));
+						+ " )", 620, 270).setFont(openSans15).moveTo(cp5.getTab("Global settings"));
 		
 		cp5.addToggle("Display Grid").setPosition(60,310).setSize(40,20).setValue(rl.params.displayGrid).setId(10).moveTo(cp5.getTab("Global settings"));
 		cp5.addToggle("Display Circle Radius").setPosition(260,310).setSize(40,20).setValue(rl.params.displayEmitterRadius).setId(11).moveTo(cp5.getTab("Global settings"));
@@ -216,7 +226,7 @@ public class ControlPanel extends PApplet {
 				break;
 			case (7):
 				rl.params.latencyRoundup = (int) newValue;
-				Textlabel label = (Textlabel) cp5.get("label2");
+				Textlabel label = (Textlabel) cp5.get("latencyLabel");
 				if (label != null)
 					label.setStringValue( "( " + rl.params.latencyRoundupLegend[rl.params.latencyRoundup - 1] + " )");			
 				break;
