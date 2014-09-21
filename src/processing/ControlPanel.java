@@ -5,6 +5,7 @@ import processing.core.PFont;
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import controlP5.Slider;
+import controlP5.Textarea;
 import controlP5.Textlabel;
 
 /**
@@ -52,20 +53,38 @@ public class ControlPanel extends PApplet {
 		
 		// Setup the tabs
 		cp5.getTab("default").setColorLabel(color(255));		
-		cp5.addTab("Data display settings").setColorLabel(color(255));		
+		cp5.addTab("Data display settings").setColorLabel(color(255));
+		cp5.addTab("Filters").setColorLabel(color(255));
 		cp5.addTab("Global settings").setColorLabel(color(255));		
 		cp5.addTab("Statistics").setColorLabel(color(255));
 		cp5.addTab("About").setColorLabel(color(255));
 				     		  
-		cp5.getTab("default").activateEvent(true).setLabel("Data source settings").setId(101);
+		cp5.getTab("default").activateEvent(true).setLabel("Data sources settings").setId(101);
 		cp5.getTab("Data display settings").activateEvent(true).setId(102);
+		cp5.getTab("Filters").activateEvent(true).setId(106);
 		cp5.getTab("Global settings").activateEvent(true).setId(103);
 		cp5.getTab("Statistics").activateEvent(true).setId(104);
 		cp5.getTab("About").activateEvent(true).setId(105);
 		
 		// first tab content
 		
-		cp5.addTextlabel("tab1Label", "DATA SOURCES", 20, 60).moveTo(cp5.getTab("default"));
+		cp5.addTextlabel("tab1Label", "DATA SOURCES", 50, 60).moveTo(cp5.getTab("default"));
+		cp5.addTextlabel("tab1Legend", "Enter here the network addresses of the servers to fetch data from.", 50, 90);
+		// Name, X, Y, W, H		
+		cp5.addTextfield("Server address - IP:PORT", 85, 135, 360, 25).setText("127.0.0.1:6379");
+		// Name, Value, X, Y, W, H
+		cp5.addButton("Connect to server", 1, 460, 135, 165, 25);
+		
+		Textarea myTextarea = cp5.addTextarea("txt", "", 85, 205, 550, 250)                  
+                  .setFont(openSans14)                  
+                  .setColor(color(255))
+                  .setColorBackground(color(20))
+                  .setColorForeground(color(255, 100));	
+		cp5.addConsole(myTextarea);
+		println("Ready to establish new connexions...");
+				
+		cp5.addButton("Load Config", 1, 520, 525, 87, 20).captionLabel().setFont(openSans12);
+		cp5.addButton("Save Config", 1, 615, 525, 87, 20).captionLabel().setFont(openSans12);		
 		
 		// second tab content
 		
@@ -91,7 +110,7 @@ public class ControlPanel extends PApplet {
 		cp5.addSlider("Background brightness", 0, 100, 30, 90, 400, 15)
 				.setId(1).setValue(rl.params.backgroundBrightness).moveTo(cp5.getTab("Global settings"));
 
-		cp5.addSlider("Emitter radius", 100, 2000, 30, 120, 400, 15).setId(2)
+		cp5.addSlider("Circle radius", 100, 2000, 30, 120, 400, 15).setId(2)
 				.setValue(rl.params.emitterRadius).moveTo(cp5.getTab("Global settings"));
 
 		cp5.addSlider("Radius brightness", 0, 100, 30, 150, 400, 15).setId(3)
@@ -153,17 +172,14 @@ public class ControlPanel extends PApplet {
 	
 	public void controlEvent(ControlEvent theEvent) {
 		
-
 		if (theEvent.getId() > 100 ) {
 			// if the event is a tab switch event, just clear the screen			
-			if (theEvent.getId() == 102) {
+			if (theEvent.getId() == 102)
 				currentTabIsDataDisplay = true;
-			} else {
-				currentTabIsDataDisplay = false;
-			}
-			
+			else
+				currentTabIsDataDisplay = false;			
 		} else {
-			
+			// if the event is associated with a controller ex. slider
 			float newValue = theEvent.getController().getValue();		
 			switch (theEvent.getController().getId()) {
 			case (1):
@@ -196,69 +212,61 @@ public class ControlPanel extends PApplet {
 				break;			
 			case (9):
 				// trick to place the slider at the correct val ( on top )
-				float correctedVal = Math.abs(5 - newValue);			
-				rl.params.numberOfEmittersY = (int) correctedVal;
+				rl.params.numberOfEmittersY = (int) Math.abs(5 - newValue);
 				break;
 			case (10):
-				if (newValue == 0.0) {
+				if (newValue == 0.0)
 					rl.params.displayGrid = false;
-				} else {
+				else
 					rl.params.displayGrid = true;
-				}
 				break;
 			case (11):
-				if (newValue == 0.0) {
+				if (newValue == 0.0)
 					rl.params.displayEmitterRadius = false;
-				} else {
+				else
 					rl.params.displayEmitterRadius = true;
-				}
 				break;
 			case (12):
-				if (newValue == 0.0) {
+				if (newValue == 0.0)
 					rl.params.displayEmitterLabels = false;
-				} else {
+				else
 					rl.params.displayEmitterLabels = true;
-				}
 				break;
 			case (13):
-				if (newValue == 0.0) {
+				if (newValue == 0.0)
 					rl.params.displayFPSCounter = false;
-				} else {
+				else
 					rl.params.displayFPSCounter = true;
-				}
 				break;
-			}
-			
-		}
-		
-		
+			}			
+		}	
 	}
 	
-	public void draw() {
-		
+	public void draw() {		
 		colorMode(HSB,360,100,100);
 		background(0,0,0);
 		
-		if (currentTabIsDataDisplay) {			
+		if (currentTabIsDataDisplay) {	// draw emitters circles in the data source section
+			
 			noFill();
 			stroke(255);
-			// draw emitters circles in the data source section
 			int circlesDistanceX = 62;
 			int circlesDistanceY = 45;
 			int numberOfEmitters = 1;
+			
 			for (int i = rl.params.numberOfEmittersX; i > 0; i--) {	
-				for (int j = rl.params.numberOfEmittersY; j > 0; j--) {		
-					ellipse(23 + ( i * circlesDistanceX), 125 + (j * circlesDistanceY), 25, 25);				
+				for (int j = rl.params.numberOfEmittersY; j > 0; j--) {
+					ellipse(23 + ( i * circlesDistanceX),
+							125 + (j * circlesDistanceY), 25, 25);				
 					textFont(openSans12);
-					
-					int ajustedXPos = 20; // ajust the X position of the text to center double digits
-					if (numberOfEmitters > 9 ) { 
-						ajustedXPos = 16;
-					}				
-					text("" + numberOfEmitters, ajustedXPos + ( i * circlesDistanceX), 130 + (j * circlesDistanceY));				
+					int ajustedXPos = 20; // adjust the X position of the text to center double digits
+					if (numberOfEmitters > 9 )
+						ajustedXPos = 16;					
+					text("" + numberOfEmitters, ajustedXPos + ( i * circlesDistanceX),
+						130 + (j * circlesDistanceY));				
 					numberOfEmitters++;
 				}
-			}			
+			}
 		}
 				
 	}
