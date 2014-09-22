@@ -5,12 +5,12 @@ import java.util.HashMap;
 
 import processing.core.PApplet;
 import data.Event;
-import data.SourceAggregator;
+import data.DataAggregator;
 
 public class Hud {
 	
 	private PApplet p;	
-	private SourceAggregator sa;
+	private DataAggregator sa;
 		
 	private ArrayList<HashMap<String, HashMap<Integer, Integer>>> displayedData;
 	
@@ -23,7 +23,7 @@ public class Hud {
 		emitters = new ArrayList<>();
 	}
 
-	public void setDataSource(SourceAggregator da) {
+	public void setDataSource(DataAggregator da) {
 		this.sa = da;			
 	}
 	

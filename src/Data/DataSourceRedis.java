@@ -11,17 +11,17 @@ import redis.clients.jedis.JedisPubSub;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-public class RedisDataSource extends Observable implements Runnable  {
+public class DataSourceRedis extends Observable implements Runnable  {
 	
 	private Jedis jedis;
 	public String host;
 	public String ip;
 	public int port;
 	
-	private SourceAggregator sourceAgg;
+	private DataAggregator sourceAgg;
 	private EventProcessor eventProcessor;
 	
-	public RedisDataSource(String host, SourceAggregator sourceAgg) {
+	public DataSourceRedis(String host, DataAggregator sourceAgg) {
 		
 		// Connect to the Redis instance
 		this.host = host;

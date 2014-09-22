@@ -3,7 +3,7 @@ import java.awt.Frame;
 
 import processing.core.PApplet;
 import controlP5.ControlP5;
-import data.SourceAggregator;
+import data.DataAggregator;
 
 public class RenderLoop extends PApplet {
 	
@@ -42,7 +42,7 @@ public class RenderLoop extends PApplet {
 		colorMode(HSB,360,100,100);   // default color mode 
 	 
 		// Data source setup
-		SourceAggregator dataSourceAgg = new SourceAggregator(this);
+		DataAggregator dataSourceAgg = new DataAggregator(this);
 		
 		// Data visualisation setup
 		hud = new Hud(this);

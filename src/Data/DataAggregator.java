@@ -8,19 +8,19 @@ import java.util.Queue;
 
 import processing.RenderLoop;
 
-public class SourceAggregator implements Observer {
+public class DataAggregator implements Observer {
 	
 	private RenderLoop renderLoop;
 	
 	public Queue<ArrayList<Event>> data;
 	
-	public SourceAggregator(RenderLoop renderLoop) {
+	public DataAggregator(RenderLoop renderLoop) {
 		
 		this.renderLoop = renderLoop;
 				
 		for (String host : renderLoop.params.hosts) { 
 			System.out.println("starting redis thread for host " + host);
-			Thread t = new Thread(new RedisDataSource(host, this));
+			Thread t = new Thread(new DataSourceRedis(host, this));
 	        t.start();
 	        
 	        // TODO create a queue for each host to put data
@@ -32,7 +32,7 @@ public class SourceAggregator implements Observer {
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		
-		RedisDataSource source = (RedisDataSource) arg0;
+		DataSourceRedis source = (DataSourceRedis) arg0;
 		
 		@SuppressWarnings("unchecked")
 		ArrayList<Event> newData = (ArrayList<Event>) arg1;
