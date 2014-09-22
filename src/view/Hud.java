@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import model.DataAggregator;
 import model.Event;
+import model.Params;
 import processing.core.PApplet;
 
 public class Hud {

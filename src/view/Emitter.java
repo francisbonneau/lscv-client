@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import model.Event;
+import model.Params;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PVector;
