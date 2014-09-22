@@ -3,10 +3,10 @@ import java.awt.Frame;
 
 import model.DataAggregator;
 import model.DataSourceRedis;
+import model.Params;
 import processing.core.PApplet;
 import view.ControlPanelUI;
 import view.Hud;
-import view.Params;
 import controlP5.ControlP5;
 
 public class RenderLoop extends PApplet {
