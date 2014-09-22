@@ -1,4 +1,4 @@
-package processing;
+package view;
 
 
 public class Params {

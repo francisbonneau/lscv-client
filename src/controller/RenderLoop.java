@@ -1,10 +1,13 @@
-package processing;
+package controller;
 import java.awt.Frame;
 
+import model.DataAggregator;
+import model.DataSourceRedis;
 import processing.core.PApplet;
+import view.ControlPanelUI;
+import view.Hud;
+import view.Params;
 import controlP5.ControlP5;
-import data.DataAggregator;
-import data.DataSourceRedis;
 
 public class RenderLoop extends PApplet {
 	
@@ -18,9 +21,9 @@ public class RenderLoop extends PApplet {
 	// Main method for starting the PApplet
 	public static void main(String args[]) {		
 		if (fullscreenMode) {
-			PApplet.main(new String[] { "--present", "processing.RenderLoop" });
+			PApplet.main(new String[] { "--present", "controller.RenderLoop" });
 		} else {
-			PApplet.main(new String[] { "processing.RenderLoop" });
+			PApplet.main(new String[] { "controller.RenderLoop" });
 		}			
 	}
 
@@ -47,14 +50,12 @@ public class RenderLoop extends PApplet {
 		
 		// Data visualisation setup
 		hud = new Hud(this, dataAggregator);		
-		hud.addEmitter();
-		
-		//hud.da.addDataSource(new DataSourceRedis(this, "10.0.0.60:6379"));		
+		hud.addEmitter();		 
 		
 		// UI controls are in separate window, configured here
 		new ControlP5(this);			
 		Frame f = new Frame("Settings");
-		ControlPanel cf = new ControlPanel(this, params.controlsWindowWidth, 
+		ControlPanelUI cf = new ControlPanelUI(this, params.controlsWindowWidth, 
 				params.controlsWindowHeight);
 		f.add(cf);
 		cf.init();

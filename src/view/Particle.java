@@ -1,5 +1,5 @@
-package processing;
-import data.Event;
+package view;
+import model.Event;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PVector;
