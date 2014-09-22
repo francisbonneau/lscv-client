@@ -10,23 +10,25 @@ import processing.RenderLoop;
 
 public class DataAggregator implements Observer {
 	
-	private RenderLoop renderLoop;
-	
+	private RenderLoop rl;
 	public Queue<ArrayList<Event>> data;
+	
+	public ArrayList<Thread> dataSourcesThreads;
 	
 	public DataAggregator(RenderLoop renderLoop) {
 		
-		this.renderLoop = renderLoop;
-				
-		for (String host : renderLoop.params.hosts) { 
-			System.out.println("starting redis thread for host " + host);
-			Thread t = new Thread(new DataSourceRedis(host, this));
-	        t.start();
-	        
-	        // TODO create a queue for each host to put data
-		}
-		
-		data = new LinkedList<ArrayList<Event>>();		
+		this.rl = renderLoop;		
+		data = new LinkedList<ArrayList<Event>>();
+		dataSourcesThreads = new ArrayList<Thread>();
+	}
+	
+	// Create a new thread in charge of running the data source
+	public void addDataSource(DataSourceRedis newDataSource) {
+		newDataSource.addObserver(this);
+		Thread t = new Thread(newDataSource);
+		t.setName(newDataSource.host);
+		t.start();
+		dataSourcesThreads.add(t);	
 	}
 
 	@Override
@@ -39,8 +41,4 @@ public class DataAggregator implements Observer {
 		data.add(newData);
 	}
 	
-	public int getLatencyRoundup() { 
-		return renderLoop.params.latencyRoundup;
-	}
-
 }
