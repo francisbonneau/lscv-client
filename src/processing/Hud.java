@@ -1,35 +1,27 @@
 package processing;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import processing.core.PApplet;
-import data.Event;
 import data.DataAggregator;
+import data.Event;
 
 public class Hud {
 	
-	private PApplet p;	
-	private DataAggregator sa;
-		
-	private ArrayList<HashMap<String, HashMap<Integer, Integer>>> displayedData;
+	private PApplet p;
+ 	private ArrayList<Emitter> emitters;
+	public DataAggregator da;
 	
-	private ArrayList<Emitter> emitters;
-	
-	public Hud(PApplet p) {		
+	public Hud(PApplet p, DataAggregator da) {		
 		this.p = p;		
-		
-		displayedData = new ArrayList<>();
+		this.da = da;
+
 		emitters = new ArrayList<>();
 	}
 
-	public void setDataSource(DataAggregator da) {
-		this.sa = da;			
-	}
-	
 	public void updateDisplayedData(Params params) {
 		
-		ArrayList<Event> newData = sa.data.poll();
+		ArrayList<Event> newData = da.data.poll();
 		while(newData != null) {	
 					
 			//displayedData.add(newData);
@@ -38,7 +30,7 @@ public class Hud {
 			Emitter em = emitters.get(0);
 			em.addParticles(newData, params);
 			
-			newData = sa.data.poll();
+			newData = da.data.poll();
 		}
 		
 	}
@@ -57,21 +49,16 @@ public class Hud {
 		
 	}
 	
-	/**
-	 * Draw the hud (the particles emitters)
-	 */
-	public void draw(Params params) {
-		
-		if (params.displayGrid == true) {
+	// Draw the hud (the particles emitters)
+	public void draw(Params params) {		
+		if (params.displayGrid == true)
 			drawGrid();
-		}
 		
 		for (Emitter em : emitters) {
 			em.update(params);
 			em.draw(params);
 		}				
 	}
-	
 	
 	public void drawGrid() {	
 		

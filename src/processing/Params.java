@@ -21,7 +21,7 @@ public class Params {
 	public boolean displayGrid = true;
 		
 	// data source
-	public String[] hosts = { "10.0.0.60:6379" };
+	public String defaultDataSource = "10.0.0.60:6379";
 	
 	// visualisation parameters
 		

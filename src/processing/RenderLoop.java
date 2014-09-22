@@ -4,6 +4,7 @@ import java.awt.Frame;
 import processing.core.PApplet;
 import controlP5.ControlP5;
 import data.DataAggregator;
+import data.DataSourceRedis;
 
 public class RenderLoop extends PApplet {
 	
@@ -42,12 +43,13 @@ public class RenderLoop extends PApplet {
 		colorMode(HSB,360,100,100);   // default color mode 
 	 
 		// Data source setup
-		DataAggregator dataSourceAgg = new DataAggregator(this);
+		DataAggregator dataAggregator = new DataAggregator(this);
 		
 		// Data visualisation setup
-		hud = new Hud(this);
-		hud.setDataSource(dataSourceAgg);
+		hud = new Hud(this, dataAggregator);		
 		hud.addEmitter();
+		
+		//hud.da.addDataSource(new DataSourceRedis(this, "10.0.0.60:6379"));		
 		
 		// UI controls are in separate window, configured here
 		new ControlP5(this);			

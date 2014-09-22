@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Observable;
 
+import processing.RenderLoop;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 
@@ -18,21 +19,21 @@ public class DataSourceRedis extends Observable implements Runnable  {
 	public String ip;
 	public int port;
 	
-	private DataAggregator sourceAgg;
+	private RenderLoop rl;
 	private EventProcessor eventProcessor;
 	
-	public DataSourceRedis(String host, DataAggregator sourceAgg) {
+	public DataSourceRedis(RenderLoop renderLoop, String host) {
 		
 		// Connect to the Redis instance
 		this.host = host;
 		this.ip = host.split(":")[0];
 		this.port = Integer.parseInt(host.split(":")[1]);
-		this.jedis = new Jedis(ip, port);
-		System.out.println("connected to redis on " + host);	
+		this.jedis = new Jedis(ip, port);	
 		
 		// add the data aggregator as observer
-		this.sourceAgg = sourceAgg;
-		this.addObserver(sourceAgg);
+		//this.sourceAgg = sourceAgg;
+		this.rl = renderLoop;
+		//this.addObserver(sourceAgg);
 		
 		// instanciate a new data processor
 		this.eventProcessor = new EventProcessor();
@@ -51,7 +52,7 @@ public class DataSourceRedis extends Observable implements Runnable  {
 			
 			@Override
 			public void onSubscribe(String arg0, int arg1) {
-				// TODO Auto-generated method stub			
+				System.out.println("Successfully connected to " + host);
 			}
 			
 			@Override
@@ -74,20 +75,23 @@ public class DataSourceRedis extends Observable implements Runnable  {
 				// decode the json data
 				Type mapType = new TypeToken<Map<String, String>>(){}.getType();  
 				Map<String, String> data = new Gson().fromJson(arg1, mapType);
-				
-				
+								
 				// process the data
-				float roundup = sourceAgg.getLatencyRoundup();
+				float roundup = rl.params.latencyRoundup;
 				ArrayList<Event> processedData = eventProcessor.processData(data, roundup);
 
 				// notify the observers				
 				setChanged();
-				notifyObservers(processedData);
-				
+				notifyObservers(processedData);				
 			}
 		};
 		
-		jedis.subscribe(jpubSub, "data");	
+		try {
+			jedis.subscribe(jpubSub, "data");			
+		} catch (Exception e) {
+			System.out.println("Error encountered when trying to connect to " + host);
+			System.out.println(e.getMessage());
+		}			
 		
 	}
  		

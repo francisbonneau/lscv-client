@@ -7,7 +7,9 @@ import controlP5.ControlP5;
 import controlP5.DropdownList;
 import controlP5.Slider;
 import controlP5.Textarea;
+import controlP5.Textfield;
 import controlP5.Textlabel;
+import data.DataSourceRedis;
 
 /**
  * See http://www.sojamo.de/libraries/controlP5/reference/controlP5/ControlP5.html 
@@ -72,12 +74,13 @@ public class ControlPanel extends PApplet {
 		cp5.addTextlabel("tab1Label", "DATA SOURCES", 50, 60).moveTo(cp5.getTab("default"));
 		cp5.addTextlabel("tab1Legend", "Enter here the network addresses of the servers to fetch data from.", 50, 90);
 		// Name, X, Y, W, H		
-		cp5.addTextfield("Server address - IP:PORT", 85, 135, 360, 25).setText("127.0.0.1:6379");
+		cp5.addTextfield("newConnexionField", 85, 135, 360, 25)
+			.setValue(rl.params.defaultDataSource).setLabel("Server address - IP:PORT");
 		// Name, Value, X, Y, W, H
-		cp5.addButton("Connect to server", 1, 470, 135, 165, 25);
+		cp5.addButton("newConnexionButton", 1, 470, 135, 165, 25).setLabel("Connect to server");
 		
 		Textarea myTextarea = cp5.addTextarea("txt", "", 85, 205, 550, 250)                  
-                  .setFont(openSans14)                  
+                  .setFont(openSans14)
                   .setColor(color(255))
                   .setColorBackground(color(20))
                   .setColorForeground(color(255, 100));	
@@ -261,10 +264,23 @@ public class ControlPanel extends PApplet {
 				else
 					rl.params.displayFPSCounter = true;
 				break;
+			case (14):
+					//p5.get("Server address - IP:PORT");
+					println("button pressed");
+					
+				break;
 			}			
 		}	
 	}
-	
+
+	// Called when the user clicks the button "Connect to server"
+	public void newConnexionButton(int theValue) {
+		// get the new server address from the adjacent textField
+		String connexionAddress = cp5.get(Textfield.class, "newConnexionField").getValueLabel().getText();
+		println("Trying to reach " + connexionAddress);
+		rl.hud.da.addDataSource(new DataSourceRedis(rl, connexionAddress));
+	}
+
 	public void draw() {		
 		colorMode(HSB,360,100,100);
 		background(0,0,0);
