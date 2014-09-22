@@ -1,4 +1,4 @@
-package processing;
+package view;
 
 import processing.core.PApplet;
 import processing.core.PFont;
@@ -9,20 +9,20 @@ import controlP5.Slider;
 import controlP5.Textarea;
 import controlP5.Textfield;
 import controlP5.Textlabel;
-import data.DataSourceRedis;
+import controller.RenderLoop;
 
 /**
  * See http://www.sojamo.de/libraries/controlP5/reference/controlP5/ControlP5.html 
- *
  */
-public class ControlPanel extends PApplet {
+public class ControlPanelUI extends PApplet {
  
 	private static final long serialVersionUID = 1L;
 
 	ControlP5 cp5;
 	private RenderLoop rl;
 	
-	int width, height;
+	public int width;
+	public int height;
 	Boolean currentTabIsDataDisplay = false;
 	
 	PFont openSans12;
@@ -32,7 +32,7 @@ public class ControlPanel extends PApplet {
 	PFont eurostile15;
 	
 	
-	public ControlPanel(RenderLoop rl, int width, int height) {
+	public ControlPanelUI(RenderLoop rl, int width, int height) {
 		this.rl = rl;
 		this.width = width;
 		this.height = height;
@@ -278,7 +278,7 @@ public class ControlPanel extends PApplet {
 		// get the new server address from the adjacent textField
 		String connexionAddress = cp5.get(Textfield.class, "newConnexionField").getValueLabel().getText();
 		println("Trying to reach " + connexionAddress);
-		rl.hud.da.addDataSource(new DataSourceRedis(rl, connexionAddress));
+		rl.hud.da.addDataSource(connexionAddress);
 	}
 
 	public void draw() {		
@@ -302,7 +302,7 @@ public class ControlPanel extends PApplet {
 					if (numberOfEmitters > 9 )
 						ajustedXPos = 66;					
 					text("" + numberOfEmitters, ajustedXPos + ( i * circlesDistanceX),
-						140 + (j * circlesDistanceY));				
+						140 + (j * circlesDistanceY));
 					numberOfEmitters++;
 				}
 			}

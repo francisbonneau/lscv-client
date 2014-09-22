@@ -1,10 +1,10 @@
-package processing;
+package view;
 
 import java.util.ArrayList;
 
+import model.DataAggregator;
+import model.Event;
 import processing.core.PApplet;
-import data.DataAggregator;
-import data.Event;
 
 public class Hud {
 	

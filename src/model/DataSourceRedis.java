@@ -1,16 +1,17 @@
-package data;
+package model;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Observable;
 
-import processing.RenderLoop;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import controller.RenderLoop;
 
 public class DataSourceRedis extends Observable implements Runnable  {
 	

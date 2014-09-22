@@ -1,4 +1,4 @@
-package processing;
+package view;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
