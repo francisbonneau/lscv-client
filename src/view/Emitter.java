@@ -15,7 +15,9 @@ import processing.core.PVector;
 
 public class Emitter {
 	
-	private PApplet p;	
+	private PApplet p;
+	private Hud hud;
+	
 	public int centerX;
 	public int centerY;	
 	
@@ -34,8 +36,9 @@ public class Emitter {
 	
 	Integer lastEventDistSize;
 
-	public Emitter(PApplet p, int x, int y) {
+	public Emitter(PApplet p, Hud hud, int x, int y) {
 		this.p = p;
+		this.hud = hud;
 		this.centerX = x;
 		this.centerY = y;
 		particlesList = new ArrayList<>();
@@ -118,17 +121,31 @@ public class Emitter {
 			float angle = Min + (int)(Math.random() * ((Max - Min) + 1));			
 		
 			while(syscallName.hasNext()) { 
+				
+				// update the hud latencies displayed				
 				int latency = syscallName.next();
+				if (hud.smallestEvtLatency > latency)
+					hud.smallestEvtLatency = latency;
+				if (hud.biggestEvtLatency < latency)
+					hud.biggestEvtLatency = latency;
+				
 				int eventCount = syscallData.next();
 				
 				Particle newP = new Particle(p, event);
 				newP.setup(new PVector(centerX, centerY), params);
 				newP.color = (float) eventDistributionColor.get(event.processName);
 				
-				float newVelocity = PApplet.map(latency, 1, 1000000,
+//				float newVelocity = PApplet.map(latency, 1, 1000000,
+//						params.particleCurrentMinVelocity, params.particleCurrentMaxVelocity);
+				
+				float newVelocity = PApplet.map(latency, hud.smallestEvtLatency, hud.biggestEvtLatency,
 						params.particleCurrentMinVelocity, params.particleCurrentMaxVelocity);
+								
+				//newP.brightness = PApplet.map(latency, hud.smallestEvtLatency, hud.biggestEvtLatency, 80, 100);
+				newP.brightness = PApplet.map(latency, hud.biggestEvtLatency, hud.smallestEvtLatency, 30, 100);
 				
 				newP.velocity = new PVector(newVelocity, newVelocity);
+				//newP.velocity = new PVector(5,5);
 				newP.acceleration = new PVector(params.particleAcceleration, params.particleAcceleration);
 				
 				newP.velocity.rotate(PApplet.radians(angle));
