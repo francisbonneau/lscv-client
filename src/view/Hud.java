@@ -13,6 +13,10 @@ public class Hud {
  	private ArrayList<Emitter> emitters;
 	public DataAggregator da;
 	
+	// parameters shared by all emitters
+	public float smallestEvtLatency = 1;
+	public float biggestEvtLatency = 1;
+	
 	public Hud(PApplet p, DataAggregator da) {		
 		this.p = p;		
 		this.da = da;
@@ -42,7 +46,7 @@ public class Hud {
 			// if there is only one emitter, center it			
 			int centerX = this.p.width/2;
 			int centerY = this.p.height/2;
-			Emitter em = new Emitter(this.p, centerX, centerY);
+			Emitter em = new Emitter(this.p, this, centerX, centerY);
 			emitters.add(em);
 		} else {
 			// TODO support multiples emitters via panels

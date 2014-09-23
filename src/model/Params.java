@@ -54,7 +54,7 @@ public class Params {
 	public float particleMinVelocity = 1;
 	public float particleCurrentMinVelocity = 5;	
 	public float particleCurrentMaxVelocity = 100;
-	public float particleMaxVelocity = 500;	
+	public float particleMaxVelocity = 1000;	
 	public float particleAcceleration = 0;	
 		
 	public int numberOfEmittersX = 1;

@@ -17,11 +17,14 @@ public class Particle {
 	public PVector velocity;
 	public PVector acceleration;	
 	public float color;
+	public float brightness;
 	public float size;
 	
 	public Particle(PApplet p, Event event) {
 		this.p = p;		
 		this.event = event;
+		
+		this.brightness = 100;
 	}
 	
 	public void setup(PVector location, Params params) {				
@@ -39,7 +42,7 @@ public class Particle {
 	public void draw() {
 		p.stroke(0);
 		p.colorMode(PConstants.HSB, 360, 100, 100);
-		p.fill(color, 100, 100);
+		p.fill(color, 100, brightness);
 		p.ellipse(location.x, location.y, size, size);
 	}
 	
