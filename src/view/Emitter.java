@@ -142,7 +142,7 @@ public class Emitter {
 						params.particleCurrentMinVelocity, params.particleCurrentMaxVelocity);
 								
 				//newP.brightness = PApplet.map(latency, hud.smallestEvtLatency, hud.biggestEvtLatency, 80, 100);
-				newP.brightness = PApplet.map(latency, hud.biggestEvtLatency, hud.smallestEvtLatency, 30, 100);
+				//newP.brightness = PApplet.map(latency, hud.biggestEvtLatency, hud.smallestEvtLatency, 30, 100);
 				
 				newP.velocity = new PVector(newVelocity, newVelocity);
 				//newP.velocity = new PVector(5,5);

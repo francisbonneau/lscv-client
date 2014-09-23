@@ -50,14 +50,15 @@ public class EventProcessor {
 							
 				// process the values format
 				String[] splittedVal = val.split("\\t");
+											
 				String latency = splittedVal[0];
 				String args;
-				if (splittedVal.length == 2) { 
-					args = splittedVal[1];
+				if (splittedVal.length == 3) {
+					 args = splittedVal[1] + " " + splittedVal[2];
 				} else {
 					args = "";
 				}
-											
+				
 				// aggregate the events latency in buckets determined
 				// by the latencyRoundup parameter
 				
@@ -68,7 +69,7 @@ public class EventProcessor {
 				if (latencyBreakdown.get(roundedVal) == null) {
 					// hashmaps initialisation
 					latencyBreakdown.put(roundedVal, 1);
-					eventsArguments.put(roundedVal, "");				
+					eventsArguments.put(roundedVal, "");
 				} else {
 					// increment the existing values
 					int newVal = latencyBreakdown.get(roundedVal) + 1;
