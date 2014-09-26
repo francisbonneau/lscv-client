@@ -1,4 +1,4 @@
-package view;
+package viewUI;
 
 import processing.core.PApplet;
 import processing.core.PFont;
@@ -300,7 +300,7 @@ public class ControlPanelUI extends PApplet {
 					textFont(openSans12);
 					int ajustedXPos = 70; // adjust the X position of the text to center double digits
 					if (numberOfEmitters > 9 )
-						ajustedXPos = 66;					
+						ajustedXPos = 66;
 					text("" + numberOfEmitters, ajustedXPos + ( i * circlesDistanceX),
 						140 + (j * circlesDistanceY));
 					numberOfEmitters++;
