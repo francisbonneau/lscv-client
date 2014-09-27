@@ -135,24 +135,19 @@ public class Emitter {
 				
 				Particle newParticle = new Particle(p, event);
 								
-				float hue = (float) eventDistributionColor.get(event.processName);
-				
-//				float brightness = PApplet.map(latency, hud.smallestEvtLatency, 
-//						hud.biggestEvtLatency, 80, 100);
+				float hue = (float) eventDistributionColor.get(event.processName);				
 				float brightness = 100;
 				
 				float size = (float) Math.sqrt(params.particleSize * eventCount);
-				
-//				float newVelocity = PApplet.map(latency, 1, 1000000,
-//				params.particleCurrentMinVelocity, params.particleCurrentMaxVelocity);				
+								
 				float velocity = PApplet.map(latency, hud.smallestEvtLatency, 
-						hud.biggestEvtLatency, params.particleCurrentMinVelocity,
-						params.particleCurrentMaxVelocity);
+						hud.biggestEvtLatency, params.particleMinVelocity,
+						params.particleMaxVelocity);
 				
 				float acceleration = params.particleAcceleration;
 				
-				newParticle.setup(new PVector(centerX, centerY), size,  angle, 
-							velocity, acceleration, hue, brightness);				
+				newParticle.setup(new PVector(centerX, centerY), size,  angle,
+							velocity, acceleration, hue, brightness);
 				
 				particlesList.add(newParticle);
 			}
@@ -172,8 +167,8 @@ public class Emitter {
 			particle.update();
 			
 			// check if the particle is outside of the emitter radius
-			double distance = Math.sqrt(Math.pow(centerX - particle.location.x,
-					2) + Math.pow(centerY - particle.location.y, 2));
+			double distance = Math.sqrt(Math.pow(centerX - particle.location.x, 2) 
+					+ Math.pow(centerY - particle.location.y, 2));
 												
 			if ( distance > params.emitterRadius/2 ) {
 				// if this is the case the particle is removed				
@@ -204,7 +199,7 @@ public class Emitter {
 		p.stroke(0,0,emitterRadiusColor);
 		p.noFill();
 		p.ellipse(centerX, centerY, radius, radius);
-	}	
+	}
 	
 	// Update all the components of the emitter 
 	public void update(Params params) {
