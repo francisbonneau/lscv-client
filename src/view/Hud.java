@@ -36,22 +36,28 @@ public class Hud {
 
 	public void updateDisplayedData(Params params) {
 		
-		// for each emitter, check if there is new data	
+		ArrayList<String> hosts = new ArrayList<>();
 		for (Emitter em : emitters) {
-			
-			Queue<ArrayList<Event>> dataList = da.getDataForHost(em.host);
-			
-			// if the data list for the emitter exist, and data source is set 
-			if (dataList != null) {
-				// we process all the new incoming events not yet processed
-				ArrayList<Event> newData = dataList.poll();			
-				while(newData != null) {
-					em.addParticles(newData, params);
-					newData = dataList.poll();
-				}
-			}			
+			hosts.add(em.host);
 		}
 		
+		for (String host : hosts) { 
+			
+			Queue<ArrayList<Event>> dataList = da.getDataForHost(host);
+			if (dataList != null) {
+				ArrayList<Event> newData = dataList.poll();			
+				while(newData != null) {
+					
+					for(Emitter em : emitters) {
+						if (em.host.equals(host))
+							em.addParticles(newData, params);
+					}					
+					newData = dataList.poll();
+				}
+			}
+			
+		}
+				
 	}
 	
 	public void addEmitter(Params params, String host) {		
@@ -91,15 +97,7 @@ public class Hud {
 				}
 				
 			}
-						
-		
-			//}
-//			catch (Exception e ) { 
-//				// Catch the exception that occurs when the number of emitters added
-//				// via the Y axis (multiples added in a single shot) is not yet updated here
-//				// causing an exception due to the emitters.size() not matching the # of emitters X/Y
-//			}
-						
+			
 		}
 		
 	}
@@ -109,16 +107,13 @@ public class Hud {
 		if (params.displayGrid == true)
 			drawGrid();
 		
-		
-		Iterator<Emitter> it = emitters.iterator();
-		
-		while(it.hasNext()) { 
-			Emitter em = it.next();
+		// to avoid ConcurrentModificationException 
+		Object[] emittersList = emitters.toArray();			
+		for (Object o : emittersList) { 
+			Emitter em = (Emitter) o;
 			em.update(params);
 			em.draw(params);
-			
 		}
-		
 	}
 	
 	public void drawGrid() {	
