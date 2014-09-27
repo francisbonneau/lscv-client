@@ -49,7 +49,7 @@ public class RenderLoop extends PApplet {
 		
 		// Data visualisation setup
 		hud = new Hud(this, dataAggregator);
-		hud.addEmitter(params.defaultDataSource);		 
+		hud.addEmitter(params, params.defaultDataSource);		 
 		
 		// UI controls are in separate window, configured here
 		new ControlP5(this);			

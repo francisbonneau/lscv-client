@@ -12,7 +12,7 @@ import controller.RenderLoop;
 /**
  * The DataAggregator is updated every time a new DataSource Thread receive
  * new incoming data, the dataAggregator then acts as a buffer, temporarily
- * storing the data by its host until the data is consumed
+ * storing the data in separate queues until the data is consumed
  */
 public class DataAggregator implements Observer {
 	

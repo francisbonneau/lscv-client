@@ -234,12 +234,27 @@ public class ControlPanelUI extends PApplet {
 					label.setStringValue( "( " + rl.params.latencyRoundupLegend[rl.params.latencyRoundup - 1] + " )");			
 				break;
 			case (8):
-				rl.params.numberOfEmittersX = (int) newValue;
-				break;			
-			case (9):
-				// trick to place the slider at the correct val ( on top )
-				rl.params.numberOfEmittersY = (int) Math.abs(5 - newValue);
+				
+				if (rl.params.numberOfEmittersX < (int) newValue) {
+					rl.params.numberOfEmittersX = (int) newValue;
+					println("added new emitterX : " + rl.params.numberOfEmittersX);				
+					rl.hud.addEmitter(rl.params, rl.params.defaultDataSource);	
+				}				
 				break;
+				
+			case (9):
+
+				// trick to place the slider at the correct val ( on top )
+				if (rl.params.numberOfEmittersY < (int) Math.abs(5 - newValue)) {					
+					rl.params.numberOfEmittersY = (int) Math.abs(5 - newValue);
+					
+					int nbEmittersToAdd = rl.params.numberOfEmittersX;	
+					for (int i = 0; i < nbEmittersToAdd; i++) {
+						rl.hud.addEmitter(rl.params, rl.params.defaultDataSource);
+					}
+				}
+				break;
+				
 			case (10):
 				if (newValue == 0.0)
 					rl.params.displayGrid = false;
@@ -291,7 +306,7 @@ public class ControlPanelUI extends PApplet {
 			stroke(255);
 			int circlesDistanceX = 62;
 			int circlesDistanceY = 45;
-			int numberOfEmitters = 1;
+			int numberOfEmitters = rl.params.numberOfEmittersX * rl.params.numberOfEmittersY;
 			
 			for (int i = rl.params.numberOfEmittersX; i > 0; i--) {	
 				for (int j = rl.params.numberOfEmittersY; j > 0; j--) {
@@ -303,7 +318,7 @@ public class ControlPanelUI extends PApplet {
 						ajustedXPos = 66;
 					text("" + numberOfEmitters, ajustedXPos + ( i * circlesDistanceX),
 						140 + (j * circlesDistanceY));
-					numberOfEmitters++;
+					numberOfEmitters--;
 				}
 			}
 		}

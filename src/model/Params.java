@@ -58,8 +58,7 @@ public class Params {
 	public float particleAcceleration = 0;	
 		
 	public int numberOfEmittersX = 1;
-	public int numberOfEmittersY = 1;
-	
+	public int numberOfEmittersY = 1;	
 	
 	public String softwareLicense = "Copyright (c) 2014 Francis Bonneau\n" + 
 		"\n" + 
