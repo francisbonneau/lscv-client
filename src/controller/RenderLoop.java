@@ -48,7 +48,7 @@ public class RenderLoop extends PApplet {
 		DataAggregator dataAggregator = new DataAggregator(this);
 		
 		// Data visualisation setup
-		hud = new Hud(this, dataAggregator);
+		hud = new Hud(this, dataAggregator);		
 		hud.addEmitter(params, params.defaultDataSource);		 
 		
 		// UI controls are in separate window, configured here

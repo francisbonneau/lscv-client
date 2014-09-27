@@ -1,9 +1,7 @@
 package view;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Queue;
 
 import model.DataAggregator;
@@ -62,46 +60,55 @@ public class Hud {
 		}
 	}
 	
-	public void addEmitter(Params params, String host) {		
+	/**
+	 * Add a new emitter to the hud, and recaculate the position of 
+	 * all emitters if necessary
+	 * @param params
+	 * @param host
+	 */	
+	public void addEmitter(Params params, String host) {
 		int emittersX = params.numberOfEmittersX;
 		int emittersY = params.numberOfEmittersY;
-		
+
 		int currentEmittersNb = emitters.size();
-		
-		if (currentEmittersNb == 0) { // if there is only one emitter, center it						
-			int centerX = this.p.width/2;
-			int centerY = this.p.height/2;
+
+		if (currentEmittersNb == 0) { 
+			// if there is only one emitter, center it
+			int centerX = this.p.width / 2;
+			int centerY = this.p.height / 2;
 			Emitter em = new Emitter(this.p, this, host, centerX, centerY);
 			emitters.add(em);
-		} else { 
-			
-			// add the new emitter with a random posistion
+		} else {			
+			// if there is multiples emitters, start by adding the new emitter
+			// with a random posistion
 			Emitter em = new Emitter(this.p, this, host, 10, 10);
 			emitters.add(em);
-			
-			// else recalculate the position of each emitter			
-			// but only if the number of emitters match
-			if (emitters.size() == (emittersX * emittersY)) {
-								
-				currentEmittersNb++;				
+
+			// and recalculate the position of each emitter
+			// but only if the number of emitters match the expected value 
+			int expectedNbEmitters = emittersX * emittersY;			
+
+			if (emitters.size() == expectedNbEmitters) {
+				currentEmittersNb++;
 				Iterator<Emitter> it = emitters.iterator();
-				
-				float Xincr =  p.width / (emittersX+1);
-				float Yincr =  p.height / (emittersY+1);
-	 				 
+
+				float Xincr = p.width / (emittersX + 1);
+				float Yincr = p.height / (emittersY + 1);
+
 				for (int i = 1; i <= emittersX; i++) {
-					  for (int j = 1; j <= emittersY; j++) {
-						  
-						  Emitter currentEmitter = it.next();
-						  currentEmitter.centerX = i * Xincr;
-						  currentEmitter.centerY = j * Yincr;
-					  }
+					for (int j = 1; j <= emittersY; j++) {
+						Emitter currentEmitter = it.next();
+						currentEmitter.centerX = i * Xincr;
+						currentEmitter.centerY = j * Yincr;						
+					}
 				}
 				
-			}
+				// also change the emitters radius to avoid collisions
+				if (params.emitterRadius > Xincr) 
+					params.emitterRadius = Xincr - 10;
 			
-		}
-		
+			} // if (emitters.size() ...
+		} // if (currentEmittersNb == 0 ...
 	}
 	
 	// Draw the hud (the particles emitters)
