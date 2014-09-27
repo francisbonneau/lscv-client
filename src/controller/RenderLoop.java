@@ -83,14 +83,15 @@ public class RenderLoop extends PApplet {
 		if (keyCode == TAB) {		
 			if (params.fullscreen) {
 				frame.setResizable(true);
-				frame.setBounds(400, 400, params.mainWindowWidth, params.mainWindowHeight);				
+				frame.setBounds(400, 400, params.mainWindowWidth, 
+						params.mainWindowHeight);				
 				params.fullscreen = false;
 			} else {				
 				frame.setResizable(true);
 				frame.setBounds(0, 0, displayWidth, displayWidth);
 				params.fullscreen = true;
 			}			
-		}		
+		}
 	}
 	
 	// Display the FPS counter

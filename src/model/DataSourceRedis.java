@@ -77,9 +77,9 @@ public class DataSourceRedis extends Observable implements Runnable  {
 				Type mapType = new TypeToken<Map<String, String>>(){}.getType();  
 				Map<String, String> data = new Gson().fromJson(arg1, mapType);
 								
-				// process the data
-				float roundup = rl.params.latencyRoundup;
-				ArrayList<Event> processedData = eventProcessor.processData(data, roundup);
+				// process the data				
+				ArrayList<Event> processedData = eventProcessor.processData(data,
+						rl.params.latencyRoundup);
 
 				// notify the observers				
 				setChanged();

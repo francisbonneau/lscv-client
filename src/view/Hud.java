@@ -48,7 +48,8 @@ public class Hud {
 			Queue<ArrayList<Event>> dataList = da.getDataForHost(host);			
 			if (dataList != null) {
 				
-				// and if this is the case update all the emitters attached to that source
+				// and if this is the case update all the emitters
+				// attached to that source
 				ArrayList<Event> newData = dataList.poll();			
 				while(newData != null) {					
 					for(Emitter em : emitters) {
@@ -117,7 +118,7 @@ public class Hud {
 		}
 	}
 	
-	public void drawGrid() {	
+	public void drawGrid() {
 		
 		int gridSquareSize = 45;		
 		int cols = p.width / gridSquareSize;
@@ -133,7 +134,7 @@ public class Hud {
 		      p.rect(x,y,gridSquareSize,gridSquareSize);
 		      
 		      p.fill(120);
-		      p.rect(x - 1, y - 1, 2, 2); 		      
+		      p.rect(x - 1, y - 1, 2, 2);
 		  }
 		}
 		

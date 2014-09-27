@@ -133,44 +133,48 @@ public class Emitter {
 				
 				int eventCount = syscallData.next();
 				
-				Particle newP = new Particle(p, event);
-				newP.setup(new PVector(centerX, centerY), params);
-				newP.color = (float) eventDistributionColor.get(event.processName);
+				Particle newParticle = new Particle(p, event);
+								
+				float hue = (float) eventDistributionColor.get(event.processName);
+				
+//				float brightness = PApplet.map(latency, hud.smallestEvtLatency, 
+//						hud.biggestEvtLatency, 80, 100);
+				float brightness = 100;
+				
+				float size = (float) Math.sqrt(params.particleSize * eventCount);
 				
 //				float newVelocity = PApplet.map(latency, 1, 1000000,
-//						params.particleCurrentMinVelocity, params.particleCurrentMaxVelocity);
+//				params.particleCurrentMinVelocity, params.particleCurrentMaxVelocity);				
+				float velocity = PApplet.map(latency, hud.smallestEvtLatency, 
+						hud.biggestEvtLatency, params.particleCurrentMinVelocity,
+						params.particleCurrentMaxVelocity);
 				
-				float newVelocity = PApplet.map(latency, hud.smallestEvtLatency, hud.biggestEvtLatency,
-						params.particleCurrentMinVelocity, params.particleCurrentMaxVelocity);
-								
-				//newP.brightness = PApplet.map(latency, hud.smallestEvtLatency, hud.biggestEvtLatency, 80, 100);
-				//newP.brightness = PApplet.map(latency, hud.biggestEvtLatency, hud.smallestEvtLatency, 30, 100);
+				float acceleration = params.particleAcceleration;
 				
-				newP.velocity = new PVector(newVelocity, newVelocity);
-				//newP.velocity = new PVector(5,5);
-				newP.acceleration = new PVector(params.particleAcceleration, params.particleAcceleration);
+				newParticle.setup(new PVector(centerX, centerY), size,  angle, 
+							velocity, acceleration, hue, brightness);				
 				
-				newP.velocity.rotate(PApplet.radians(angle));
-				newP.acceleration.rotate(PApplet.radians(angle));
-																			
-				newP.size = (float) Math.sqrt(newP.size * eventCount);
-				
-				particlesList.add(newP);
+				particlesList.add(newParticle);
 			}
 		}
 	}
 	
+	/**
+	 * Update all the particles position and speed 
+	 * @param params
+	 */
 	public void updateParticles(Params params) {
 		
 		Iterator<Particle> it = particlesList.iterator();		
 		while(it.hasNext()) { 
+			
 			Particle particle = it.next();
 			particle.update();
 			
-			double distance = Math.sqrt(Math.pow(centerX - particle.location.x, 2) +  
-					Math.pow(centerY - particle.location.y, 2));
-									
 			// check if the particle is outside of the emitter radius
+			double distance = Math.sqrt(Math.pow(centerX - particle.location.x,
+					2) + Math.pow(centerY - particle.location.y, 2));
+												
 			if ( distance > params.emitterRadius/2 ) {
 				// if this is the case the particle is removed				
 				it.remove();
@@ -178,16 +182,18 @@ public class Emitter {
 		}
 		
 	}
-	
-	public void drawLabels() { 
-		for (EmitterLabel label : labelsList) {
-			label.drawLabel();
-		}
-	}
-	
+		
+	// Draw all the particles
 	public void drawParticles() {		
 		for (Particle particle : particlesList) {
 			particle.draw();
+		}
+	}
+	
+	// Draw the emitter labels	
+	public void drawLabels() { 
+		for (EmitterLabel label : labelsList) {
+			label.drawLabel();
 		}
 	}
 	
@@ -200,10 +206,12 @@ public class Emitter {
 		p.ellipse(centerX, centerY, radius, radius);
 	}	
 	
+	// Update all the components of the emitter 
 	public void update(Params params) {
 		updateParticles(params);
 	}
-	
+
+	// Draw all the components of the emitter 
 	public void draw(Params params) {
 		drawParticles();
 		
