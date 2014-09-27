@@ -20,8 +20,8 @@ public class Emitter {
 	
 	public String host;
 	
-	public int centerX;
-	public int centerY;	
+	public float centerX;
+	public float centerY;	
 	
 	public List<Particle> particlesList;	
 	public List<EmitterLabel> labelsList;
