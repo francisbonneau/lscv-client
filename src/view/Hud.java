@@ -1,6 +1,8 @@
 package view;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Queue;
 
 import model.DataAggregator;
 import model.Event;
@@ -10,7 +12,8 @@ import processing.core.PApplet;
 public class Hud {
 	
 	private PApplet p;
- 	private ArrayList<Emitter> emitters;
+ 	private HashMap<String, Emitter> emitters;
+ 	
 	public DataAggregator da;
 	
 	// parameters shared by all emitters
@@ -21,33 +24,37 @@ public class Hud {
 		this.p = p;		
 		this.da = da;
 
-		emitters = new ArrayList<>();
+		emitters = new HashMap<String, Emitter>();
 	}
 
 	public void updateDisplayedData(Params params) {
 		
-		ArrayList<Event> newData = da.data.poll();
-		while(newData != null) {	
-					
-			//displayedData.add(newData);
+		// for each emitter, check if there is new data	
+		for (Emitter em : emitters.values()) {
 			
-			// TODO figure out to which emitter the data is supposed to go
-			Emitter em = emitters.get(0);
-			em.addParticles(newData, params);
+			Queue<ArrayList<Event>> dataList = da.getDataForHost(em.host);
 			
-			newData = da.data.poll();
+			// if the data list for the emitter exist, and data source is set 
+			if (dataList != null) {
+				// we process all the new incoming events not yet processed
+				ArrayList<Event> newData = dataList.poll();			
+				while(newData != null) {
+					em.addParticles(newData, params);
+					newData = dataList.poll();
+				}
+			}			
 		}
 		
 	}
 	
-	public void addEmitter() {
+	public void addEmitter(String host) {
 		
 		if (emitters.size() == 0) {			
 			// if there is only one emitter, center it			
 			int centerX = this.p.width/2;
 			int centerY = this.p.height/2;
-			Emitter em = new Emitter(this.p, this, centerX, centerY);
-			emitters.add(em);
+			Emitter em = new Emitter(this.p, this, host, centerX, centerY);
+			emitters.put(host, em);			
 		} else {
 			// TODO support multiples emitters via panels
 		}
@@ -59,7 +66,7 @@ public class Hud {
 		if (params.displayGrid == true)
 			drawGrid();
 		
-		for (Emitter em : emitters) {
+		for (Emitter em : emitters.values()) {
 			em.update(params);
 			em.draw(params);
 		}				

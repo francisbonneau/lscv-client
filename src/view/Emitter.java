@@ -18,11 +18,12 @@ public class Emitter {
 	private PApplet p;
 	private Hud hud;
 	
+	public String host;
+	
 	public int centerX;
 	public int centerY;	
 	
-	public List<Particle> particlesList;
-	
+	public List<Particle> particlesList;	
 	public List<EmitterLabel> labelsList;
 	
 	// It is exactly like HashMap, except that when you iterate over it,
@@ -36,9 +37,10 @@ public class Emitter {
 	
 	Integer lastEventDistSize;
 
-	public Emitter(PApplet p, Hud hud, int x, int y) {
+	public Emitter(PApplet p, Hud hud, String host, int x, int y) {
 		this.p = p;
 		this.hud = hud;
+		this.host = host;
 		this.centerX = x;
 		this.centerY = y;
 		particlesList = new ArrayList<>();
