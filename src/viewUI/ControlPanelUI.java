@@ -142,10 +142,10 @@ public class ControlPanelUI extends PApplet {
 		cp5.addSlider("Particle size", 1, 400, 60, 180, 400, 15).setId(4)
 				.setValue(rl.params.particleSize).moveTo(cp5.getTab("Global settings"));
 
-		cp5.addRange("Particle velocity", rl.params.particleMinVelocity,
-				rl.params.particleMaxVelocity,
-				rl.params.particleCurrentMinVelocity,
-				rl.params.particleCurrentMaxVelocity, 60, 210, 400, 15)
+		cp5.addRange("Particle velocity", rl.params.particleVelocityRangeMin,
+				rl.params.particleVelocityRangeMax,
+				rl.params.particleMinVelocity,
+				rl.params.particleMaxVelocity, 60, 210, 400, 15)
 				.setId(5).moveTo(cp5.getTab("Global settings"));
 
 		cp5.addSlider("Particle acceleration", 0, 1, 60, 240, 400, 15).setId(6)
@@ -221,8 +221,8 @@ public class ControlPanelUI extends PApplet {
 				rl.params.particleSize = newValue;
 				break;
 			case (5):
-				rl.params.particleCurrentMinVelocity = theEvent.getController().getArrayValue(0);
-				rl.params.particleCurrentMaxVelocity = theEvent.getController().getArrayValue(1);			
+				rl.params.particleMinVelocity = theEvent.getController().getArrayValue(0);
+				rl.params.particleVelocityRangeMax = theEvent.getController().getArrayValue(1);			
 				break;
 			case (6):
 				rl.params.particleAcceleration = newValue;

@@ -51,10 +51,10 @@ public class Params {
 	public boolean displayEmitterLabels = true;
 
 	public float particleSize = 10;		
-	public float particleMinVelocity = 1;
-	public float particleCurrentMinVelocity = 5;	
-	public float particleCurrentMaxVelocity = 100;
-	public float particleMaxVelocity = 1000;	
+	public float particleVelocityRangeMin = 1;
+	public float particleMinVelocity = 5;
+	public float particleMaxVelocity = 100;
+	public float particleVelocityRangeMax = 1000;	
 	public float particleAcceleration = 0;	
 		
 	public int numberOfEmittersX = 1;
