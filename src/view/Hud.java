@@ -36,28 +36,29 @@ public class Hud {
 
 	public void updateDisplayedData(Params params) {
 		
+		// first collect the list of hosts sending data
 		ArrayList<String> hosts = new ArrayList<>();
 		for (Emitter em : emitters) {
 			hosts.add(em.host);
 		}
 		
-		for (String host : hosts) { 
+		for (String host : hosts) {
 			
-			Queue<ArrayList<Event>> dataList = da.getDataForHost(host);
+			// then for each host check if there is new data available			
+			Queue<ArrayList<Event>> dataList = da.getDataForHost(host);			
 			if (dataList != null) {
+				
+				// and if this is the case update all the emitters attached to that source
 				ArrayList<Event> newData = dataList.poll();			
-				while(newData != null) {
-					
+				while(newData != null) {					
 					for(Emitter em : emitters) {
 						if (em.host.equals(host))
 							em.addParticles(newData, params);
 					}					
 					newData = dataList.poll();
 				}
-			}
-			
+			}	
 		}
-				
 	}
 	
 	public void addEmitter(Params params, String host) {		
