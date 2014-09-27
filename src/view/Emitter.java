@@ -124,7 +124,7 @@ public class Emitter {
 		
 			while(syscallName.hasNext()) { 
 				
-				// update the hud latencies displayed				
+				// update the hud latencies displayed
 				int latency = syscallName.next();
 				if (hud.smallestEvtLatency > latency)
 					hud.smallestEvtLatency = latency;
