@@ -104,8 +104,12 @@ public class Hud {
 				}
 				
 				// also change the emitters radius to avoid collisions
-				if (params.emitterRadius > Xincr) 
-					params.emitterRadius = Xincr - 10;
+				float smallestDist = Xincr;
+				if (Yincr < Xincr)
+					smallestDist = Yincr;
+				
+				if (params.emitterRadius > smallestDist) 
+					params.emitterRadius = smallestDist - 10;
 			
 			} // if (emitters.size() ...
 		} // if (currentEmittersNb == 0 ...
