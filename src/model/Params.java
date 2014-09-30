@@ -46,7 +46,8 @@ public class Params {
 	
 	public float backgroundBrightness = 10;	
 	public float emitterRadius = 500;
-	public float emitterRadiusBrightness = 15;
+	//public float emitterRadiusBrightness = 15;
+	public float emitterRadiusBrightness = 100;
 	public boolean displayEmitterRadius = true;
 	public boolean displayEmitterLabels = true;
 
@@ -57,8 +58,8 @@ public class Params {
 	public float particleVelocityRangeMax = 1000;	
 	public float particleAcceleration = 0;	
 		
-	public int numberOfEmittersX = 1;
-	public int numberOfEmittersY = 1;	
+	public int emittersRowsX = 1;
+	public int emittersRowsY = 1;	
 	
 	public String softwareLicense = "Copyright (c) 2014 Francis Bonneau\n" + 
 		"\n" + 

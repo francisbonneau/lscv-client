@@ -16,20 +16,25 @@ import processing.core.PApplet;
  */
 public class Hud {
 	
-	private PApplet p;
- 	private ArrayList<Emitter> emitters;
+	public PApplet p;
+ 	public ArrayList<Emitter> emitters;
  	
+ 	public Params params; 	
 	public DataAggregator da;
+	public HudRegionManager regionManager;
 	
 	// parameters shared by all emitters
 	public float smallestEvtLatency = 1;
 	public float biggestEvtLatency = 1;
 	
-	public Hud(PApplet p, DataAggregator da) {		
+	public Hud(PApplet p, Params params, DataAggregator da) {		
 		this.p = p;		
 		this.da = da;
-
-		emitters = new ArrayList<Emitter>();
+		this.params = params;
+		
+		this.emitters = new ArrayList<Emitter>();
+		this.regionManager = new HudRegionManager(this);
+		
 	}
 
 	public void updateDisplayedData(Params params) {
@@ -67,8 +72,8 @@ public class Hud {
 	 * @param host
 	 */	
 	public void addEmitter(Params params, String host) {
-		int emittersX = params.numberOfEmittersX;
-		int emittersY = params.numberOfEmittersY;
+		int emittersX = params.emittersRowsX;
+		int emittersY = params.emittersRowsY;
 
 		int currentEmittersNb = emitters.size();
 
@@ -76,12 +81,14 @@ public class Hud {
 			// if there is only one emitter, center it
 			int centerX = this.p.width / 2;
 			int centerY = this.p.height / 2;
-			Emitter em = new Emitter(this.p, this, host, centerX, centerY);
+			Emitter em = new Emitter(this.p, this, centerX, centerY);
+			em.setHost(host);
 			emitters.add(em);
 		} else {			
 			// if there is multiples emitters, start by adding the new emitter
 			// with a random posistion
-			Emitter em = new Emitter(this.p, this, host, 10, 10);
+			Emitter em = new Emitter(this.p, this, 10, 10);
+			em.setHost(host);
 			emitters.add(em);
 
 			// and recalculate the position of each emitter

@@ -235,24 +235,53 @@ public class ControlPanelUI extends PApplet {
 				break;
 			case (8):
 				
-				if (rl.params.numberOfEmittersX < (int) newValue) {
-					rl.params.numberOfEmittersX = (int) newValue;
-					println("added new emitterX : " + rl.params.numberOfEmittersX);				
-					rl.hud.addEmitter(rl.params, rl.params.defaultDataSource);	
-				}				
+				if (rl.params.emittersRowsX < (int) newValue) {
+					
+					int newVal = (int) newValue;					
+					int oldVal = rl.params.emittersRowsX;
+					rl.params.emittersRowsX = newVal;
+					
+					for (int i = oldVal; i < newVal; i++ ) {
+						rl.hud.regionManager.addRowOfEmittersAxisX();
+					}
+					
+				} else if (rl.params.emittersRowsX > (int) newValue) {
+					
+					int newVal = (int) newValue;					
+					int oldVal = rl.params.emittersRowsX;
+					rl.params.emittersRowsX = newVal;
+					
+					for (int i = oldVal; i > newVal; i-- ) {
+						rl.hud.regionManager.removeRowOfEmittersAxisX();
+					}
+					
+				}
 				break;
 				
 			case (9):
 
 				// trick to place the slider at the correct val ( on top )
-				if (rl.params.numberOfEmittersY < (int) Math.abs(5 - newValue)) {					
-					rl.params.numberOfEmittersY = (int) Math.abs(5 - newValue);
+				if (rl.params.emittersRowsY < (int) Math.abs(5 - newValue)) {
 					
-					int nbEmittersToAdd = rl.params.numberOfEmittersX;	
-					for (int i = 0; i < nbEmittersToAdd; i++) {
-						rl.hud.addEmitter(rl.params, rl.params.defaultDataSource);
+					int newVal = (int) Math.abs(5 - newValue);				
+					int oldVal = rl.params.emittersRowsY;
+					rl.params.emittersRowsY = newVal;
+					
+					for (int i = oldVal; i < newVal; i++ ) {
+						rl.hud.regionManager.addRowOfEmittersAxisY();
+					}
+					
+				} else if (rl.params.emittersRowsY > (int) newValue) {
+					
+					int newVal = (int) Math.abs(5 - newValue);
+					int oldVal = rl.params.emittersRowsY;
+					rl.params.emittersRowsY = newVal;
+					
+					for (int i = oldVal; i > newVal; i-- ) {
+						rl.hud.regionManager.removeRowOfEmittersAxisY();
 					}
 				}
+				
 				break;
 				
 			case (10):
@@ -306,10 +335,10 @@ public class ControlPanelUI extends PApplet {
 			stroke(255);
 			int circlesDistanceX = 62;
 			int circlesDistanceY = 45;
-			int numberOfEmitters = rl.params.numberOfEmittersX * rl.params.numberOfEmittersY;
+			int numberOfEmitters = rl.params.emittersRowsX * rl.params.emittersRowsY;
 			
-			for (int i = rl.params.numberOfEmittersX; i > 0; i--) {	
-				for (int j = rl.params.numberOfEmittersY; j > 0; j--) {
+			for (int i = rl.params.emittersRowsX; i > 0; i--) {	
+				for (int j = rl.params.emittersRowsY; j > 0; j--) {
 					ellipse(73 + ( i * circlesDistanceX),
 							135 + (j * circlesDistanceY), 25, 25);				
 					textFont(openSans12);

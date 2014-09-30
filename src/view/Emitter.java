@@ -17,9 +17,8 @@ public class Emitter {
 	
 	private PApplet p;
 	private Hud hud;
-	
-	public String host;
-	
+	public int id;
+	public String host;	
 	public float centerX;
 	public float centerY;	
 	
@@ -37,10 +36,9 @@ public class Emitter {
 	
 	Integer lastEventDistSize;
 
-	public Emitter(PApplet p, Hud hud, String host, int x, int y) {
+	public Emitter(PApplet p, Hud hud, int x, int y) {
 		this.p = p;
-		this.hud = hud;
-		this.host = host;
+		this.hud = hud;		
 		this.centerX = x;
 		this.centerY = y;
 		particlesList = new ArrayList<>();
@@ -54,6 +52,10 @@ public class Emitter {
 		
 		labelsList = new ArrayList<>();
 		lastEventDistSize = 0;
+	}
+	
+	public void setHost(String host) {
+		this.host = host;
 	}
 	
 	public void addParticles(ArrayList<Event> newData, Params params) {
@@ -208,6 +210,9 @@ public class Emitter {
 
 	// Draw all the components of the emitter 
 	public void draw(Params params) {
+				
+		p.text(id, centerX, centerY);
+		
 		drawParticles();
 		
 		if (params.displayEmitterLabels)
