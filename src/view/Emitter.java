@@ -43,7 +43,8 @@ public class Emitter {
 		this.centerX = x;
 		this.centerY = y;
 		
-		
+		this.host = "";
+				
 		particlesList = new ArrayList<>();
 		
 		eventDistribution = new LinkedHashMap<String, Integer>();
