@@ -65,63 +65,6 @@ public class Hud {
 		}
 	}
 	
-//	/**
-//	 * Add a new emitter to the hud, and recaculate the position of 
-//	 * all emitters if necessary
-//	 * @param params
-//	 * @param host
-//	 */	
-//	public void addEmitter(Params params, String host) {
-//		int emittersX = params.emittersRowsX;
-//		int emittersY = params.emittersRowsY;
-//
-//		int currentEmittersNb = emitters.size();
-//
-//		if (currentEmittersNb == 0) { 
-//			// if there is only one emitter, center it
-//			int centerX = this.p.width / 2;
-//			int centerY = this.p.height / 2;
-//			Emitter em = new Emitter(this.p, this, centerX, centerY);
-//			em.setHost(host);
-//			emitters.add(em);
-//		} else {			
-//			// if there is multiples emitters, start by adding the new emitter
-//			// with a random posistion
-//			Emitter em = new Emitter(this.p, this, 10, 10);
-//			em.setHost(host);
-//			emitters.add(em);
-//
-//			// and recalculate the position of each emitter
-//			// but only if the number of emitters match the expected value 
-//			int expectedNbEmitters = emittersX * emittersY;			
-//
-//			if (emitters.size() == expectedNbEmitters) {
-//				currentEmittersNb++;
-//				Iterator<Emitter> it = emitters.iterator();
-//
-//				float Xincr = p.width / (emittersX + 1);
-//				float Yincr = p.height / (emittersY + 1);
-//
-//				for (int i = 1; i <= emittersX; i++) {
-//					for (int j = 1; j <= emittersY; j++) {
-//						Emitter currentEmitter = it.next();
-//						currentEmitter.centerX = i * Xincr;
-//						currentEmitter.centerY = j * Yincr;						
-//					}
-//				}
-//				
-//				// also change the emitters radius to avoid collisions
-//				float smallestDist = Xincr;
-//				if (Yincr < Xincr)
-//					smallestDist = Yincr;
-//				
-//				if (params.emitterRadius > smallestDist) 
-//					params.emitterRadius = smallestDist - 10;
-//			
-//			} // if (emitters.size() ...
-//		} // if (currentEmittersNb == 0 ...
-//	}
-	
 	// Draw the hud (the particles emitters)
 	public void draw(Params params) {
 		if (params.displayGrid == true)
