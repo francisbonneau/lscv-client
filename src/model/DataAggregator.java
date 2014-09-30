@@ -16,18 +16,24 @@ import controller.RenderLoop;
  */
 public class DataAggregator implements Observer {
 	
-	private RenderLoop rl;	
+	private RenderLoop rl;
+	
+	private ArrayList<String> dataSourcesNames;
 	private HashMap<String, Queue<ArrayList<Event>>> dataBySource;	
 	private ArrayList<Thread> dataSourcesThreads;
+	
 	
 	public DataAggregator(RenderLoop renderLoop) {		
 		this.rl = renderLoop;
 		
+		dataSourcesNames = new ArrayList<>();
 		dataBySource = new HashMap<String, Queue<ArrayList<Event>>>();	
 		dataSourcesThreads = new ArrayList<Thread>();
 	}
 
 	public void addDataSource(String hostname) {
+		
+		dataSourcesNames.add(hostname);
 		
 		// allocate a new queue to store incoming data until processing
 		Queue<ArrayList<Event>> data = new LinkedList<ArrayList<Event>>();
@@ -54,6 +60,10 @@ public class DataAggregator implements Observer {
 	
 	public Queue<ArrayList<Event>> getDataForHost(String host) {
 		return dataBySource.get(host);
+	}
+	
+	public ArrayList<String> getDataSources() {
+		return dataSourcesNames;
 	}
 	
 }

@@ -20,7 +20,7 @@ public class Hud {
  	public ArrayList<Emitter> emitters;
  	
  	public Params params; 	
-	public DataAggregator da;
+	public DataAggregator dataAgg;
 	public HudRegionManager regionManager;
 	
 	// parameters shared by all emitters
@@ -29,7 +29,7 @@ public class Hud {
 	
 	public Hud(PApplet p, Params params, DataAggregator da) {		
 		this.p = p;		
-		this.da = da;
+		this.dataAgg = da;
 		this.params = params;
 		
 		this.emitters = new ArrayList<Emitter>();
@@ -48,7 +48,7 @@ public class Hud {
 		for (String host : hosts) {
 			
 			// then for each host check if there is new data available			
-			Queue<ArrayList<Event>> dataList = da.getDataForHost(host);			
+			Queue<ArrayList<Event>> dataList = dataAgg.getDataForHost(host);			
 			if (dataList != null) {
 				
 				// and if this is the case update all the emitters

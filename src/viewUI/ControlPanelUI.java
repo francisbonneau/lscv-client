@@ -64,20 +64,20 @@ public class ControlPanelUI extends PApplet {
 		cp5.addTab("About").setColorLabel(color(255));
 				     		  
 		cp5.getTab("default").activateEvent(true)
-			.setLabel("  Data sources settings  ").setId(101);
+			.setLabel("  Data sources settings  ").setId(201);
 		
 		cp5.getTab("Data display settings").activateEvent(true)
-			.setLabel("  Data display settings  ").setId(102);
+			.setLabel("  Data display settings  ").setId(202);
 		
 		//cp5.getTab("Filters").activateEvent(true).setId(106);
 		
 		cp5.getTab("Global settings").activateEvent(true)
-			.setLabel("    Global settings    ").setId(103);
+			.setLabel("    Global settings    ").setId(203);
 		
 		//cp5.getTab("Statistics").activateEvent(true).setId(104);
 		
 		cp5.getTab("About").activateEvent(true)
-			.setLabel("       About       ").setId(104);
+			.setLabel("       About       ").setId(204);
 		
 		// first tab content
 		
@@ -127,16 +127,27 @@ public class ControlPanelUI extends PApplet {
 				.moveTo(cp5.getTab("Data display settings"));
 		
 		DropdownList d1, d2;		
-		d1 = cp5.addDropdownList("myList-d1", 90, 390, 200, 35)
+		// (String theName, int theX, int theY, int theW, int theH)
+		d1 = cp5.addDropdownList("circlesList", 90, 400, 200, 105)
+				.setBarHeight(17)
+				.setLabel("Circles")				
+				.moveTo(cp5.getTab("Data display settings"))
+				.setId(101);
+		
+		// (String theName, int theValue
+		d1.addItem("1", 1);
+		
+		cp5.addTextlabel("tab2Legend3", "==", 305, 382)
+				.setFont(openSans15)
 				.moveTo(cp5.getTab("Data display settings"));
 		
-		cp5.addTextlabel("tab2Legend3", " => ", 310, 380)
-				.moveTo(cp5.getTab("Data display settings"));
+		d2 = cp5.addDropdownList("dataSourcesList", 345, 400, 200, 105)
+				.setBarHeight(17)
+				.setLabel("Data sources")
+				.moveTo(cp5.getTab("Data display settings"))
+				.setId(102);
 		
-		d2 = cp5.addDropdownList("myList-d2", 350, 390, 200, 35)
-				.moveTo(cp5.getTab("Data display settings"));
-		
-		cp5.addButton("Select", 1, 570, 375, 60, 20)
+		cp5.addButton("  Select ", 1, 570, 380, 70, 20)
 		.moveTo(cp5.getTab("Data display settings"));
 		
 		cp5.getTab("Data display settings").add(cp5.getController("Load Config"));
@@ -217,12 +228,14 @@ public class ControlPanelUI extends PApplet {
 	
 	public void controlEvent(ControlEvent theEvent) {
 		
-		if (theEvent.getId() > 100 ) {
+		if (theEvent.getId() > 200 ) {
 			// if the event is a tab switch event, just clear the screen			
-			if (theEvent.getId() == 102)
+			if (theEvent.getId() == 202)
 				currentTabIsDataDisplay = true;
 			else
 				currentTabIsDataDisplay = false;			
+		} else if (theEvent.getId() > 100 ) { 
+			
 		} else {
 			// if the event is associated with a controller ex. slider
 			float newValue = theEvent.getController().getValue();		
@@ -265,6 +278,7 @@ public class ControlPanelUI extends PApplet {
 					for (int i = oldVal; i < newVal; i++ ) {
 						rl.hud.regionManager.addRowOfEmittersAxisX();
 					}
+					updateCirclesDropdown();
 					
 				} else if (rl.params.emittersRowsX > (int) newValue) {
 					
@@ -275,8 +289,10 @@ public class ControlPanelUI extends PApplet {
 					for (int i = oldVal; i > newVal; i-- ) {
 						rl.hud.regionManager.removeRowOfEmittersAxisX();
 					}
+					updateCirclesDropdown();
 					
-				}
+				}			
+				
 				break;
 			
 			// slider to control the number of rows in Y
@@ -295,6 +311,7 @@ public class ControlPanelUI extends PApplet {
 					for (int i = oldVal; i < newVal; i++ ) {
 						rl.hud.regionManager.addRowOfEmittersAxisY();
 					}
+					updateCirclesDropdown();
 					
 				} else if (rl.params.emittersRowsY > ajustedValue) {
 					
@@ -305,6 +322,7 @@ public class ControlPanelUI extends PApplet {
 					for (int i = oldVal; i > newVal; i-- ) {
 						rl.hud.regionManager.removeRowOfEmittersAxisY();
 					}
+					updateCirclesDropdown();
 				}
 				
 				break;
@@ -341,13 +359,30 @@ public class ControlPanelUI extends PApplet {
 			}			
 		}	
 	}
+	
+	// update the dropdown to select the circles ids
+	private void updateCirclesDropdown() {
+		DropdownList d = (DropdownList) cp5.get("circlesList");		
+		d.clear();		
+		int circlesNb = rl.params.emittersRowsX * rl.params.emittersRowsY;		
+		for (int i = 1; i <= circlesNb; i++ ) {
+			d.addItem("" + i, i);
+		}
+	}
 
 	// Called when the user clicks the button "Connect to server"
 	public void newConnexionButton(int theValue) {
 		// get the new server address from the adjacent textField
-		String connexionAddress = cp5.get(Textfield.class, "newConnexionField").getValueLabel().getText();
+		String connexionAddress = cp5.get(Textfield.class, "newConnexionField")
+				.getValueLabel().getText();
+		
 		println("Trying to reach " + connexionAddress);
-		rl.hud.da.addDataSource(connexionAddress);
+		
+		rl.hud.dataAgg.addDataSource(connexionAddress);
+		DropdownList d = (DropdownList) cp5.get("dataSourcesList");
+		int i = d.getListBoxItems().length;
+		d.addItem(connexionAddress, i + 1);
+			
 	}
 
 	public void draw() {		
