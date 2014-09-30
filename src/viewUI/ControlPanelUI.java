@@ -77,7 +77,7 @@ public class ControlPanelUI extends PApplet {
 		//cp5.getTab("Statistics").activateEvent(true).setId(104);
 		
 		cp5.getTab("About").activateEvent(true)
-			.setLabel("        About        ").setId(104);
+			.setLabel("       About       ").setId(104);
 		
 		// first tab content
 		
