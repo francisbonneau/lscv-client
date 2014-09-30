@@ -147,8 +147,9 @@ public class ControlPanelUI extends PApplet {
 				.moveTo(cp5.getTab("Data display settings"))
 				.setId(102);
 		
-		cp5.addButton("  Select ", 1, 570, 380, 70, 20)
-		.moveTo(cp5.getTab("Data display settings"));
+		cp5.addButton("selectDataSrcButton", 1, 570, 380, 70, 20)
+			.setLabel("  Select  ")
+			.moveTo(cp5.getTab("Data display settings"));
 		
 		cp5.getTab("Data display settings").add(cp5.getController("Load Config"));
 		cp5.getTab("Data display settings").add(cp5.getController("Save Config"));
@@ -368,6 +369,18 @@ public class ControlPanelUI extends PApplet {
 		for (int i = 1; i <= circlesNb; i++ ) {
 			d.addItem("" + i, i);
 		}
+	}
+
+	// Called the the user click on the select button in the data src tab
+	public void selectDataSrcButton(int theValue) {
+		DropdownList d1 = (DropdownList) cp5.get("circlesList");
+		DropdownList d2 = (DropdownList) cp5.get("dataSourcesList");
+		
+		int selectedCircle = (int) d1.getValue() - 1;
+		String selectedDataSource = rl.hud.dataAgg.getDataSources().get((int) d2.getValue() -1);
+		
+		rl.hud.emitters.get(selectedCircle).host = selectedDataSource;
+		System.out.print("test");
 	}
 
 	// Called when the user clicks the button "Connect to server"
