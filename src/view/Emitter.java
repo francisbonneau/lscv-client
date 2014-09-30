@@ -17,7 +17,7 @@ public class Emitter {
 	
 	private PApplet p;
 	private Hud hud;
-	public int id;
+	private int id;
 	public String host;	
 	public float centerX;
 	public float centerY;	
@@ -36,11 +36,14 @@ public class Emitter {
 	
 	Integer lastEventDistSize;
 
-	public Emitter(PApplet p, Hud hud, int x, int y) {
+	public Emitter(PApplet p, Hud hud, int id, int x, int y) {
 		this.p = p;
 		this.hud = hud;		
+		this.id = id;		
 		this.centerX = x;
 		this.centerY = y;
+		
+		
 		particlesList = new ArrayList<>();
 		
 		eventDistribution = new LinkedHashMap<String, Integer>();

@@ -271,7 +271,7 @@ public class ControlPanelUI extends PApplet {
 						rl.hud.regionManager.addRowOfEmittersAxisY();
 					}
 					
-				} else if (rl.params.emittersRowsY > (int) newValue) {
+				} else if (rl.params.emittersRowsY > (int) Math.abs(5 - newValue)) {
 					
 					int newVal = (int) Math.abs(5 - newValue);
 					int oldVal = rl.params.emittersRowsY;
