@@ -63,12 +63,21 @@ public class ControlPanelUI extends PApplet {
 		//cp5.addTab("Statistics").setColorLabel(color(255));
 		cp5.addTab("About").setColorLabel(color(255));
 				     		  
-		cp5.getTab("default").activateEvent(true).setLabel("Data sources settings").setId(101);
-		cp5.getTab("Data display settings").activateEvent(true).setId(102);
+		cp5.getTab("default").activateEvent(true)
+			.setLabel("  Data sources settings  ").setId(101);
+		
+		cp5.getTab("Data display settings").activateEvent(true)
+			.setLabel("  Data display settings  ").setId(102);
+		
 		//cp5.getTab("Filters").activateEvent(true).setId(106);
-		cp5.getTab("Global settings").activateEvent(true).setId(103);
+		
+		cp5.getTab("Global settings").activateEvent(true)
+			.setLabel("    Global settings    ").setId(103);
+		
 		//cp5.getTab("Statistics").activateEvent(true).setId(104);
-		cp5.getTab("About").activateEvent(true).setId(104);
+		
+		cp5.getTab("About").activateEvent(true)
+			.setLabel("        About        ").setId(104);
 		
 		// first tab content
 		
