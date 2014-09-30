@@ -214,7 +214,7 @@ public class Emitter {
 	// Draw all the components of the emitter 
 	public void draw(Params params) {
 				
-		p.text(id, centerX, centerY);
+		//p.text(id, centerX, centerY);
 		
 		drawParticles();
 		
