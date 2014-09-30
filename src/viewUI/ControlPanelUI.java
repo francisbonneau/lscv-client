@@ -58,17 +58,17 @@ public class ControlPanelUI extends PApplet {
 		// Setup the tabs
 		cp5.getTab("default").setColorLabel(color(255));		
 		cp5.addTab("Data display settings").setColorLabel(color(255));
-		cp5.addTab("Filters").setColorLabel(color(255));
+		//cp5.addTab("Filters").setColorLabel(color(255));
 		cp5.addTab("Global settings").setColorLabel(color(255));		
-		cp5.addTab("Statistics").setColorLabel(color(255));
+		//cp5.addTab("Statistics").setColorLabel(color(255));
 		cp5.addTab("About").setColorLabel(color(255));
 				     		  
 		cp5.getTab("default").activateEvent(true).setLabel("Data sources settings").setId(101);
 		cp5.getTab("Data display settings").activateEvent(true).setId(102);
-		cp5.getTab("Filters").activateEvent(true).setId(106);
+		//cp5.getTab("Filters").activateEvent(true).setId(106);
 		cp5.getTab("Global settings").activateEvent(true).setId(103);
-		cp5.getTab("Statistics").activateEvent(true).setId(104);
-		cp5.getTab("About").activateEvent(true).setId(105);
+		//cp5.getTab("Statistics").activateEvent(true).setId(104);
+		cp5.getTab("About").activateEvent(true).setId(104);
 		
 		// first tab content
 		
@@ -135,10 +135,10 @@ public class ControlPanelUI extends PApplet {
 		
 		// third tab content
 		
-		cp5.addTextlabel("tab3Label", "FILTERS", 50, 60).moveTo(cp5.getTab("Filters"));
-		
-		cp5.getTab("Filters").add(cp5.getController("Load Config"));
-		cp5.getTab("Filters").add(cp5.getController("Save Config"));
+//		cp5.addTextlabel("tab3Label", "FILTERS", 50, 60).moveTo(cp5.getTab("Filters"));
+//		
+//		cp5.getTab("Filters").add(cp5.getController("Load Config"));
+//		cp5.getTab("Filters").add(cp5.getController("Save Config"));
 		
 		// fourth tab content
 		
@@ -182,12 +182,8 @@ public class ControlPanelUI extends PApplet {
 		cp5.getTab("Global settings").add(cp5.getController("Save Config"));		
 		
 		// fifth tab content
-		
-		cp5.addTextlabel("tab5Label", "STATISTICS", 50, 60).moveTo(cp5.getTab("Statistics"));
-		
-		// sixth tab content
-		
-		cp5.addTextlabel("tab6Label", "ABOUT", 50, 60).moveTo(
+			
+		cp5.addTextlabel("ta56Label", "ABOUT", 50, 60).moveTo(
 				cp5.getTab("About"));
 		cp5.addTextlabel("about1",
 				"Project created for the course GTI719 at l'École de technologie supérieure (ETS) in ",
