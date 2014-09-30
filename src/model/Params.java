@@ -11,8 +11,8 @@ public class Params {
 	public int mainWindowHeight = 800;
 	public int mainWindowWidth = 1200;
 		
-	public int controlsWindowHeight = 600;
-	public int controlsWindowWidth = 750;
+	public int controlsWindowHeight = 700;
+	public int controlsWindowWidth = 725;
 	
 	public int framerate = 30;	
 	public boolean resizable = false;
