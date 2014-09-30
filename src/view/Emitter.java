@@ -62,6 +62,10 @@ public class Emitter {
 		this.host = host;
 	}
 	
+	public int getID() {
+		return this.id;
+	}
+	
 	public void addParticles(ArrayList<Event> newData, Params params) {
 		
 		Iterator<Event> events = newData.iterator();
