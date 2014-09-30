@@ -12,7 +12,8 @@ import controlP5.Textlabel;
 import controller.RenderLoop;
 
 /**
- * See http://www.sojamo.de/libraries/controlP5/reference/controlP5/ControlP5.html 
+ * See ControlP5 documentation at  
+ * http://www.sojamo.de/libraries/controlP5/reference/controlP5/ControlP5.html 
  */
 public class ControlPanelUI extends PApplet {
  
@@ -97,24 +98,37 @@ public class ControlPanelUI extends PApplet {
 				+ " the screen in multiples sections, each containing a circle.", 50, 90)
 				.moveTo(cp5.getTab("Data display settings"));
 		
-		cp5.addSlider("  ", 1, 8, 1, 130, 135, 450, 10).setId(8)
-				.moveTo(cp5.getTab("Data display settings"))
+		//addSlider(String theIndex, Sring theName, float theMin, float theMax, 
+		//		float theDefaultValue, int theX, int theY, int theW, int theH)
+		cp5.addSlider("  ", 1, rl.params.maxNumberOfEmittersX, 1, 130, 135,
+				450, 10).setId(8).moveTo(cp5.getTab("Data display settings"))
 				.setNumberOfTickMarks(8).showTickMarks(false)				
 				.setSliderMode(Slider.FLEXIBLE).valueLabel().setVisible(false);
 				
-		// trick to place the slider at the correct val ( on top )				
-		cp5.addSlider(" ", 1, 4, 4, 90, 175, 10, 150).setId(9).moveTo(cp5.getTab("Data display settings"))
+		// trick to place the slider at the correct val ( on top ), we 
+		// set the min and max val to the same val
+		cp5.addSlider(" ", 1, rl.params.maxNumberOfEmittersY, 
+				rl.params.maxNumberOfEmittersY, 90, 175, 10, 150)
+				.setId(9).moveTo(cp5.getTab("Data display settings"))
 				.setNumberOfTickMarks(4).showTickMarks(false)
 				.setSliderMode(Slider.FLEXIBLE).valueLabel().setVisible(false);
 		
-		cp5.addTextlabel("tab2Legend2", "Then select the data source that each circle should display :", 50, 350)
+		cp5.addTextlabel("tab2Legend2", "Then select the data source that"
+				+ " each circle should display :", 50, 350)
 				.moveTo(cp5.getTab("Data display settings"));
 		
 		DropdownList d1, d2;		
-		d1 = cp5.addDropdownList("myList-d1", 90, 390, 200, 35).moveTo(cp5.getTab("Data display settings"));
-		cp5.addTextlabel("tab2Legend3", " => ", 310, 380).moveTo(cp5.getTab("Data display settings"));		
-		d2 = cp5.addDropdownList("myList-d2", 350, 390, 200, 35).moveTo(cp5.getTab("Data display settings"));
-		cp5.addButton("Select", 1, 570, 375, 60, 20).moveTo(cp5.getTab("Data display settings"));
+		d1 = cp5.addDropdownList("myList-d1", 90, 390, 200, 35)
+				.moveTo(cp5.getTab("Data display settings"));
+		
+		cp5.addTextlabel("tab2Legend3", " => ", 310, 380)
+				.moveTo(cp5.getTab("Data display settings"));
+		
+		d2 = cp5.addDropdownList("myList-d2", 350, 390, 200, 35)
+				.moveTo(cp5.getTab("Data display settings"));
+		
+		cp5.addButton("Select", 1, 570, 375, 60, 20)
+		.moveTo(cp5.getTab("Data display settings"));
 		
 		cp5.getTab("Data display settings").add(cp5.getController("Load Config"));
 		cp5.getTab("Data display settings").add(cp5.getController("Save Config"));
@@ -233,6 +247,8 @@ public class ControlPanelUI extends PApplet {
 				if (label != null)
 					label.setStringValue( "( " + rl.params.latencyRoundupLegend[rl.params.latencyRoundup - 1] + " )");			
 				break;
+				
+			// slider to control the number of rows in X
 			case (8):
 				
 				if (rl.params.emittersRowsX < (int) newValue) {
@@ -257,13 +273,17 @@ public class ControlPanelUI extends PApplet {
 					
 				}
 				break;
-				
+			
+			// slider to control the number of rows in Y
 			case (9):
 
 				// trick to place the slider at the correct val ( on top )
-				if (rl.params.emittersRowsY < (int) Math.abs(5 - newValue)) {
+				int ajustedValue = (int) Math.abs(rl.params.maxNumberOfEmittersY
+						+ 1 - newValue);
+				
+				if (rl.params.emittersRowsY < ajustedValue) {
 					
-					int newVal = (int) Math.abs(5 - newValue);				
+					int newVal = ajustedValue;				
 					int oldVal = rl.params.emittersRowsY;
 					rl.params.emittersRowsY = newVal;
 					
@@ -271,9 +291,9 @@ public class ControlPanelUI extends PApplet {
 						rl.hud.regionManager.addRowOfEmittersAxisY();
 					}
 					
-				} else if (rl.params.emittersRowsY > (int) Math.abs(5 - newValue)) {
+				} else if (rl.params.emittersRowsY > ajustedValue) {
 					
-					int newVal = (int) Math.abs(5 - newValue);
+					int newVal = ajustedValue;
 					int oldVal = rl.params.emittersRowsY;
 					rl.params.emittersRowsY = newVal;
 					
