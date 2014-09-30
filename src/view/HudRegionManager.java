@@ -17,8 +17,7 @@ public class HudRegionManager {
 		this.hud = hud;
 		
 		// add the first emitter
-		Emitter em = new Emitter(hud.p, hud, 10, 10);
-		em.id = 1;
+		Emitter em = new Emitter(hud.p, hud, 1, 10, 10);		
 		hud.emitters.add(em);
 		handleOnlyOneEmitterCase();
 	}
@@ -28,9 +27,10 @@ public class HudRegionManager {
 		boolean onlyOneEmitter = handleOnlyOneEmitterCase();
 		if (!onlyOneEmitter) {
 								
-			for (int i = 0; i < hud.params.emittersRowsY; i++) { 
-				Emitter em = new Emitter(hud.p, hud, 10,10);
-				em.id = hud.emitters.size() + 1;
+			for (int i = 0; i < hud.params.emittersRowsY; i++) {
+				
+				int id = hud.emitters.size() + 1; 
+				Emitter em = new Emitter(hud.p, hud, id,  10,10);				
 				hud.emitters.add(em);
 			}
 			calculateEmittersPositions();
@@ -44,8 +44,8 @@ public class HudRegionManager {
 		if (!onlyOneEmitter) {
 			
 			for (int i = 0; i < hud.params.emittersRowsX; i++) { 
-				Emitter em = new Emitter(hud.p, hud, 10,10);
-				em.id = hud.emitters.size() + 1;
+				int id = hud.emitters.size() + 1; 
+				Emitter em = new Emitter(hud.p, hud, id,  10,10);
 				hud.emitters.add(em);
 			}
 			calculateEmittersPositions();
@@ -66,6 +66,14 @@ public class HudRegionManager {
 	
 	public void removeRowOfEmittersAxisY() {
 		
+		for (int i = 0; i < hud.params.emittersRowsX; i++) { 
+			hud.emitters.remove(hud.emitters.size() - 1);
+		}
+		
+		boolean onlyOneEmitter = handleOnlyOneEmitterCase();
+		if (!onlyOneEmitter) {
+			calculateEmittersPositions();
+		}		
 	}
 	
 	private void calculateEmittersPositions() {
