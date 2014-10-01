@@ -156,48 +156,50 @@ public class ControlPanelUI extends PApplet {
 		
 		// third tab content
 		
-//		cp5.addTextlabel("tab3Label", "FILTERS", 50, 60).moveTo(cp5.getTab("Filters"));
-//		
-//		cp5.getTab("Filters").add(cp5.getController("Load Config"));
-//		cp5.getTab("Filters").add(cp5.getController("Save Config"));
-		
-		// fourth tab content
-		
 		cp5.addTextlabel("tab4Label", "GLOBAL SETTINGS", 50, 60).moveTo(cp5.getTab("Global settings"));
 		
+		//addSlider(String theIndex, Sring theName, float theMin, float theMax, 
+		//		float theDefaultValue, int theX, int theY, int theW, int theH)
 		cp5.addSlider("Background brightness", 0, 100, 60, 90, 400, 15)
 				.setId(1).setValue(rl.params.backgroundBrightness).moveTo(cp5.getTab("Global settings"));
 
 		cp5.addSlider("Circle radius", 100, 2000, 60, 120, 400, 15).setId(2)
 				.setValue(rl.params.emitterRadius).moveTo(cp5.getTab("Global settings"));
-
+		
 		cp5.addSlider("Radius brightness", 0, 100, 60, 150, 400, 15).setId(3)
 				.setValue(rl.params.emitterRadiusBrightness).moveTo(cp5.getTab("Global settings"));
+		
+		cp5.addSlider("Distance between circles", 0, 1000, 60, 180, 400, 15).setId(14)
+		.setValue(rl.params.distanceBetweenEmitters).moveTo(cp5.getTab("Global settings"));
 
-		cp5.addSlider("Particle size", 1, 400, 60, 180, 400, 15).setId(4)
+		cp5.addSlider("Particle size", 1, 400, 60, 210, 400, 15).setId(4)
 				.setValue(rl.params.particleSize).moveTo(cp5.getTab("Global settings"));
 
 		cp5.addRange("Particle velocity", rl.params.particleVelocityRangeMin,
 				rl.params.particleVelocityRangeMax,
 				rl.params.particleMinVelocity,
-				rl.params.particleMaxVelocity, 60, 210, 400, 15)
+				rl.params.particleMaxVelocity, 60, 240, 400, 15)
 				.setId(5).moveTo(cp5.getTab("Global settings"));
 
-		cp5.addSlider("Particle acceleration", 0, 1, 60, 240, 400, 15).setId(6)
+		cp5.addSlider("Particle acceleration", 0, 1, 60, 270, 400, 15).setId(6)
 				.setValue(rl.params.particleAcceleration).moveTo(cp5.getTab("Global settings"));
 
-		cp5.addSlider("Latency rounding", 1, 8, 60, 270, 400, 15).setId(7)
+		cp5.addSlider("Latency rounding", 1, 8, 60, 300, 400, 15).setId(7)
 				.setValue(rl.params.latencyRoundup).setNumberOfTickMarks(8)
 				.showTickMarks(false).moveTo(cp5.getTab("Global settings"));
 		
 		cp5.addTextlabel("latencyLabel", "( "
 						+ rl.params.latencyRoundupLegend[rl.params.latencyRoundup - 1]
-						+ " )", 620, 270).setFont(openSans15).moveTo(cp5.getTab("Global settings"));
+						+ " )", 620, 300).setFont(openSans15).moveTo(cp5.getTab("Global settings"));
 		
-		cp5.addToggle("Display Grid").setPosition(60,310).setSize(40,20).setValue(rl.params.displayGrid).setId(10).moveTo(cp5.getTab("Global settings"));
-		cp5.addToggle("Display Circle Radius").setPosition(260,310).setSize(40,20).setValue(rl.params.displayEmitterRadius).setId(11).moveTo(cp5.getTab("Global settings"));
-		cp5.addToggle("Display Labels").setPosition(60,360).setSize(40,20).setValue(rl.params.displayEmitterRadius).setId(12).moveTo(cp5.getTab("Global settings"));
-		cp5.addToggle("Display FPS counter").setPosition(260,360).setSize(40,20).setValue(rl.params.displayFPSCounter).setId(13).moveTo(cp5.getTab("Global settings"));
+		cp5.addToggle("Display Grid").setPosition(60,360).setSize(40,20)
+			.setValue(rl.params.displayGrid).setId(10).moveTo(cp5.getTab("Global settings"));
+		cp5.addToggle("Display Circle Radius").setPosition(260,360).setSize(40,20)
+			.setValue(rl.params.displayEmitterRadius).setId(11).moveTo(cp5.getTab("Global settings"));
+		cp5.addToggle("Display Labels").setPosition(60,410).setSize(40,20)
+			.setValue(rl.params.displayEmitterRadius).setId(12).moveTo(cp5.getTab("Global settings"));
+		cp5.addToggle("Display FPS counter").setPosition(260,410).setSize(40,20)
+			.setValue(rl.params.displayFPSCounter).setId(13).moveTo(cp5.getTab("Global settings"));
 		
 		cp5.getTab("Global settings").add(cp5.getController("Load Config"));
 		cp5.getTab("Global settings").add(cp5.getController("Save Config"));		
@@ -353,8 +355,8 @@ public class ControlPanelUI extends PApplet {
 					rl.params.displayFPSCounter = true;
 				break;
 			case (14):
-					//p5.get("Server address - IP:PORT");
-					println("button pressed");
+					rl.params.distanceBetweenEmitters = newValue;
+					rl.hud.regionManager.calculateEmittersPositions();
 					
 				break;
 			}			
