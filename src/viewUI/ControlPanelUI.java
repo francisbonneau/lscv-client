@@ -1,5 +1,7 @@
 package viewUI;
 
+import java.awt.Label;
+
 import processing.core.PApplet;
 import processing.core.PFont;
 import controlP5.ControlEvent;
@@ -85,20 +87,42 @@ public class ControlPanelUI extends PApplet {
 		cp5.addTextlabel("tab1Legend", "Enter here the network addresses of the servers to fetch data from.", 50, 90);
 		// Name, X, Y, W, H		
 		cp5.addTextfield("newConnexionField", 85, 135, 360, 25)
-			.setValue(rl.params.defaultDataSource).setLabel("Server address - IP:PORT");
+			.setValue(rl.params.defaultDataSource)
+			.setLabel("Server address - IP:PORT").getCaptionLabel().setFont(openSans13);
+			
 		// Name, Value, X, Y, W, H
 		cp5.addButton("newConnexionButton", 1, 470, 135, 165, 25).setLabel("Connect to server");
 		
-		Textarea myTextarea = cp5.addTextarea("txt", "", 85, 205, 550, 250)                  
-                  .setFont(openSans14)
-                  .setColor(color(255))
+		Textarea myTextarea = cp5.addTextarea("txt", "", 85, 205, 550, 150)                  
+                  .setFont(openSans14).setColor(color(255))
                   .setColorBackground(color(20))
                   .setColorForeground(color(255, 100));	
 		cp5.addConsole(myTextarea);
 		println("Ready to establish new connexions...");
+		
+		cp5.addTextlabel("tab1Labe2", "EVENTS FILTERS", 50, 380)
+			.moveTo(cp5.getTab("default"));
+		cp5.addTextlabel("tab1Legend2", "(Optionnal) Filters can be applied here to the "
+				+ "data sources to restrict the incoming events.", 50, 410);		
+		cp5.addTextlabel("tab1Legend3", "See https://github.com/draios/sysdig"
+				+ "/wiki/Sysdig-User-Guide", 50, 435);
 				
-		cp5.addButton("Load Config", 1, 520, 525, 87, 20).captionLabel().setFont(openSans12);
-		cp5.addButton("Save Config", 1, 615, 525, 87, 20).captionLabel().setFont(openSans12);		
+		cp5.addTextlabel("tab1Legend4", "Select data source :", 50, 480);
+		
+		cp5.addDropdownList("dataSourcesList2", 200, 498, 200, 105)
+			.setBarHeight(17)
+			.setLabel("Data sources list")				
+			.setId(103);
+		
+		cp5.addTextfield("newfilterField", 85, 530, 360, 25)			
+			.setValue("")
+			.setLabel("example : proc.name=top").getCaptionLabel().setFont(openSans13);
+		
+		cp5.addButton("newFilterButton", 1, 470, 530, 165, 25)
+			.setLabel("       Apply filter");
+				
+		cp5.addButton("Load Config", 1, 510, 615, 87, 20).captionLabel().setFont(openSans12);
+		cp5.addButton("Save Config", 1, 605, 615, 87, 20).captionLabel().setFont(openSans12);		
 		
 		// second tab content
 		
@@ -130,7 +154,7 @@ public class ControlPanelUI extends PApplet {
 		// (String theName, int theX, int theY, int theW, int theH)
 		d1 = cp5.addDropdownList("circlesList", 90, 400, 200, 105)
 				.setBarHeight(17)
-				.setLabel("Circles")				
+				.setLabel("Circle number")				
 				.moveTo(cp5.getTab("Data display settings"))
 				.setId(101);
 		
@@ -143,7 +167,7 @@ public class ControlPanelUI extends PApplet {
 		
 		d2 = cp5.addDropdownList("dataSourcesList", 345, 400, 200, 105)
 				.setBarHeight(17)
-				.setLabel("Data sources")
+				.setLabel("No data source yet")
 				.moveTo(cp5.getTab("Data display settings"))
 				.setId(102);
 		
@@ -381,8 +405,7 @@ public class ControlPanelUI extends PApplet {
 		int selectedCircle = (int) d1.getValue() - 1;
 		String selectedDataSource = rl.hud.dataAgg.getDataSources().get((int) d2.getValue() -1);
 		
-		rl.hud.emitters.get(selectedCircle).host = selectedDataSource;
-		System.out.print("test");
+		rl.hud.emitters.get(selectedCircle).host = selectedDataSource;		
 	}
 
 	// Called when the user clicks the button "Connect to server"
@@ -397,7 +420,11 @@ public class ControlPanelUI extends PApplet {
 		DropdownList d = (DropdownList) cp5.get("dataSourcesList");
 		int i = d.getListBoxItems().length;
 		d.addItem(connexionAddress, i + 1);
-			
+		
+		DropdownList d2 = (DropdownList) cp5.get("dataSourcesList2");
+		i = d.getListBoxItems().length;
+		d2.addItem(connexionAddress, i + 1);
+
 	}
 
 	public void draw() {		
