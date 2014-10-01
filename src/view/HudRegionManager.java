@@ -85,7 +85,9 @@ public class HudRegionManager {
 		// but only if the number of emitters match the expected value 
 		int expectedNbEmitters = emittersX * emittersY;
 
-		if (hud.emitters.size() == expectedNbEmitters) {			
+		if (hud.emitters.size() == expectedNbEmitters && 
+				hud.emitters.size() > 1) {
+			
 			Iterator<Emitter> it = hud.emitters.iterator();
 
 			float Xincr = (hud.p.width + hud.params.distanceBetweenEmitters) 
