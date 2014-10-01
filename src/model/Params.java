@@ -47,12 +47,12 @@ public class Params {
 	public float backgroundBrightness = 10;	
 	
 	public float emitterRadius = 500;
-	public float emitterRadiusBrightness = 15;
+	public float emitterRadiusBrightness = 15;		
 	public boolean displayEmitterRadius = true;
-	public boolean displayEmitterLabels = true;
-	
+	public boolean displayEmitterLabels = true;	
 	public int maxNumberOfEmittersX = 8;
 	public int maxNumberOfEmittersY = 4;
+	public float distanceBetweenEmitters = 35;
 
 	public float particleSize = 10;		
 	public float particleVelocityRangeMin = 1;

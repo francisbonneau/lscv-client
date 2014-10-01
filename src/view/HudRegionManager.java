@@ -76,7 +76,7 @@ public class HudRegionManager {
 		}		
 	}
 	
-	private void calculateEmittersPositions() {
+	public void calculateEmittersPositions() {
 		
 		int emittersX = hud.params.emittersRowsX;
 		int emittersY = hud.params.emittersRowsY;
@@ -88,14 +88,18 @@ public class HudRegionManager {
 		if (hud.emitters.size() == expectedNbEmitters) {			
 			Iterator<Emitter> it = hud.emitters.iterator();
 
-			float Xincr = hud.p.width / (emittersX + 1);
-			float Yincr = hud.p.height / (emittersY + 1);
+			float Xincr = (hud.p.width + hud.params.distanceBetweenEmitters) 
+					/ (emittersX + 1);			
+			float Yincr = (hud.p.height + hud.params.distanceBetweenEmitters) 
+					/ (emittersY + 1);
 
 			for (int i = 1; i <= emittersX; i++) {
 				for (int j = 1; j <= emittersY; j++) {
 					Emitter currentEmitter = it.next();
-					currentEmitter.centerX = i * Xincr;
-					currentEmitter.centerY = j * Yincr;
+					currentEmitter.centerX = i * Xincr -
+							hud.params.distanceBetweenEmitters/2;
+					currentEmitter.centerY = j * Yincr - 
+							hud.params.distanceBetweenEmitters/2;
 				}
 			}
 			
@@ -105,7 +109,7 @@ public class HudRegionManager {
 				smallestDist = Yincr;
 			
 			if (hud.params.emitterRadius > smallestDist) 
-				hud.params.emitterRadius = smallestDist - 10;			
+				hud.params.emitterRadius = smallestDist - 10;
 		}
 		
 	}
