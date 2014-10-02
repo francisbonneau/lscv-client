@@ -189,9 +189,9 @@ public class Emitter {
 	}
 		
 	// Draw all the particles
-	public void drawParticles() {		
+	public void drawParticles(float backgroundBrightness) {		
 		for (Particle particle : particlesList) {
-			particle.draw();
+			particle.draw(backgroundBrightness);
 		}
 	}
 	
@@ -221,7 +221,7 @@ public class Emitter {
 				
 		//p.text(id, centerX, centerY);
 		
-		drawParticles();
+		drawParticles(params.backgroundBrightness);
 		
 		if (params.displayEmitterLabels)
 			drawLabels();
