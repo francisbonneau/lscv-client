@@ -6,7 +6,7 @@ public class Params {
 	// default parameters of the application
 	
 	// display parameters
-	public boolean fullscreen = false;
+	public boolean windowMaximized = false;
 	
 	public int mainWindowHeight = 800;
 	public int mainWindowWidth = 1200;

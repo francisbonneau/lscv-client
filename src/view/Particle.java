@@ -72,7 +72,7 @@ public class Particle {
 	public void draw(float backgroundBrightness) {
 	
 		p.colorMode(PConstants.HSB, 360, 100, 100);		
-		//p.noStroke();				
+		//p.noStroke();
 		p.stroke(hue, 100, backgroundBrightness);
 		p.fill(hue, 100, brightness);
 		p.ellipse(location.x, location.y, size, size);

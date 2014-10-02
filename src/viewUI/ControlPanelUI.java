@@ -141,7 +141,7 @@ public class ControlPanelUI extends PApplet {
 		// trick to place the slider at the correct val ( on top ), we 
 		// set the min and max val to the same val
 		cp5.addSlider(" ", 1, rl.params.maxNumberOfEmittersY, 
-				rl.params.maxNumberOfEmittersY, 90, 175, 10, 150)
+				rl.params.maxNumberOfEmittersY, 90, 175, 10, 120)
 				.setId(9).moveTo(cp5.getTab("Data display settings"))
 				.setNumberOfTickMarks(4).showTickMarks(false)
 				.setSliderMode(Slider.FLEXIBLE).valueLabel().setVisible(false);
@@ -152,20 +152,21 @@ public class ControlPanelUI extends PApplet {
 		
 		DropdownList d1, d2;		
 		// (String theName, int theX, int theY, int theW, int theH)
-		d1 = cp5.addDropdownList("circlesList", 90, 400, 200, 105)
+		d1 = cp5.addDropdownList("circlesList", 90, 400, 200, 125)				
 				.setBarHeight(17)
-				.setLabel("Circle number")				
+				.setLabel("Circle number")
 				.moveTo(cp5.getTab("Data display settings"))
 				.setId(101);
 		
 		// (String theName, int theValue
-		d1.addItem("1", 1);
+		d1.addItem("Circle #1", 1);
+		d1.setIndex(0);
 		
 		cp5.addTextlabel("tab2Legend3", "==", 305, 382)
 				.setFont(openSans15)
 				.moveTo(cp5.getTab("Data display settings"));
 		
-		d2 = cp5.addDropdownList("dataSourcesList", 345, 400, 200, 105)
+		d2 = cp5.addDropdownList("dataSourcesList", 345, 400, 200, 155)
 				.setBarHeight(17)
 				.setLabel("No data source yet")
 				.moveTo(cp5.getTab("Data display settings"))
@@ -380,7 +381,7 @@ public class ControlPanelUI extends PApplet {
 				break;
 			case (14):
 					rl.params.distanceBetweenEmitters = newValue;
-					rl.hud.regionManager.calculateEmittersPositions();
+					rl.hud.regionManager.refresh();
 					
 				break;
 			}			
@@ -393,7 +394,7 @@ public class ControlPanelUI extends PApplet {
 		d.clear();		
 		int circlesNb = rl.params.emittersRowsX * rl.params.emittersRowsY;		
 		for (int i = 1; i <= circlesNb; i++ ) {
-			d.addItem("" + i, i);
+			d.addItem("Circle #" + i, i);
 		}
 	}
 
@@ -419,12 +420,13 @@ public class ControlPanelUI extends PApplet {
 		rl.hud.dataAgg.addDataSource(connexionAddress);
 		DropdownList d = (DropdownList) cp5.get("dataSourcesList");
 		int i = d.getListBoxItems().length;
-		d.addItem(connexionAddress, i + 1);
+		d.addItem(connexionAddress, i + 1);		
+		d.setIndex(0);
 		
 		DropdownList d2 = (DropdownList) cp5.get("dataSourcesList2");
 		i = d.getListBoxItems().length;
 		d2.addItem(connexionAddress, i + 1);
-
+		d2.setIndex(0);
 	}
 
 	public void draw() {		

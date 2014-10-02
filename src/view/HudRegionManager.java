@@ -22,6 +22,15 @@ public class HudRegionManager {
 		handleOnlyOneEmitterCase();
 	}
 	
+	public void refresh() {		
+		boolean onlyOneEmitter = handleOnlyOneEmitterCase();
+		System.out.println("onlyOneEmitter : " + onlyOneEmitter);
+		if (!onlyOneEmitter) {
+			calculateEmittersPositions();
+		}
+		
+	}
+	
 	public void addRowOfEmittersAxisX() {
 		
 		boolean onlyOneEmitter = handleOnlyOneEmitterCase();
@@ -76,7 +85,7 @@ public class HudRegionManager {
 		}		
 	}
 	
-	public void calculateEmittersPositions() {
+	private void calculateEmittersPositions() {
 		
 		int emittersX = hud.params.emittersRowsX;
 		int emittersY = hud.params.emittersRowsY;
@@ -122,7 +131,7 @@ public class HudRegionManager {
 			// if there is only one emitter, center it
 			int centerX = hud.p.width / 2;
 			int centerY = hud.p.height / 2;
-						
+
 			Emitter em = hud.emitters.get(0);
 			em.centerX = centerX;
 			em.centerY = centerY;
