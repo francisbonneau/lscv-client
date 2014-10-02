@@ -1,13 +1,11 @@
 package view;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Queue;
-
+import processing.core.PApplet;
 import model.DataAggregator;
 import model.Event;
 import model.Params;
-import processing.core.PApplet;
 
 /**
  * The hud handle the update and drawing of one or multiples emitters,

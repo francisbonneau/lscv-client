@@ -2,9 +2,6 @@ package view;
 
 import java.util.Iterator;
 
-import model.Params;
-
-
 /**
  * This object should handle the subdivision of the hud space into multiples 
  * regions
@@ -24,7 +21,6 @@ public class HudRegionManager {
 	
 	public void refresh() {		
 		boolean onlyOneEmitter = handleOnlyOneEmitterCase();
-		System.out.println("onlyOneEmitter : " + onlyOneEmitter);
 		if (!onlyOneEmitter) {
 			calculateEmittersPositions();
 		}
