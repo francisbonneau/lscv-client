@@ -1,7 +1,5 @@
 package viewUI;
 
-import java.awt.Label;
-
 import processing.core.PApplet;
 import processing.core.PFont;
 import controlP5.ControlEvent;
@@ -150,9 +148,8 @@ public class ControlPanelUI extends PApplet {
 				+ " each circle should display :", 50, 350)
 				.moveTo(cp5.getTab("Data display settings"));
 		
-		DropdownList d1, d2;		
 		// (String theName, int theX, int theY, int theW, int theH)
-		d1 = cp5.addDropdownList("circlesList", 90, 400, 200, 125)				
+		DropdownList d1 = cp5.addDropdownList("circlesList", 90, 400, 200, 125)				
 				.setBarHeight(17)
 				.setLabel("Circle number")
 				.moveTo(cp5.getTab("Data display settings"))
@@ -166,11 +163,11 @@ public class ControlPanelUI extends PApplet {
 				.setFont(openSans15)
 				.moveTo(cp5.getTab("Data display settings"));
 		
-		d2 = cp5.addDropdownList("dataSourcesList", 345, 400, 200, 155)
-				.setBarHeight(17)
-				.setLabel("No data source yet")
-				.moveTo(cp5.getTab("Data display settings"))
-				.setId(102);
+		cp5.addDropdownList("dataSourcesList", 345, 400, 200, 155)
+			.setBarHeight(17)
+			.setLabel("No data source yet")
+			.moveTo(cp5.getTab("Data display settings"))
+			.setId(102);
 		
 		cp5.addButton("selectDataSrcButton", 1, 570, 380, 70, 20)
 			.setLabel("  Select  ")
@@ -262,7 +259,8 @@ public class ControlPanelUI extends PApplet {
 				currentTabIsDataDisplay = true;
 			else
 				currentTabIsDataDisplay = false;			
-		} else if (theEvent.getId() > 100 ) { 
+		} else if (theEvent.getId() > 100 ) {
+			// if the event is a dropdown menu, do nothing
 			
 		} else {
 			// if the event is associated with a controller ex. slider
@@ -444,7 +442,7 @@ public class ControlPanelUI extends PApplet {
 			for (int i = rl.params.emittersRowsX; i > 0; i--) {	
 				for (int j = rl.params.emittersRowsY; j > 0; j--) {
 					ellipse(73 + ( i * circlesDistanceX),
-							135 + (j * circlesDistanceY), 25, 25);				
+							135 + (j * circlesDistanceY), 25, 25);
 					textFont(openSans12);
 					int ajustedXPos = 70; // adjust the X position of the text to center double digits
 					if (numberOfEmitters > 9 )
