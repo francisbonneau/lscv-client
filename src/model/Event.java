@@ -16,5 +16,12 @@ public class Event {
 		this.processName = process;
 		this.syscall = syscall;
 	}
+
+	@Override
+	public String toString() {
+		return "Events (" + arguments.keySet().size() +  ") [username=" 
+				+ username + ", processName=" + processName
+				+ ", syscall=" + syscall + "]";
+	}	
 	
 }

@@ -78,7 +78,7 @@ public class EventProcessor {
 					// and combine the events arguments				
 					String oldArgs = eventsArguments.get(roundedVal);
 					eventsArguments.put(roundedVal, oldArgs + "\n" + args);
-				}			
+				}
 								
 			}
 			
