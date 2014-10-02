@@ -31,9 +31,9 @@ public class RenderLoop extends PApplet {
 	public void setup() {
 		
 		params = new Params(); // default parameters initialisation	
-		params.fullscreen = fullscreenMode;
+		params.windowMaximized = fullscreenMode;
 		
-		if (params.fullscreen) // screen settings
+		if (params.windowMaximized) // screen settings
 			size(displayWidth, displayHeight, P3D);
 		else
 			size(params.mainWindowWidth, params.mainWindowHeight, P3D);
@@ -84,16 +84,18 @@ public class RenderLoop extends PApplet {
 	
 	public void keyPressed() { 
 		if (keyCode == TAB) {		
-			if (params.fullscreen) {
+			if (params.windowMaximized) {
 				frame.setResizable(true);
-				frame.setBounds(400, 400, params.mainWindowWidth, 
+				frame.setBounds(400, 400, params.mainWindowWidth,
 						params.mainWindowHeight);				
-				params.fullscreen = false;
+				params.windowMaximized = false;				
 			} else {				
 				frame.setResizable(true);
 				frame.setBounds(0, 0, displayWidth, displayWidth);
-				params.fullscreen = true;
-			}			
+				params.windowMaximized = true;
+				
+			}
+			hud.regionManager.refresh();
 		}
 	}
 	
@@ -102,12 +104,12 @@ public class RenderLoop extends PApplet {
 		fill(200); // gray color
 		int x, y;
 		
-		if (params.fullscreen) {			
-			x = displayWidth - 75;
-			y = displayHeight - 25; 
+		if (params.windowMaximized) {			
+			x = displayWidth - 150;
+			y = displayHeight - 150; 
 		} else {
 			x = params.mainWindowWidth - 75;
-			y = params.mainWindowHeight - 25;			
+			y = params.mainWindowHeight - 45;			
 		}
 		text(frameRate, x, y);
 	}

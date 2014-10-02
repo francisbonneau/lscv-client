@@ -100,10 +100,8 @@ public class Hud {
 		      p.fill(120);
 		      p.rect(x - 1, y - 1, 3, 3);
 		  }
-		}
-		
+		}		
 		p.popMatrix();
-		
 	}
 
 }
