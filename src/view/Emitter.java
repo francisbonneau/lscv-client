@@ -213,7 +213,9 @@ public class Emitter {
 	
 	// Update all the components of the emitter 
 	public void update(Params params) {
-		updateParticles(params);
+		if (!params.displayPaused) { 
+			updateParticles(params);
+		}		
 	}
 
 	// Draw all the components of the emitter 

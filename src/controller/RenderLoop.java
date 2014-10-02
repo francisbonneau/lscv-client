@@ -83,7 +83,7 @@ public class RenderLoop extends PApplet {
 	}
 	
 	public void keyPressed() { 
-		if (keyCode == TAB) {		
+		if (keyCode == TAB) {
 			if (params.windowMaximized) {
 				frame.setResizable(true);
 				frame.setBounds(400, 400, params.mainWindowWidth,
@@ -97,6 +97,16 @@ public class RenderLoop extends PApplet {
 			}
 			hud.regionManager.refresh();
 		}
+		
+		if (key == ' ') { // Spacebar pressed
+			if (params.displayPaused == false) {
+				params.displayPaused = true;
+			} else { 
+				params.displayPaused = false;
+			}			
+		}
+		
+		
 	}
 	
 	// Display the FPS counter
