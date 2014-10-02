@@ -23,6 +23,8 @@ public class Params {
 	// data source
 	public String defaultDataSource = "127.0.0.1:6379";
 	
+	public boolean displayPaused = false;
+	
 	// visualisation parameters
 		
 	// between 1 and 8, used to control the number of particles
