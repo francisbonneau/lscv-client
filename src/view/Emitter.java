@@ -189,10 +189,15 @@ public class Emitter {
 	}
 		
 	// Draw all the particles
-	public void drawParticles(float backgroundBrightness) {		
+	public void drawParticles(float backgroundBrightness) {
+		
+		boolean particleArgsDisplayed = false;
+				
 		for (Particle particle : particlesList) {
-			particle.draw(backgroundBrightness);
-		}
+			particleArgsDisplayed = particle.draw(backgroundBrightness, 
+					particleArgsDisplayed);
+		}				
+		
 	}
 	
 	// Draw the emitter labels	
@@ -215,7 +220,7 @@ public class Emitter {
 	public void update(Params params) {
 		if (!params.displayPaused) { 
 			updateParticles(params);
-		}		
+		}
 	}
 
 	// Draw all the components of the emitter 

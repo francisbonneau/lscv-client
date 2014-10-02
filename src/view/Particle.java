@@ -1,4 +1,6 @@
 package view;
+import java.util.Iterator;
+
 import model.Event;
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -69,13 +71,37 @@ public class Particle {
 	}
 	
 	// Draw the particle on the PApplet
-	public void draw(float backgroundBrightness) {
+	public boolean draw(float backgroundBrightness, boolean particleArgsDisplayed) {
 	
 		p.colorMode(PConstants.HSB, 360, 100, 100);		
 		//p.noStroke();
-		p.stroke(hue, 100, backgroundBrightness);
-		p.fill(hue, 100, brightness);
-		p.ellipse(location.x, location.y, size, size);
+						
+		if (p.mouseX > location.x - size && p.mouseX < location.x + size
+			&& p.mouseY > location.y - size && p.mouseY < location.y + size) {
+			
+			p.stroke(hue, 0, backgroundBrightness);
+			p.fill(hue, 100, brightness);
+			p.ellipse(location.x, location.y, size + 2, size + 2);
+			
+			if (!particleArgsDisplayed) {
+				String args = event.toString();
+				Iterator<String> it = event.arguments.values().iterator();
+				while(it.hasNext()) {
+					String s = it.next();
+					args += s + "\n";
+				}				
+				p.text(args, 50, 50);
+				return true;
+			}			
+						
+		} else {
+			p.stroke(hue, 100, backgroundBrightness);
+			p.fill(hue, 100, brightness);
+			p.ellipse(location.x, location.y, size, size);	
+		}
+		
+		return particleArgsDisplayed;
+		
 	}
 	
 }
