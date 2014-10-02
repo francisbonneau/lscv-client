@@ -7,6 +7,7 @@ import processing.core.PApplet;
 import view.Hud;
 import viewUI.ControlPanelUI;
 import controlP5.ControlP5;
+import processing.opengl.*;
 
 public class RenderLoop extends PApplet {
 	
@@ -33,9 +34,11 @@ public class RenderLoop extends PApplet {
 		params.fullscreen = fullscreenMode;
 		
 		if (params.fullscreen) // screen settings
-			size(displayWidth, displayHeight);
+			size(displayWidth, displayHeight, P3D);
 		else
-			size(params.mainWindowWidth, params.mainWindowHeight);
+			size(params.mainWindowWidth, params.mainWindowHeight, P3D);
+		
+		System.out.println("rendering with : " + g.getClass());
 		
 		frameRate(params.framerate);  // frames per second limit
 		
