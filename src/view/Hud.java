@@ -67,6 +67,7 @@ public class Hud {
 	
 	// Draw the hud (the particles emitters)
 	public void draw(Params params) {
+		
 		if (params.displayGrid == true)
 			drawGrid();
 		
@@ -85,6 +86,9 @@ public class Hud {
 		int cols = p.width / gridSquareSize;
 		int rows = p.height / gridSquareSize;
 		
+		p.pushMatrix();
+		p.translate(0, 0, -10);
+		
 		for (int i = 0; i < cols; i++) {
 		  for (int j = 0; j < rows; j++) {
 			  int x = i * gridSquareSize;
@@ -92,12 +96,13 @@ public class Hud {
 			  
 			  p.noFill();
 		      p.stroke(40);
-		      p.rect(x,y,gridSquareSize,gridSquareSize);
-		      
+		      p.rect(x,y,gridSquareSize,gridSquareSize);		      
 		      p.fill(120);
-		      p.rect(x - 1, y - 1, 2, 2);
+		      p.rect(x - 1, y - 1, 3, 3);
 		  }
 		}
+		
+		p.popMatrix();
 		
 	}
 
