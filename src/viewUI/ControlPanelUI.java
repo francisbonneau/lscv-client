@@ -32,7 +32,6 @@ public class ControlPanelUI extends PApplet {
 	PFont openSans15;	
 	PFont eurostile15;
 	
-	
 	public ControlPanelUI(RenderLoop rl, int width, int height) {
 		this.rl = rl;
 		this.width = width;
@@ -262,9 +261,21 @@ public class ControlPanelUI extends PApplet {
 		} else if (theEvent.getId() > 100 ) {
 			// if the event is a dropdown menu, do nothing
 			
+			switch (theEvent.getId()) {
+			case (103): // filter data source
+				
+				DropdownList d =  (DropdownList) cp5.get("dataSourcesList2");			
+				String host = rl.hud.dataAgg.getDataSources().get((int) d.getValue() -2);			
+				String filter = rl.hud.dataAgg.getDataSourceFilter(host);			
+				Textfield tf = (Textfield) cp5.get("newfilterField");
+				tf.setValue(filter);
+				
+				break;
+			}
+			
 		} else {
 			// if the event is associated with a controller ex. slider
-			float newValue = theEvent.getController().getValue();		
+			float newValue = theEvent.getController().getValue();
 			switch (theEvent.getController().getId()) {
 			case (1):
 				rl.params.backgroundBrightness = newValue;			
@@ -289,7 +300,8 @@ public class ControlPanelUI extends PApplet {
 				rl.params.latencyRoundup = (int) newValue;
 				Textlabel label = (Textlabel) cp5.get("latencyLabel");
 				if (label != null)
-					label.setStringValue( "( " + rl.params.latencyRoundupLegend[rl.params.latencyRoundup - 1] + " )");			
+					label.setStringValue( "( " +
+						rl.params.latencyRoundupLegend[rl.params.latencyRoundup - 1] + " )");			
 				break;
 				
 			// slider to control the number of rows in X
@@ -394,6 +406,18 @@ public class ControlPanelUI extends PApplet {
 		for (int i = 1; i <= circlesNb; i++ ) {
 			d.addItem("Circle #" + i, i);
 		}
+	}
+	
+	
+	// add a new filter
+	public void newFilterButton(int theValue) {
+		
+		DropdownList d = (DropdownList) cp5.get("dataSourcesList2");	
+		String host = rl.hud.dataAgg.getDataSources().get((int) d.getValue() -2);
+		String filter = cp5.get(Textfield.class, "newfilterField")
+								.getValueLabel().getText();
+		
+		rl.hud.dataAgg.applyFilterToDataSource(host, filter);
 	}
 
 	// Called the the user click on the select button in the data src tab
