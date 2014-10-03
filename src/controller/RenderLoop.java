@@ -16,7 +16,7 @@ public class RenderLoop extends PApplet {
 	public Hud hud;
 	
 	// Single parameter outside of the Params class for the static context
-	public static boolean fullscreenMode = true;
+	public static boolean fullscreenMode = false;
 	
 	// Main method for starting the PApplet
 	public static void main(String args[]) {		
@@ -51,7 +51,7 @@ public class RenderLoop extends PApplet {
 		DataAggregator dataAggregator = new DataAggregator(this);
 		
 		// Data visualisation setup
-		hud = new Hud(this, params, dataAggregator);		
+		hud = new Hud(this, params, dataAggregator);
 		//hud.addEmitter(params, params.defaultDataSource);		 
 		
 		// UI controls are in separate window, configured here
@@ -105,11 +105,11 @@ public class RenderLoop extends PApplet {
 				params.displayPaused = false;
 			}			
 		}
-				
+
 	}
 	
 	// Display the FPS counter
-	public void displayFPSCounter() {		
+	public void displayFPSCounter() {
 		fill(200); // gray color
 		int x, y;
 		

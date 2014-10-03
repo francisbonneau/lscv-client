@@ -19,7 +19,11 @@ public class DataAggregator implements Observer {
 	private RenderLoop rl;
 	
 	private ArrayList<String> dataSourcesNames;
-	private HashMap<String, Queue<ArrayList<Event>>> dataBySource;	
+	
+	private HashMap<String, DataSourceRedis> dataSourceByHost;
+	
+	private HashMap<String, Queue<ArrayList<Event>>> dataBySource;
+	
 	private ArrayList<Thread> dataSourcesThreads;
 	
 	
@@ -27,6 +31,8 @@ public class DataAggregator implements Observer {
 		this.rl = renderLoop;
 		
 		dataSourcesNames = new ArrayList<>();
+		dataSourceByHost = new HashMap<String, DataSourceRedis>();
+		
 		dataBySource = new HashMap<String, Queue<ArrayList<Event>>>();	
 		dataSourcesThreads = new ArrayList<Thread>();
 	}
@@ -39,9 +45,12 @@ public class DataAggregator implements Observer {
 		Queue<ArrayList<Event>> data = new LinkedList<ArrayList<Event>>();
 		dataBySource.put(hostname, data);
 
-		// Create a new thread in charge of running the data source
+		// Instanciate the new data Source
 		DataSourceRedis newDataSource = new DataSourceRedis(rl, hostname);
-		newDataSource.addObserver(this);
+		newDataSource.addObserver(this);		
+		dataSourceByHost.put(hostname, newDataSource);
+
+		// Create a new thread in charge of running the data source
 		Thread t = new Thread(newDataSource);
 		t.setName(newDataSource.host);
 		t.start();
@@ -64,6 +73,14 @@ public class DataAggregator implements Observer {
 	
 	public ArrayList<String> getDataSources() {
 		return dataSourcesNames;
+	}
+	
+	public void applyFilterToDataSource(String host, String filter) {
+		dataSourceByHost.get(host).setFilter(filter);		
+	}
+	
+	public String getDataSourceFilter(String host) {
+		return dataSourceByHost.get(host).getFilter();
 	}
 	
 }
