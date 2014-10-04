@@ -21,7 +21,6 @@ public class EventProcessor {
 		Format : <event latency>\t<event args>\n 
 	 */
 	
-	
 	public ArrayList<Event> processData(Map<String, String> rawData, 
 			float latencyRoundup) {		
 		
@@ -61,16 +60,21 @@ public class EventProcessor {
 				
 				Double latency = Double.parseDouble(valueStrings[0]);
 
-				String args = null;
-				if (valueStrings.length == 3)
-					 args = valueStrings[1] + " " + valueStrings[2];
+				String args;  
+				if (valueStrings.length == 2) {
+					args = "> " + valueStrings[1]; 
+				} else if (valueStrings.length == 3) {
+					args = "> " + valueStrings[1] + " < " + valueStrings[2];
+				} else {
+					args = ".";
+				}
 					
 				int roundedLat = roundLatency(latency, latencyRoundup);
 				
 				if (latencyBreakdown.get(roundedLat) == null) {
 					// hashmaps initialisation if not alreay done
 					latencyBreakdown.put(roundedLat, 1);
-					eventsArguments.put(roundedLat, "");
+					eventsArguments.put(roundedLat, args);
 				} else {
 					// increment the existing values
 					int incrementedVal = latencyBreakdown.get(roundedLat) + 1;
@@ -78,17 +82,13 @@ public class EventProcessor {
 					
 					// and combine the events arguments
 					String previousArgs = eventsArguments.get(roundedLat);					
-					if (args != null) {
-						eventsArguments.put(roundedLat, previousArgs + "\n" + args);
-					} else {
-						eventsArguments.put(roundedLat, previousArgs);
-					}					
+					eventsArguments.put(roundedLat, previousArgs + "\n" + args);			 		
 				}
 				
 				systemCallsCount++;
 			}
 			
-			// and we add the new processed event to the list					
+			// and we add the new processed event to the list
 			processedData.add(new Event(userName, processName, syscallName, 
 					systemCallsCount, latencyBreakdown, eventsArguments));
 		}
@@ -96,7 +96,6 @@ public class EventProcessor {
 		return processedData;
 		
 	}
-	
 	
 	private int roundLatency(Double latency, float latencyRoundup) {
 		// aggregate the events latency in buckets determined
@@ -107,5 +106,5 @@ public class EventProcessor {
 		return roundedVal;
 	}
 	
-	
 }
+ 

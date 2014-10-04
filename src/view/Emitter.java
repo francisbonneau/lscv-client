@@ -7,11 +7,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import model.Event;
-import model.Params;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PVector;
-
 
 public class Emitter {
 	
@@ -25,16 +23,22 @@ public class Emitter {
 	public List<Particle> particlesList;	
 	public List<EmitterLabel> labelsList;
 	
-	// It is exactly like HashMap, except that when you iterate over it,
-	// it presents the items in the insertion order.
-	public LinkedHashMap<String, Integer> eventDistribution;
-	public long eventsTotalCount;
-
-
-	HashMap<String, Float> eventLowerAngle;
-	HashMap<String, Float> eventHigherAngle;
+	// It is exactly like HashMap, but presents the items in the insertion order.	
+	// Key : the unique value (ex: process name) used to separate emitter regions, 
+	// Value : the number associated (# of syscall) with that region
+	public LinkedHashMap<String, Integer> regionsSize;
 	
-	Integer lastEventDistSize;
+	HashMap<String, Float> divisionsLowerAngles;
+	
+	HashMap<String, Float> divisionsHigherAngle;
+	
+	private long regionsTotalSize;
+	
+	// stats
+	public long eventsDisplayedCount;
+	public long syscallDisplayedCount;
+	public long eventsTotalCount;
+	public long syscallTotalCount;
 
 	public Emitter(PApplet p, Hud hud, int id, int x, int y) {
 		this.p = p;
@@ -44,17 +48,20 @@ public class Emitter {
 		this.centerY = y;
 		
 		this.host = "";
-				
+		
 		particlesList = new ArrayList<>();
-		
-		eventDistribution = new LinkedHashMap<String, Integer>();
-		eventsTotalCount = 0;		
-
-		eventLowerAngle = new HashMap<String, Float>();
-		eventHigherAngle = new HashMap<String, Float>();
-		
 		labelsList = new ArrayList<>();
-		lastEventDistSize = 0;
+		
+		regionsSize = new LinkedHashMap<String, Integer>();
+		divisionsLowerAngles = new HashMap<String, Float>();
+		divisionsHigherAngle = new HashMap<String, Float>();
+		
+		eventsDisplayedCount = 0;
+		syscallDisplayedCount = 0;
+		eventsTotalCount = 0;
+		syscallTotalCount = 0;
+		regionsTotalSize = 0;
+		
 	}
 	
 	public void setHost(String host) {
@@ -70,20 +77,20 @@ public class Emitter {
 		// the filtering ordering should be by username, process name, then syscall
 		for (Event e : newData) {
 			
-			if (eventDistribution.containsKey(e.processName)) {
-				int lastVal = eventDistribution.get(e.processName);
-				eventDistribution.put(e.processName, lastVal + e.syscallNumber);
+			if (regionsSize.containsKey(e.processName)) {
+				int lastVal = regionsSize.get(e.processName);
+				regionsSize.put(e.processName, lastVal + e.syscallNumber);
 			}
 			else {				
 				// new process
-				eventDistribution.put(e.processName, e.syscallNumber);
+				regionsSize.put(e.processName, e.syscallNumber);
 										
 				// Get a new color for the new division
 				float newColor = hud.colorGenerator.getNewColorHue();
 				hud.colorPalette.put(e.processName, newColor);
 				
-			}
-			eventsTotalCount = eventsTotalCount + e.syscallNumber;
+			}		
+			regionsTotalSize += e.syscallNumber;			
 		}
 		
 	}
@@ -91,11 +98,11 @@ public class Emitter {
 	private void divideEmitter() {
 		
 		// divide the circle according to the event distribution
-		Iterator<String> eventDistNames = eventDistribution.keySet().iterator();
-		Iterator<Integer> eventsDistCount = eventDistribution.values().iterator();
+		Iterator<String> eventDistNames = regionsSize.keySet().iterator();
+		Iterator<Integer> eventsDistCount = regionsSize.values().iterator();
 		
-		eventLowerAngle = new HashMap<String, Float>();
-		eventHigherAngle = new HashMap<String, Float>();
+		divisionsLowerAngles = new HashMap<String, Float>();
+		divisionsHigherAngle = new HashMap<String, Float>();
 		
 		float lastAngle = 0;
 		labelsList = new ArrayList<>();	
@@ -104,14 +111,14 @@ public class Emitter {
 			String procName = eventDistNames.next();
 			int size = eventsDistCount.next();
 			
-			float relativeSize = PApplet.map(size, 0, eventsTotalCount, 0, 360);
+			float relativeSize = PApplet.map(size, 0, regionsTotalSize, 0, 360);
 						
-			eventLowerAngle.put(procName, lastAngle);
-			eventHigherAngle.put(procName, lastAngle + relativeSize);
+			divisionsLowerAngles.put(procName, lastAngle);
+			divisionsHigherAngle.put(procName, lastAngle + relativeSize);
 			lastAngle = lastAngle + relativeSize;
 			
-			float Min = eventLowerAngle.get(procName);
-			float Max = eventHigherAngle.get(procName);
+			float Min = divisionsLowerAngles.get(procName);
+			float Max = divisionsHigherAngle.get(procName);
 			float angle = (Min + Max)/2 + 45;
 			float radius = hud.params.emitterRadius/2 + 35;
 			
@@ -135,14 +142,13 @@ public class Emitter {
 		while (events.hasNext()) {
 			Event event = events.next();		
 			
-			Iterator<Integer> syscallName = event.latencyBreakdown.keySet().iterator();
-			Iterator<Integer> syscallData = event.latencyBreakdown.values().iterator();
+			Iterator<Integer> syscallName = event.latencyBreakdown.keySet().iterator();			
 			
-			float Min = eventLowerAngle.get(event.processName);
-			float Max = eventHigherAngle.get(event.processName);			
+			float Min = divisionsLowerAngles.get(event.processName);
+			float Max = divisionsHigherAngle.get(event.processName);			
 			float angle = Min + (int)(Math.random() * ((Max - Min) + 1));			
 		
-			while(syscallName.hasNext()) { 
+			while(syscallName.hasNext()) {
 				
 				// update the hud latencies displayed
 				int latency = syscallName.next();
@@ -168,6 +174,11 @@ public class Emitter {
 							velocity, acceleration, hue, brightness);
 				
 				particlesList.add(newParticle);
+				
+				eventsDisplayedCount += 1;
+				syscallDisplayedCount += event.syscallNumber;
+				eventsTotalCount += 1;
+				syscallTotalCount += event.syscallNumber;
 			}
 		}
 	}
@@ -188,6 +199,9 @@ public class Emitter {
 			if ( distance > hud.params.emitterRadius/2 ) {
 				// if this is the case the particle is removed				
 				it.remove();
+				// and the stats are updated
+				eventsDisplayedCount -= eventsDisplayedCount - 1;
+				syscallDisplayedCount -= particle.event.syscallNumber;				
 				
 			// if the particle is approching the radius, fade it out
 			} else if (hud.params.emitterRadius/2 - distance < 40) {
@@ -200,13 +214,11 @@ public class Emitter {
 	// Draw all the particles
 	public void drawParticles(float backgroundBrightness) {
 		
-		boolean particleArgsDisplayed = false;
+		//boolean particleArgsDisplayed = false;
 				
 		for (Particle particle : particlesList) {
-			particleArgsDisplayed = particle.draw(backgroundBrightness, 
-					particleArgsDisplayed);
-		}				
-		
+			 particle.draw(backgroundBrightness);
+		}		
 	}
 	
 	// Draw the emitter labels	

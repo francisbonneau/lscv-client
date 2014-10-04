@@ -74,7 +74,7 @@ public class Particle {
 	}
 	
 	// Draw the particle on the PApplet
-	public boolean draw(float backgroundBrightness, boolean particleArgsDisplayed) {
+	public void draw(float backgroundBrightness) {
 	
 		p.colorMode(PConstants.HSB, 360, 100, 100);		
 		
@@ -85,26 +85,21 @@ public class Particle {
 			p.stroke(hue, saturation, backgroundBrightness);
 			p.fill(hue, saturation, brightness);
 			p.ellipse(location.x, location.y, size + 2, size + 2);
-			
-			if (!particleArgsDisplayed) {
-				String args = event.toString();
-				Iterator<String> it = event.arguments.values().iterator();
-				while(it.hasNext()) {
-					String s = it.next();
-					args += s + "\n";
-				}				
-				p.text(args, 50, 50);
-				return true;
-			}			
-		
+				 
+			String args = event.toString() + "\n\n\n";
+			Iterator<String> it = event.arguments.values().iterator();
+			while(it.hasNext()) {
+				String s = it.next();
+				args += s + "\n";
+			}				
+			p.text(args, 50, 50);
+ 
 		} else {
 			p.stroke(hue, saturation, backgroundBrightness);
 			p.fill(hue, saturation, brightness);
 			p.ellipse(location.x, location.y, size, size);	
 		}
-		
-		return particleArgsDisplayed;
-		
+ 		
 	}
 	
 }

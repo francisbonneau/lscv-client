@@ -18,9 +18,10 @@ public class Params {
 	public boolean resizable = false;
 	
 	public boolean displayFPSCounter = true;	
-	public boolean displayGrid = true;
+	public boolean displayGrid = false;
+	public boolean displayStats = true;
 		
-	// data source
+	// default data source
 	public String defaultDataSource = "127.0.0.1:6379";
 	
 	public boolean displayPaused = false;
