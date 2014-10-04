@@ -29,7 +29,8 @@ public class Emitter {
 	// it presents the items in the insertion order.
 	public LinkedHashMap<String, Integer> eventDistribution;
 	public long eventsTotalCount;
-	public HashMap<String, Float> eventDistributionColor;
+
+
 
 	HashMap<String, Float> eventLowerAngle;
 	HashMap<String, Float> eventHigherAngle;
@@ -48,8 +49,7 @@ public class Emitter {
 		particlesList = new ArrayList<>();
 		
 		eventDistribution = new LinkedHashMap<String, Integer>();
-		eventsTotalCount = 0;
-		eventDistributionColor = new HashMap<String, Float>();
+		eventsTotalCount = 0;		
 
 		eventLowerAngle = new HashMap<String, Float>();
 		eventHigherAngle = new HashMap<String, Float>();
@@ -82,8 +82,11 @@ public class Emitter {
 				eventDistribution.put(e.processName, 1);
 										
 				// Generate a new color randomly
-				float hue = 0 + (int)(Math.random() * ((360 - 0) + 1));				
-				eventDistributionColor.put(e.processName, hue);
+//				float hue = 0 + (int)(Math.random() * ((360 - 0) + 1));				
+//				eventDistributionColor.put(e.processName, hue);
+				float newColor = hud.colorGenerator.getNewColorHue();
+				hud.colorPalette.put(e.processName, newColor);
+				
 			}
 			eventsTotalCount = eventsTotalCount + 1;
 		}
@@ -116,7 +119,7 @@ public class Emitter {
 			float textXposition = (float) Math.cos(PApplet.radians(angle)) * radius + centerX;
 			float textYposition = (float) Math.sin(PApplet.radians(angle)) * radius + centerY;
 			
-			float color = this.eventDistributionColor.get(procName); 				
+			float color = this.hud.colorPalette.get(procName); 				
 			EmitterLabel label = new EmitterLabel(p, procName, 15, color, textXposition, textYposition);
 			labelsList.add(label);
 		}
@@ -145,7 +148,7 @@ public class Emitter {
 				
 				Particle newParticle = new Particle(p, event);
 								
-				float hue = (float) eventDistributionColor.get(event.processName);				
+				float hue = this.hud.colorPalette.get(event.processName);				
 				float brightness = 100;
 				
 				float size = (float) Math.sqrt(params.particleSize * eventCount);
