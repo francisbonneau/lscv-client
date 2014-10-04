@@ -186,6 +186,10 @@ public class Emitter {
 			if ( distance > params.emitterRadius/2 ) {
 				// if this is the case the particle is removed				
 				it.remove();
+				
+			// if the particle is approching the radius, fade it out
+			} else if (params.emitterRadius/2 - distance < 40) {
+				particle.brightness =  particle.brightness - 10;
 			}
 		}
 		

@@ -77,8 +77,8 @@ public class Particle {
 	public boolean draw(float backgroundBrightness, boolean particleArgsDisplayed) {
 	
 		p.colorMode(PConstants.HSB, 360, 100, 100);		
-		//p.noStroke();
-						
+		
+		// if the user mouse is hovering the particle
 		if (p.mouseX > location.x - size && p.mouseX < location.x + size
 			&& p.mouseY > location.y - size && p.mouseY < location.y + size) {
 			
@@ -96,7 +96,7 @@ public class Particle {
 				p.text(args, 50, 50);
 				return true;
 			}			
-						
+		
 		} else {
 			p.stroke(hue, saturation, backgroundBrightness);
 			p.fill(hue, saturation, brightness);
