@@ -46,7 +46,7 @@ public class Params {
 		"100 ns", "10 ns", "1 ns"
 	};
 	
-	public float backgroundBrightness = 10;	
+	public float backgroundBrightness = 9.0f;	
 	
 	public float emitterRadius = 500;
 	public float emitterRadiusBrightness = 15;		

@@ -29,6 +29,8 @@ public class Particle {
 	// the particle hue (H) in the HSB model
 	private float hue;
 	
+	public float saturation;
+	
 	// the particle brightness (B) in the HSB model
 	public float brightness;
 	
@@ -61,6 +63,7 @@ public class Particle {
 		this.acceleration.rotate(PApplet.radians(this.angle));		
 		
 		this.hue = hue;
+		this.saturation = 90;
 		this.brightness = brightness;
 	}
 
@@ -79,8 +82,8 @@ public class Particle {
 		if (p.mouseX > location.x - size && p.mouseX < location.x + size
 			&& p.mouseY > location.y - size && p.mouseY < location.y + size) {
 			
-			p.stroke(hue, 0, backgroundBrightness);
-			p.fill(hue, 100, brightness);
+			p.stroke(hue, saturation, backgroundBrightness);
+			p.fill(hue, saturation, brightness);
 			p.ellipse(location.x, location.y, size + 2, size + 2);
 			
 			if (!particleArgsDisplayed) {
@@ -95,8 +98,8 @@ public class Particle {
 			}			
 						
 		} else {
-			p.stroke(hue, 100, backgroundBrightness);
-			p.fill(hue, 100, brightness);
+			p.stroke(hue, saturation, backgroundBrightness);
+			p.fill(hue, saturation, brightness);
 			p.ellipse(location.x, location.y, size, size);	
 		}
 		

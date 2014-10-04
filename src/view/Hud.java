@@ -1,7 +1,9 @@
 package view;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Queue;
+
 import processing.core.PApplet;
 import model.DataAggregator;
 import model.Event;
@@ -25,6 +27,9 @@ public class Hud {
 	public float smallestEvtLatency = 1;
 	public float biggestEvtLatency = 1;
 	
+	public HashMap<String, Float> colorPalette;
+	public ColorGenerator colorGenerator;
+	
 	public Hud(PApplet p, Params params, DataAggregator da) {		
 		this.p = p;		
 		this.dataAgg = da;
@@ -32,6 +37,9 @@ public class Hud {
 		
 		this.emitters = new ArrayList<Emitter>();
 		this.regionManager = new HudRegionManager(this);
+				
+		this.colorPalette =  new HashMap<String, Float>();
+		this.colorGenerator = new ColorGenerator();
 		
 	}
 
