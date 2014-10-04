@@ -24,12 +24,13 @@ public class EmitterLabel {
 		this.positionY = positionY;
 	}
 	
+	
 	public void drawLabel() {
-		
-		p.colorMode(PConstants.HSB, 360, 100, 100);		
-		p.textSize(textSize);		
+		p.colorMode(PConstants.HSB, 360, 100, 100);
+		p.textSize(textSize);
 		p.fill(this.color, 100, 100);
 		p.text(text, positionX, positionY);
+	
 	}
-
+	
 }

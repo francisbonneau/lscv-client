@@ -2,6 +2,7 @@ package viewUI;
 
 import processing.core.PApplet;
 import processing.core.PFont;
+import controlP5.CColor;
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import controlP5.DropdownList;
@@ -53,6 +54,15 @@ public class ControlPanelUI extends PApplet {
  		openSans14 = loadFont("OpenSans-14.vlw");
 		openSans15 = loadFont("OpenSans-15.vlw");		
 		cp5.setFont(openSans15);
+		
+		// set colors
+//		cp5.setColorBackground(color(213,244,198));
+//		cp5.setColorForeground(color(150,227,113)); //Qty & rim color
+//		cp5.setColorActive(color(119,219,70)); //Selected items
+		
+//		cp5.setColorBackground(color(33,71,14));
+//		cp5.setColorForeground(color(72,157,30)); //Qty & rim color
+//		cp5.setColorActive(color(72,157,30)); //Selected items
 		
 		// Setup the tabs
 		cp5.getTab("default").setColorLabel(color(255));		
@@ -266,9 +276,11 @@ public class ControlPanelUI extends PApplet {
 				
 				DropdownList d =  (DropdownList) cp5.get("dataSourcesList2");			
 				String host = rl.hud.dataAgg.getDataSources().get((int) d.getValue() -2);			
-				String filter = rl.hud.dataAgg.getDataSourceFilter(host);			
-				Textfield tf = (Textfield) cp5.get("newfilterField");
-				tf.setValue(filter);
+				String filter = rl.hud.dataAgg.getDataSourceFilter(host);
+				if (filter != null) {
+					Textfield tf = (Textfield) cp5.get("newfilterField");
+					tf.setValue(filter);
+				}
 				
 				break;
 			}
