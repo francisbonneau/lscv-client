@@ -101,9 +101,9 @@ public class RenderLoop extends PApplet {
 		if (key == ' ') { // Spacebar pressed
 			if (params.displayPaused == false) {
 				params.displayPaused = true;
-			} else { 
+			} else {
 				params.displayPaused = false;
-			}			
+			}
 		}
 
 	}
