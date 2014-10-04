@@ -31,8 +31,7 @@ public class ColorGenerator {
 		
 		// avoid dark blue colors - hard to read on a black background
 		} while (adjustedHue >= 200 && adjustedHue <= 270);		
-				
-		System.out.println(adjustedHue);		
+
 		return adjustedHue;
 	}
 		
