@@ -78,7 +78,7 @@ public class RenderLoop extends PApplet {
 		if (params.displayFPSCounter)
 			displayFPSCounter();
 		
-		hud.updateDisplayedData(params);
+		hud.update(params);
 		hud.draw(params);
 	}
 	
@@ -93,7 +93,7 @@ public class RenderLoop extends PApplet {
 				frame.setResizable(true);
 				frame.setBounds(0, 0, displayWidth, displayWidth);
 				params.windowMaximized = true;
-				
+
 			}
 			hud.regionManager.refresh();
 		}
@@ -115,7 +115,7 @@ public class RenderLoop extends PApplet {
 		
 		if (params.windowMaximized) {			
 			x = displayWidth - 150;
-			y = displayHeight - 150; 
+			y = displayHeight - 125; 
 		} else {
 			x = params.mainWindowWidth - 75;
 			y = params.mainWindowHeight - 45;			

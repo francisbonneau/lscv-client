@@ -1,7 +1,9 @@
 package view;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Queue;
 
 import processing.core.PApplet;
@@ -29,6 +31,11 @@ public class Hud {
 	
 	public HashMap<String, Float> colorPalette;
 	public ColorGenerator colorGenerator;
+
+	public long eventsDisplayedCount;
+	public long syscallDisplayedCount;
+	public long eventsTotalCount;
+	public long syscallTotalCount;
 	
 	public Hud(PApplet p, Params params, DataAggregator da) {		
 		this.p = p;		
@@ -43,7 +50,7 @@ public class Hud {
 		
 	}
 
-	public void updateDisplayedData(Params params) {
+	private void updateDisplayedData(Params params) {
 		
 		if (!params.displayPaused) { 
 		
@@ -74,7 +81,33 @@ public class Hud {
 		}
 	}
 	
-	// Draw the hud (the particles emitters)
+	// Get the stats from all emitters and combine them
+	private void updateStats() {
+		
+		eventsDisplayedCount = 0;
+		syscallDisplayedCount = 0;
+		eventsTotalCount = 0;
+		syscallTotalCount = 0;
+		
+		Object[] emittersList = emitters.toArray();	
+		for (Object o : emittersList) { 
+			Emitter em = (Emitter) o;
+			
+			eventsDisplayedCount += em.eventsDisplayedCount;		
+			syscallDisplayedCount += em.syscallDisplayedCount;
+			eventsTotalCount += em.eventsTotalCount;
+			syscallTotalCount += em.syscallTotalCount;
+		}
+		
+	}
+	
+	// Update the hud
+	public void update(Params params) {
+		updateDisplayedData(params);
+		updateStats();
+	}
+	
+	// Draw the hud 
 	public void draw(Params params) {
 		
 		if (params.displayGrid == true)
@@ -87,6 +120,31 @@ public class Hud {
 			em.update();
 			em.draw();
 		}
+		
+		if(params.displayStats)
+			drawStats();
+		
+	}
+	
+	
+	private void drawStats() {		
+		p.fill(225); // gray color
+		int x, y;
+		
+		if (params.windowMaximized) {			
+			x = 50;
+			y = p.displayHeight - 150; 
+		} else {
+			x = 50;
+			y = p.displayHeight - 45;			
+		}
+		
+		NumberFormat formatter = NumberFormat.getInstance(new Locale("en_US"));
+				
+		p.text("Particles : " + formatter.format(eventsDisplayedCount), x, y);
+		p.text("System calls : " + formatter.format(syscallDisplayedCount), x, y + 25);
+		p.text("Particles processed total : " + formatter.format(eventsTotalCount), x, y + 50);
+		p.text("System calls processed total : " + formatter.format(syscallTotalCount), x, y + 75);
 	}
 	
 	public void drawGrid() {
