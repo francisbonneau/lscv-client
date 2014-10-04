@@ -65,7 +65,7 @@ public class Hud {
 					while(newData != null) {					
 						for(Emitter em : emitters) {
 							if (em.host.equals(host))
-								em.addParticles(newData, params);
+								em.addParticles(newData);
 						}					
 						newData = dataList.poll();
 					}
@@ -84,8 +84,8 @@ public class Hud {
 		Object[] emittersList = emitters.toArray();			
 		for (Object o : emittersList) { 
 			Emitter em = (Emitter) o;
-			em.update(params);
-			em.draw(params);
+			em.update();
+			em.draw();
 		}
 	}
 	

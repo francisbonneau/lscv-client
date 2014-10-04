@@ -31,7 +31,6 @@ public class Emitter {
 	public long eventsTotalCount;
 
 
-
 	HashMap<String, Float> eventLowerAngle;
 	HashMap<String, Float> eventHigherAngle;
 	
@@ -66,32 +65,31 @@ public class Emitter {
 		return this.id;
 	}
 	
-	public void addParticles(ArrayList<Event> newData, Params params) {
-		
-		Iterator<Event> events = newData.iterator();
+	private void calculateDivisionsDistribution(ArrayList<Event> newData) {
 		
 		// the filtering ordering should be by username, process name, then syscall
-		// but pocess name is a good default
 		for (Event e : newData) {
-			if (eventDistribution.containsKey(e.processName)) { 
+			
+			if (eventDistribution.containsKey(e.processName)) {
 				int lastVal = eventDistribution.get(e.processName);
-				eventDistribution.put(e.processName, lastVal + 1);
-			}					
+				eventDistribution.put(e.processName, lastVal + e.syscallNumber);
+			}
 			else {				
 				// new process
-				eventDistribution.put(e.processName, 1);
+				eventDistribution.put(e.processName, e.syscallNumber);
 										
-				// Generate a new color randomly
-//				float hue = 0 + (int)(Math.random() * ((360 - 0) + 1));				
-//				eventDistributionColor.put(e.processName, hue);
+				// Get a new color for the new division
 				float newColor = hud.colorGenerator.getNewColorHue();
 				hud.colorPalette.put(e.processName, newColor);
 				
 			}
-			eventsTotalCount = eventsTotalCount + 1;
+			eventsTotalCount = eventsTotalCount + e.syscallNumber;
 		}
 		
-							
+	}
+	
+	private void divideEmitter() {
+		
 		// divide the circle according to the event distribution
 		Iterator<String> eventDistNames = eventDistribution.keySet().iterator();
 		Iterator<Integer> eventsDistCount = eventDistribution.values().iterator();
@@ -115,16 +113,25 @@ public class Emitter {
 			float Min = eventLowerAngle.get(procName);
 			float Max = eventHigherAngle.get(procName);
 			float angle = (Min + Max)/2 + 45;
-			float radius = params.emitterRadius/2 + 35;
-			float textXposition = (float) Math.cos(PApplet.radians(angle)) * radius + centerX;
-			float textYposition = (float) Math.sin(PApplet.radians(angle)) * radius + centerY;
+			float radius = hud.params.emitterRadius/2 + 35;
 			
-			float color = this.hud.colorPalette.get(procName); 				
-			EmitterLabel label = new EmitterLabel(p, procName, 15, color, textXposition, textYposition);
-			labelsList.add(label);
+			float labelX = (float) Math.cos(PApplet.radians(angle)) * radius + centerX;
+			float labelY = (float) Math.sin(PApplet.radians(angle)) * radius + centerY;
+			
+			labelsList.add(new EmitterLabel(p, procName, 15, 
+				hud.colorPalette.get(procName), labelX, labelY));
 		}
+		
+	}
+		
+	public void addParticles(ArrayList<Event> newData) {
+					
+		calculateDivisionsDistribution(newData);
+		
+		divideEmitter();
 			
 		// for each process in the list
+		Iterator<Event> events = newData.iterator();
 		while (events.hasNext()) {
 			Event event = events.next();		
 			
@@ -143,21 +150,19 @@ public class Emitter {
 					hud.smallestEvtLatency = latency;
 				if (hud.biggestEvtLatency < latency)
 					hud.biggestEvtLatency = latency;
-				
-				int eventCount = syscallData.next();
-				
+			 				
 				Particle newParticle = new Particle(p, event);
 								
 				float hue = this.hud.colorPalette.get(event.processName);				
 				float brightness = 100;
 				
-				float size = (float) Math.sqrt(params.particleSize * eventCount);
+				float size = (float) Math.sqrt(hud.params.particleSize * event.syscallNumber);
 								
 				float velocity = PApplet.map(latency, hud.smallestEvtLatency, 
-						hud.biggestEvtLatency, params.particleMinVelocity,
-						params.particleMaxVelocity);
+						hud.biggestEvtLatency, hud.params.particleMinVelocity,
+						hud.params.particleMaxVelocity);
 				
-				float acceleration = params.particleAcceleration;
+				float acceleration = hud.params.particleAcceleration;
 				
 				newParticle.setup(new PVector(centerX, centerY), size,  angle,
 							velocity, acceleration, hue, brightness);
@@ -166,12 +171,9 @@ public class Emitter {
 			}
 		}
 	}
-	
-	/**
-	 * Update all the particles position and speed 
-	 * @param params
-	 */
-	public void updateParticles(Params params) {
+
+	// Update all the particles position and speed
+	public void updateParticles() {
 		
 		Iterator<Particle> it = particlesList.iterator();		
 		while(it.hasNext()) { 
@@ -183,12 +185,12 @@ public class Emitter {
 			double distance = Math.sqrt(Math.pow(centerX - particle.location.x, 2) 
 					+ Math.pow(centerY - particle.location.y, 2));
 												
-			if ( distance > params.emitterRadius/2 ) {
+			if ( distance > hud.params.emitterRadius/2 ) {
 				// if this is the case the particle is removed				
 				it.remove();
 				
 			// if the particle is approching the radius, fade it out
-			} else if (params.emitterRadius/2 - distance < 40) {
+			} else if (hud.params.emitterRadius/2 - distance < 40) {
 				particle.brightness =  particle.brightness - 10;
 			}
 		}
@@ -224,25 +226,23 @@ public class Emitter {
 	}
 	
 	// Update all the components of the emitter 
-	public void update(Params params) {
-		if (!params.displayPaused) { 
-			updateParticles(params);
+	public void update() {
+		if (!hud.params.displayPaused) { 
+			updateParticles();
 		}
 	}
 
 	// Draw all the components of the emitter 
-	public void draw(Params params) {
+	public void draw() {
 				
-		//p.text(id, centerX, centerY);
+		drawParticles(hud.params.backgroundBrightness);
 		
-		drawParticles(params.backgroundBrightness);
-		
-		if (params.displayEmitterLabels)
+		if (hud.params.displayEmitterLabels)
 			drawLabels();
 		
-		if (params.displayEmitterRadius)
-			drawRadius(params.backgroundBrightness, 
-					params.emitterRadiusBrightness, params.emitterRadius);
+		if (hud.params.displayEmitterRadius)
+			drawRadius(hud.params.backgroundBrightness, 
+				hud.params.emitterRadiusBrightness, hud.params.emitterRadius);
 	}
 	
 }
