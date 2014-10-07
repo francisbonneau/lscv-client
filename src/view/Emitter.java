@@ -23,16 +23,7 @@ public class Emitter {
 	public List<Particle> particlesList;	
 	public List<EmitterLabel> labelsList;
 	
-	// It is exactly like HashMap, but presents the items in the insertion order.	
-	// Key : the unique value (ex: process name) used to separate emitter regions, 
-	// Value : the number associated (# of syscall) with that region
-	public LinkedHashMap<String, Integer> regionsSize;
-	
-	HashMap<String, Float> divisionsLowerAngles;
-	
-	HashMap<String, Float> divisionsHigherAngle;
-	
-	private long regionsTotalSize;
+	public EmitterSubdivision subdivisions;
 	
 	// stats
 	public long eventsDisplayedCount;
@@ -52,15 +43,12 @@ public class Emitter {
 		particlesList = new ArrayList<>();
 		labelsList = new ArrayList<>();
 		
-		regionsSize = new LinkedHashMap<String, Integer>();
-		divisionsLowerAngles = new HashMap<String, Float>();
-		divisionsHigherAngle = new HashMap<String, Float>();
-		
 		eventsDisplayedCount = 0;
 		syscallDisplayedCount = 0;
 		eventsTotalCount = 0;
 		syscallTotalCount = 0;
-		regionsTotalSize = 0;
+		
+		subdivisions = new EmitterSubdivision(this);
 		
 	}
 	
@@ -72,81 +60,45 @@ public class Emitter {
 		return this.id;
 	}
 	
-	private void calculateDivisionsDistribution(ArrayList<Event> newData) {
-		
-		// the filtering ordering should be by username, process name, then syscall
-		for (Event e : newData) {
-			
-			if (regionsSize.containsKey(e.processName)) {
-				int lastVal = regionsSize.get(e.processName);
-				regionsSize.put(e.processName, lastVal + e.syscallNumber);
-			}
-			else {				
-				// new process
-				regionsSize.put(e.processName, e.syscallNumber);
-										
-				// Get a new color for the new division
-				float newColor = hud.colorGenerator.getNewColorHue();
-				hud.colorPalette.put(e.processName, newColor);
-				
-			}		
-			regionsTotalSize += e.syscallNumber;			
-		}
-		
+	public Hud getHud() {
+		return this.hud;
 	}
-	
-	private void divideEmitter() {
+
 		
-		// divide the circle according to the event distribution
-		Iterator<String> eventDistNames = regionsSize.keySet().iterator();
-		Iterator<Integer> eventsDistCount = regionsSize.values().iterator();
+	public void addParticles(ArrayList<Event> newData) {
 		
-		divisionsLowerAngles = new HashMap<String, Float>();
-		divisionsHigherAngle = new HashMap<String, Float>();
+		String divisionsAttribute = "syscall";
+					
+		subdivisions.createDivisions(newData, divisionsAttribute);		
+		subdivisions.calculateDivisionsSizes();
 		
-		float lastAngle = 0;
-		labelsList = new ArrayList<>();	
-		
-		while(eventDistNames.hasNext()) {
-			String procName = eventDistNames.next();
-			int size = eventsDistCount.next();
-			
-			float relativeSize = PApplet.map(size, 0, regionsTotalSize, 0, 360);
-						
-			divisionsLowerAngles.put(procName, lastAngle);
-			divisionsHigherAngle.put(procName, lastAngle + relativeSize);
-			lastAngle = lastAngle + relativeSize;
-			
-			float Min = divisionsLowerAngles.get(procName);
-			float Max = divisionsHigherAngle.get(procName);
+		// Add the labels to each emitter subdivision
+		Iterator<String> it = subdivisions.divisionsSize.keySet().iterator();		
+		while (it.hasNext()) {
+			String divisionID = it.next();					
+			float Min = subdivisions.getDivisionLowerAngle(divisionID);			
+			float Max = subdivisions.getDivisonHigherAngle(divisionID);					
 			float angle = (Min + Max)/2 + 45;
+
 			float radius = hud.params.emitterRadius/2 + 35;
-			
 			float labelX = (float) Math.cos(PApplet.radians(angle)) * radius + centerX;
 			float labelY = (float) Math.sin(PApplet.radians(angle)) * radius + centerY;
 			
-			labelsList.add(new EmitterLabel(p, procName, 15, 
-				hud.colorPalette.get(procName), labelX, labelY));
+			labelsList.add(new EmitterLabel(p, divisionID, 15, 
+					hud.colorPalette.get(divisionID), labelX, labelY));
 		}
-		
-	}
-		
-	public void addParticles(ArrayList<Event> newData) {
-					
-		calculateDivisionsDistribution(newData);
-		
-		divideEmitter();
 			
 		// for each process in the list
 		Iterator<Event> events = newData.iterator();
 		while (events.hasNext()) {
-			Event event = events.next();		
+			Event event = events.next();
+			
+			String divisionID = event.attributes.get(divisionsAttribute);
 			
 			Iterator<Integer> syscallName = event.latencyBreakdown.keySet().iterator();			
 			
-			float Min = divisionsLowerAngles.get(event.processName);
-			float Max = divisionsHigherAngle.get(event.processName);	
-			
+			float Min = subdivisions.getDivisionLowerAngle(divisionID);
+			float Max = subdivisions.getDivisonHigherAngle(divisionID);
 			
 			float angle = Min + (float) Math.random() * ((Max - Min) + 1);					
 		
@@ -161,7 +113,7 @@ public class Emitter {
 			 				
 				Particle newParticle = new Particle(p, event);
 								
-				float hue = this.hud.colorPalette.get(event.processName);				
+				float hue = this.hud.colorPalette.get(divisionID);				
 				float brightness = 100;
 				
 				float size = (float) Math.sqrt(hud.params.particleSize * event.syscallNumber);
@@ -212,7 +164,7 @@ public class Emitter {
 		}
 		
 	}
-		
+	
 	// Draw all the particles
 	public void drawParticles(float backgroundBrightness) {
 		for (Particle particle : particlesList) {			

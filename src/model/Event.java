@@ -6,8 +6,12 @@ public class Event {
 	
 	public String username;
 	public String processName;
-	public String syscall;	
+	public String syscall;
 	public int syscallNumber;
+	
+	// Hashmap for the properties, ex : username, processname, system call name	
+	// usefull for direct access
+	public HashMap<String, String> attributes;
 	
 	// This hash contains the list of all the system call latencies and 
 	// the number of system call for each latencies (used for aggregation)
@@ -26,13 +30,19 @@ public class Event {
 	//				 ...           ...	
 	public HashMap<Integer, String> arguments;
 	
-	public Event(String username, String processName, String syscallName, 
+	public Event(String user, String process, String syscall, 
 			int syscallNumber, HashMap<Integer, Integer> latencyBreakdown,
 			HashMap<Integer, String> arguments ) {
 		
-		this.username = username;
-		this.processName = processName;
-		this.syscall = syscallName;
+		this.username = user;
+		this.processName = process;
+		this.syscall = syscall;
+
+		this.attributes = new HashMap<>();
+		attributes.put("user", user);
+		attributes.put("process", process);
+		attributes.put("syscall", syscall);
+		
 		this.syscallNumber = syscallNumber;
 		this.latencyBreakdown = latencyBreakdown;
 		this.arguments = arguments;
