@@ -200,7 +200,7 @@ public class ControlPanelUI extends PApplet {
 		cp5.addSlider("Radius brightness", 0, 100, 60, 150, 400, 15).setId(3)
 				.setValue(rl.params.emitterRadiusBrightness).moveTo(cp5.getTab("Global settings"));
 		
-		cp5.addSlider("Distance between circles", 0, 1000, 60, 180, 400, 15).setId(14)
+		cp5.addSlider("Distance between circles", 0, 1000, 60, 180, 400, 15).setId(15)
 		.setValue(rl.params.distanceBetweenEmitters).moveTo(cp5.getTab("Global settings"));
 
 		cp5.addSlider("Particle size", 1, 400, 60, 210, 400, 15).setId(4)
@@ -230,7 +230,9 @@ public class ControlPanelUI extends PApplet {
 		cp5.addToggle("Display Labels").setPosition(60,410).setSize(40,20)
 			.setValue(rl.params.displayEmitterRadius).setId(12).moveTo(cp5.getTab("Global settings"));
 		cp5.addToggle("Display FPS counter").setPosition(260,410).setSize(40,20)
-			.setValue(rl.params.displayFPSCounter).setId(13).moveTo(cp5.getTab("Global settings"));
+			.setValue(rl.params.displayFPSCounter).setId(13).moveTo(cp5.getTab("Global settings"));		
+		cp5.addToggle("Draw circles strokes").setPosition(460,360).setSize(40,20)
+		.setValue(rl.params.drawCirclesStrokes).setId(14).moveTo(cp5.getTab("Global settings"));
 		
 		cp5.getTab("Global settings").add(cp5.getController("Load Config"));
 		cp5.getTab("Global settings").add(cp5.getController("Save Config"));		
@@ -402,9 +404,15 @@ public class ControlPanelUI extends PApplet {
 					rl.params.displayFPSCounter = true;
 				break;
 			case (14):
+				if (newValue == 0.0)
+					rl.params.drawCirclesStrokes = false;
+				else
+					rl.params.drawCirclesStrokes = true;
+				break;				
+				
+			case (15):
 					rl.params.distanceBetweenEmitters = newValue;
-					rl.hud.regionManager.refresh();
-					
+					rl.hud.regionManager.refresh();					
 				break;
 			}			
 		}	

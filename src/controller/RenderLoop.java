@@ -4,6 +4,7 @@ import java.awt.Frame;
 import model.DataAggregator;
 import model.Params;
 import processing.core.PApplet;
+import processing.event.MouseEvent;
 import view.Hud;
 import viewUI.ControlPanelUI;
 import controlP5.ControlP5;
@@ -65,13 +66,14 @@ public class RenderLoop extends PApplet {
 		f.setSize(cf.width, cf.height);
 		f.setLocation(100, 100);
 		f.setResizable(false);
-		f.setVisible(true);
+		f.setVisible(true);		
 	}
 	
 	// Main screen refresh function
 	public void draw() {		
 		
 		background(0, 0, params.backgroundBrightness);
+				
 		smooth();
 		noStroke();
 		
@@ -80,6 +82,7 @@ public class RenderLoop extends PApplet {
 		
 		hud.update(params);
 		hud.draw(params);
+				
 	}
 	
 	public void keyPressed() { 
@@ -105,8 +108,8 @@ public class RenderLoop extends PApplet {
 				params.displayPaused = false;
 			}
 		}
-
-	}
+		
+	}	
 	
 	// Display the FPS counter
 	public void displayFPSCounter() {
