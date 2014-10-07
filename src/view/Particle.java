@@ -74,7 +74,7 @@ public class Particle {
 	}
 	
 	// Draw the particle on the PApplet
-	public void draw(float backgroundBrightness) {
+	public void draw(float backgroundBrightness, boolean drawStroke) {
 	
 		p.colorMode(PConstants.HSB, 360, 100, 100);		
 		
@@ -82,10 +82,10 @@ public class Particle {
 		if (p.mouseX > location.x - size && p.mouseX < location.x + size
 			&& p.mouseY > location.y - size && p.mouseY < location.y + size) {
 			
-			p.stroke(hue, saturation, backgroundBrightness);
+			p.fill(hue, 0, brightness);
+			p.ellipse(location.x, location.y, size, size);			
 			p.fill(hue, saturation, brightness);
-			p.ellipse(location.x, location.y, size + 2, size + 2);
-				 
+							 
 			String args = event.toString() + "\n\n\n";
 			Iterator<String> it = event.arguments.values().iterator();
 			while(it.hasNext()) {
@@ -95,9 +95,32 @@ public class Particle {
 			p.text(args, 50, 50);
  
 		} else {
-			p.stroke(hue, saturation, backgroundBrightness);
+			
+			if (drawStroke)
+				p.stroke(hue, saturation, backgroundBrightness);
+			
+//			p.fill(hue, saturation, brightness);
+//			p.ellipse(location.x, location.y, size, size);
+			
+//			for (int i = 5; i > 0; i--) {
+//				p.fill(hue, saturation, brightness - (5*i));
+//				p.ellipse(location.x, location.y, size - (1 * i), size - (1 * i));
+//			}
+			
+//			PVector locationTMP = location.get();
+//			PVector velocityTMP = velocity.get();
+//			velocityTMP.rotate((float) Math.PI);
+//			velocityTMP.normalize();
+//			for (float i = velocity.mag(); i > 0; i--) {
+//				locationTMP.add(velocityTMP);			
+//				p.fill(hue, saturation, brightness - (10*i));
+//				p.ellipse(locationTMP.x, locationTMP.y, size - i, size -i);
+//			}			
+			
 			p.fill(hue, saturation, brightness);
-			p.ellipse(location.x, location.y, size, size);	
+			p.ellipse(location.x, location.y, size, size);
+			
+			
 		}
  		
 	}

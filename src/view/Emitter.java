@@ -145,8 +145,10 @@ public class Emitter {
 			Iterator<Integer> syscallName = event.latencyBreakdown.keySet().iterator();			
 			
 			float Min = divisionsLowerAngles.get(event.processName);
-			float Max = divisionsHigherAngle.get(event.processName);			
-			float angle = Min + (int)(Math.random() * ((Max - Min) + 1));			
+			float Max = divisionsHigherAngle.get(event.processName);	
+			
+			
+			float angle = Min + (float) Math.random() * ((Max - Min) + 1);					
 		
 			while(syscallName.hasNext()) {
 				
@@ -213,12 +215,9 @@ public class Emitter {
 		
 	// Draw all the particles
 	public void drawParticles(float backgroundBrightness) {
-		
-		//boolean particleArgsDisplayed = false;
-				
-		for (Particle particle : particlesList) {
-			 particle.draw(backgroundBrightness);
-		}		
+		for (Particle particle : particlesList) {			
+			 particle.draw(backgroundBrightness, hud.params.drawCirclesStrokes);
+		}
 	}
 	
 	// Draw the emitter labels	

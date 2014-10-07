@@ -20,6 +20,8 @@ public class Params {
 	public boolean displayFPSCounter = true;	
 	public boolean displayGrid = false;
 	public boolean displayStats = true;
+	
+	public boolean drawCirclesStrokes = false;
 		
 	// default data source
 	public String defaultDataSource = "127.0.0.1:6379";
