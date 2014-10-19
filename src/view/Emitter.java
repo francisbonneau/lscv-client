@@ -24,7 +24,7 @@ public class Emitter {
     public List<Particle> particlesList;
     public List<EmitterLabel> labelsList;
 
-    public EmitterSubdivision subdivisions;
+    public EmitterSubdivider subdivisions;
 
     // stats
     public long eventsDisplayedCount;
@@ -49,7 +49,7 @@ public class Emitter {
         eventsTotalCount = 0;
         syscallTotalCount = 0;
 
-        subdivisions = new EmitterSubdivision(this,
+        subdivisions = new EmitterSubdivider(this,
         		hud.params.emitterSubDivisionsTimeoutSec);
     }
 
@@ -70,11 +70,11 @@ public class Emitter {
 
         String divisionsAttribute = "process";
 
-        subdivisions.createDivisions(newData, divisionsAttribute);
-        subdivisions.calculateDivisionsSizes();
+        subdivisions.addDivisions(newData, divisionsAttribute);
+        subdivisions.adjustDivisionsSizes();
 
         // Add the labels to each emitter subdivision
-        Iterator<String> it = subdivisions.divisionsSize.keySet().iterator();
+        Iterator<String> it = subdivisions.divisions.keySet().iterator();
         while (it.hasNext()) {
             String divisionID = it.next();
             float Min = subdivisions.getDivisionLowerAngle(divisionID);
