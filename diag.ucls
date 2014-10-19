@@ -10,8 +10,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="view.EmitterSubdivision" project="PFE" 
-    file="/PFE/src/view/EmitterSubdivision.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="2" language="java" name="view.EmitterSubdivider" project="PFE" file="/PFE/src/view/EmitterSubdivider.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
     <position height="232" width="295" x="1451" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
