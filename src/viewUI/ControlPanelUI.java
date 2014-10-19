@@ -2,7 +2,6 @@ package viewUI;
 
 import processing.core.PApplet;
 import processing.core.PFont;
-import controlP5.CColor;
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import controlP5.DropdownList;
@@ -23,8 +22,8 @@ public class ControlPanelUI extends PApplet {
 	ControlP5 cp5;
 	private RenderLoop rl;
 	
-	public int width;
-	public int height;
+	public int windowWidth;
+	public int windowHeight;
 	Boolean currentTabIsDataDisplay = false;
 	
 	PFont openSans12;
@@ -33,15 +32,15 @@ public class ControlPanelUI extends PApplet {
 	PFont openSans15;	
 	PFont eurostile15;
 	
-	public ControlPanelUI(RenderLoop rl, int width, int height) {
+	public ControlPanelUI(RenderLoop rl) {
 		this.rl = rl;
-		this.width = width;
-		this.height = height;
+		this.windowWidth = rl.getParams().controlsWindowWidth;
+		this.windowHeight =  rl.getParams().controlsWindowHeight;		 
 	}
 
 	@SuppressWarnings("deprecation")
 	public void setup() {
-		size(width, height);
+		size(windowWidth, windowHeight);
 		frameRate(25);
 		cp5 = new ControlP5(this);
 		
@@ -94,7 +93,7 @@ public class ControlPanelUI extends PApplet {
 		cp5.addTextlabel("tab1Legend", "Enter here the network addresses of the servers to fetch data from.", 50, 90);
 		// Name, X, Y, W, H		
 		cp5.addTextfield("newConnexionField", 85, 135, 360, 25)
-			.setValue(rl.params.defaultDataSource)
+			.setValue(rl.getParams().defaultDataSource)
 			.setLabel("Server address - IP:PORT").getCaptionLabel().setFont(openSans13);
 			
 		// Name, Value, X, Y, W, H
@@ -140,15 +139,15 @@ public class ControlPanelUI extends PApplet {
 		
 		//addSlider(String theIndex, Sring theName, float theMin, float theMax, 
 		//		float theDefaultValue, int theX, int theY, int theW, int theH)
-		cp5.addSlider("  ", 1, rl.params.maxNumberOfEmittersX, 1, 130, 135,
+		cp5.addSlider("  ", 1, rl.getParams().maxNumberOfEmittersX, 1, 130, 135,
 				450, 10).setId(8).moveTo(cp5.getTab("Data display settings"))
 				.setNumberOfTickMarks(8).showTickMarks(false)				
 				.setSliderMode(Slider.FLEXIBLE).valueLabel().setVisible(false);
 				
 		// trick to place the slider at the correct val ( on top ), we 
 		// set the min and max val to the same val
-		cp5.addSlider(" ", 1, rl.params.maxNumberOfEmittersY, 
-				rl.params.maxNumberOfEmittersY, 90, 175, 10, 120)
+		cp5.addSlider(" ", 1, rl.getParams().maxNumberOfEmittersY, 
+				rl.getParams().maxNumberOfEmittersY, 90, 175, 10, 120)
 				.setId(9).moveTo(cp5.getTab("Data display settings"))
 				.setNumberOfTickMarks(4).showTickMarks(false)
 				.setSliderMode(Slider.FLEXIBLE).valueLabel().setVisible(false);
@@ -192,47 +191,47 @@ public class ControlPanelUI extends PApplet {
 		//addSlider(String theIndex, Sring theName, float theMin, float theMax, 
 		//		float theDefaultValue, int theX, int theY, int theW, int theH)
 		cp5.addSlider("Background brightness", 0, 100, 60, 90, 400, 15)
-				.setId(1).setValue(rl.params.backgroundBrightness).moveTo(cp5.getTab("Global settings"));
+				.setId(1).setValue(rl.getParams().backgroundBrightness).moveTo(cp5.getTab("Global settings"));
 
 		cp5.addSlider("Circle radius", 100, 2000, 60, 120, 400, 15).setId(2)
-				.setValue(rl.params.emitterRadius).moveTo(cp5.getTab("Global settings"));
+				.setValue(rl.getParams().emitterRadius).moveTo(cp5.getTab("Global settings"));
 		
 		cp5.addSlider("Radius brightness", 0, 100, 60, 150, 400, 15).setId(3)
-				.setValue(rl.params.emitterRadiusBrightness).moveTo(cp5.getTab("Global settings"));
+				.setValue(rl.getParams().emitterRadiusBrightness).moveTo(cp5.getTab("Global settings"));
 		
 		cp5.addSlider("Distance between circles", 0, 1000, 60, 180, 400, 15).setId(15)
-		.setValue(rl.params.distanceBetweenEmitters).moveTo(cp5.getTab("Global settings"));
+		.setValue(rl.getParams().distanceBetweenEmitters).moveTo(cp5.getTab("Global settings"));
 
 		cp5.addSlider("Particle size", 1, 400, 60, 210, 400, 15).setId(4)
-				.setValue(rl.params.particleSize).moveTo(cp5.getTab("Global settings"));
+				.setValue(rl.getParams().particleSize).moveTo(cp5.getTab("Global settings"));
 
-		cp5.addRange("Particle velocity", rl.params.particleVelocityRangeMin,
-				rl.params.particleVelocityRangeMax,
-				rl.params.particleMinVelocity,
-				rl.params.particleMaxVelocity, 60, 240, 400, 15)
+		cp5.addRange("Particle velocity", rl.getParams().particleVelocityRangeMin,
+				rl.getParams().particleVelocityRangeMax,
+				rl.getParams().particleMinVelocity,
+				rl.getParams().particleMaxVelocity, 60, 240, 400, 15)
 				.setId(5).moveTo(cp5.getTab("Global settings"));
 
 		cp5.addSlider("Particle acceleration", 0, 1, 60, 270, 400, 15).setId(6)
-				.setValue(rl.params.particleAcceleration).moveTo(cp5.getTab("Global settings"));
+				.setValue(rl.getParams().particleAcceleration).moveTo(cp5.getTab("Global settings"));
 
 		cp5.addSlider("Latency rounding", 1, 8, 60, 300, 400, 15).setId(7)
-				.setValue(rl.params.latencyRoundup).setNumberOfTickMarks(8)
+				.setValue(rl.getParams().latencyRoundup).setNumberOfTickMarks(8)
 				.showTickMarks(false).moveTo(cp5.getTab("Global settings"));
 		
 		cp5.addTextlabel("latencyLabel", "( "
-						+ rl.params.latencyRoundupLegend[rl.params.latencyRoundup - 1]
+						+ rl.getParams().latencyRoundupLegend[rl.getParams().latencyRoundup - 1]
 						+ " )", 620, 300).setFont(openSans15).moveTo(cp5.getTab("Global settings"));
 		
 		cp5.addToggle("Display Grid").setPosition(60,360).setSize(40,20)
-			.setValue(rl.params.displayGrid).setId(10).moveTo(cp5.getTab("Global settings"));
+			.setValue(rl.getParams().displayGrid).setId(10).moveTo(cp5.getTab("Global settings"));
 		cp5.addToggle("Display Circle Radius").setPosition(260,360).setSize(40,20)
-			.setValue(rl.params.displayEmitterRadius).setId(11).moveTo(cp5.getTab("Global settings"));
+			.setValue(rl.getParams().displayEmitterRadius).setId(11).moveTo(cp5.getTab("Global settings"));
 		cp5.addToggle("Display Labels").setPosition(60,410).setSize(40,20)
-			.setValue(rl.params.displayEmitterRadius).setId(12).moveTo(cp5.getTab("Global settings"));
+			.setValue(rl.getParams().displayEmitterRadius).setId(12).moveTo(cp5.getTab("Global settings"));
 		cp5.addToggle("Display FPS counter").setPosition(260,410).setSize(40,20)
-			.setValue(rl.params.displayFPSCounter).setId(13).moveTo(cp5.getTab("Global settings"));		
+			.setValue(rl.getParams().displayFPSCounter).setId(13).moveTo(cp5.getTab("Global settings"));		
 		cp5.addToggle("Draw circles strokes").setPosition(460,360).setSize(40,20)
-		.setValue(rl.params.drawCirclesStrokes).setId(14).moveTo(cp5.getTab("Global settings"));
+		.setValue(rl.getParams().drawCirclesStrokes).setId(14).moveTo(cp5.getTab("Global settings"));
 		
 		cp5.getTab("Global settings").add(cp5.getController("Load Config"));
 		cp5.getTab("Global settings").add(cp5.getController("Save Config"));		
@@ -257,7 +256,7 @@ public class ControlPanelUI extends PApplet {
 				"and ControlP5 ( http://www.sojamo.de/libraries/controlP5/ )",
 				50, 190).moveTo(cp5.getTab("About"));
 				
-		cp5.addTextlabel("license", rl.params.softwareLicense, 50, 250)
+		cp5.addTextlabel("license", rl.getParams().softwareLicense, 50, 250)
 				.setFont(openSans14).moveTo(cp5.getTab("About"));
 		
 	}
@@ -277,8 +276,8 @@ public class ControlPanelUI extends PApplet {
 			case (103): // filter data source
 				
 				DropdownList d =  (DropdownList) cp5.get("dataSourcesList2");			
-				String host = rl.hud.dataAgg.getDataSources().get((int) d.getValue() -2);			
-				String filter = rl.hud.dataAgg.getDataSourceFilter(host);
+				String host = rl.getDataAgg().getDataSources().get((int) d.getValue() -2);			
+				String filter = rl.getDataAgg().getDataSourceFilter(host);
 				if (filter != null) {
 					Textfield tf = (Textfield) cp5.get("newfilterField");
 					tf.setValue(filter);
@@ -292,54 +291,54 @@ public class ControlPanelUI extends PApplet {
 			float newValue = theEvent.getController().getValue();
 			switch (theEvent.getController().getId()) {
 			case (1):
-				rl.params.backgroundBrightness = newValue;			
+				rl.getParams().backgroundBrightness = newValue;			
 				break;
 			case (2):
-				rl.params.emitterRadius = newValue;
+				rl.getParams().emitterRadius = newValue;
 				break;
 			case (3):
-				rl.params.emitterRadiusBrightness = newValue;
+				rl.getParams().emitterRadiusBrightness = newValue;
 				break;
 			case (4):
-				rl.params.particleSize = newValue;
+				rl.getParams().particleSize = newValue;
 				break;
 			case (5):
-				rl.params.particleMinVelocity = theEvent.getController().getArrayValue(0);
-				rl.params.particleVelocityRangeMax = theEvent.getController().getArrayValue(1);			
+				rl.getParams().particleMinVelocity = theEvent.getController().getArrayValue(0);
+				rl.getParams().particleVelocityRangeMax = theEvent.getController().getArrayValue(1);			
 				break;
 			case (6):
-				rl.params.particleAcceleration = newValue;
+				rl.getParams().particleAcceleration = newValue;
 				break;
 			case (7):
-				rl.params.latencyRoundup = (int) newValue;
+				rl.getParams().latencyRoundup = (int) newValue;
 				Textlabel label = (Textlabel) cp5.get("latencyLabel");
 				if (label != null)
 					label.setStringValue( "( " +
-						rl.params.latencyRoundupLegend[rl.params.latencyRoundup - 1] + " )");			
+						rl.getParams().latencyRoundupLegend[rl.getParams().latencyRoundup - 1] + " )");			
 				break;
 				
 			// slider to control the number of rows in X
 			case (8):
 				
-				if (rl.params.emittersRowsX < (int) newValue) {
+				if (rl.getParams().emittersRowsX < (int) newValue) {
 					
 					int newVal = (int) newValue;					
-					int oldVal = rl.params.emittersRowsX;
-					rl.params.emittersRowsX = newVal;
+					int oldVal = rl.getParams().emittersRowsX;
+					rl.getParams().emittersRowsX = newVal;
 					
 					for (int i = oldVal; i < newVal; i++ ) {
-						rl.hud.regionManager.addRowOfEmittersAxisX();
+						rl.getHud().regionManager.addRowOfEmittersAxisX();
 					}
 					updateCirclesDropdown();
 					
-				} else if (rl.params.emittersRowsX > (int) newValue) {
+				} else if (rl.getParams().emittersRowsX > (int) newValue) {
 					
 					int newVal = (int) newValue;					
-					int oldVal = rl.params.emittersRowsX;
-					rl.params.emittersRowsX = newVal;
+					int oldVal = rl.getParams().emittersRowsX;
+					rl.getParams().emittersRowsX = newVal;
 					
 					for (int i = oldVal; i > newVal; i-- ) {
-						rl.hud.regionManager.removeRowOfEmittersAxisX();
+						rl.getHud().regionManager.removeRowOfEmittersAxisX();
 					}
 					updateCirclesDropdown();
 					
@@ -351,28 +350,28 @@ public class ControlPanelUI extends PApplet {
 			case (9):
 
 				// trick to place the slider at the correct val ( on top )
-				int ajustedValue = (int) Math.abs(rl.params.maxNumberOfEmittersY
+				int ajustedValue = (int) Math.abs(rl.getParams().maxNumberOfEmittersY
 						+ 1 - newValue);
 				
-				if (rl.params.emittersRowsY < ajustedValue) {
+				if (rl.getParams().emittersRowsY < ajustedValue) {
 					
 					int newVal = ajustedValue;				
-					int oldVal = rl.params.emittersRowsY;
-					rl.params.emittersRowsY = newVal;
+					int oldVal = rl.getParams().emittersRowsY;
+					rl.getParams().emittersRowsY = newVal;
 					
 					for (int i = oldVal; i < newVal; i++ ) {
-						rl.hud.regionManager.addRowOfEmittersAxisY();
+						rl.getHud().regionManager.addRowOfEmittersAxisY();
 					}
 					updateCirclesDropdown();
 					
-				} else if (rl.params.emittersRowsY > ajustedValue) {
+				} else if (rl.getParams().emittersRowsY > ajustedValue) {
 					
 					int newVal = ajustedValue;
-					int oldVal = rl.params.emittersRowsY;
-					rl.params.emittersRowsY = newVal;
+					int oldVal = rl.getParams().emittersRowsY;
+					rl.getParams().emittersRowsY = newVal;
 					
 					for (int i = oldVal; i > newVal; i-- ) {
-						rl.hud.regionManager.removeRowOfEmittersAxisY();
+						rl.getHud().regionManager.removeRowOfEmittersAxisY();
 					}
 					updateCirclesDropdown();
 				}
@@ -381,38 +380,38 @@ public class ControlPanelUI extends PApplet {
 				
 			case (10):
 				if (newValue == 0.0)
-					rl.params.displayGrid = false;
+					rl.getParams().displayGrid = false;
 				else
-					rl.params.displayGrid = true;
+					rl.getParams().displayGrid = true;
 				break;
 			case (11):
 				if (newValue == 0.0)
-					rl.params.displayEmitterRadius = false;
+					rl.getParams().displayEmitterRadius = false;
 				else
-					rl.params.displayEmitterRadius = true;
+					rl.getParams().displayEmitterRadius = true;
 				break;
 			case (12):
 				if (newValue == 0.0)
-					rl.params.displayEmitterLabels = false;
+					rl.getParams().displayEmitterLabels = false;
 				else
-					rl.params.displayEmitterLabels = true;
+					rl.getParams().displayEmitterLabels = true;
 				break;
 			case (13):
 				if (newValue == 0.0)
-					rl.params.displayFPSCounter = false;
+					rl.getParams().displayFPSCounter = false;
 				else
-					rl.params.displayFPSCounter = true;
+					rl.getParams().displayFPSCounter = true;
 				break;
 			case (14):
 				if (newValue == 0.0)
-					rl.params.drawCirclesStrokes = false;
+					rl.getParams().drawCirclesStrokes = false;
 				else
-					rl.params.drawCirclesStrokes = true;
+					rl.getParams().drawCirclesStrokes = true;
 				break;				
 				
 			case (15):
-					rl.params.distanceBetweenEmitters = newValue;
-					rl.hud.regionManager.refresh();					
+					rl.getParams().distanceBetweenEmitters = newValue;
+					rl.getHud().regionManager.refresh();					
 				break;
 			}			
 		}	
@@ -422,7 +421,7 @@ public class ControlPanelUI extends PApplet {
 	private void updateCirclesDropdown() {
 		DropdownList d = (DropdownList) cp5.get("circlesList");		
 		d.clear();		
-		int circlesNb = rl.params.emittersRowsX * rl.params.emittersRowsY;		
+		int circlesNb = rl.getParams().emittersRowsX * rl.getParams().emittersRowsY;		
 		for (int i = 1; i <= circlesNb; i++ ) {
 			d.addItem("Circle #" + i, i);
 		}
@@ -433,11 +432,11 @@ public class ControlPanelUI extends PApplet {
 	public void newFilterButton(int theValue) {
 		
 		DropdownList d = (DropdownList) cp5.get("dataSourcesList2");	
-		String host = rl.hud.dataAgg.getDataSources().get((int) d.getValue() -2);
+		String host = rl.getDataAgg().getDataSources().get((int) d.getValue() -2);
 		String filter = cp5.get(Textfield.class, "newfilterField")
 								.getValueLabel().getText();
 		
-		rl.hud.dataAgg.applyFilterToDataSource(host, filter);
+		rl.getDataAgg().applyFilterToDataSource(host, filter);
 	}
 
 	// Called the the user click on the select button in the data src tab
@@ -446,9 +445,9 @@ public class ControlPanelUI extends PApplet {
 		DropdownList d2 = (DropdownList) cp5.get("dataSourcesList");
 		
 		int selectedCircle = (int) d1.getValue() - 1;
-		String selectedDataSource = rl.hud.dataAgg.getDataSources().get((int) d2.getValue() -1);
+		String selectedDataSource = rl.getDataAgg().getDataSources().get((int) d2.getValue() -1);
 		
-		rl.hud.emitters.get(selectedCircle).host = selectedDataSource;		
+		rl.getHud().emitters.get(selectedCircle).host = selectedDataSource;		
 	}
 
 	// Called when the user clicks the button "Connect to server"
@@ -459,7 +458,7 @@ public class ControlPanelUI extends PApplet {
 		
 		println("Trying to reach " + connexionAddress);
 		
-		rl.hud.dataAgg.addDataSource(connexionAddress);
+		rl.getDataAgg().addDataSource(connexionAddress);
 		DropdownList d = (DropdownList) cp5.get("dataSourcesList");
 		int i = d.getListBoxItems().length;
 		d.addItem(connexionAddress, i + 1);		
@@ -481,10 +480,10 @@ public class ControlPanelUI extends PApplet {
 			stroke(255);
 			int circlesDistanceX = 62;
 			int circlesDistanceY = 45;
-			int numberOfEmitters = rl.params.emittersRowsX * rl.params.emittersRowsY;
+			int numberOfEmitters = rl.getParams().emittersRowsX * rl.getParams().emittersRowsY;
 			
-			for (int i = rl.params.emittersRowsX; i > 0; i--) {	
-				for (int j = rl.params.emittersRowsY; j > 0; j--) {
+			for (int i = rl.getParams().emittersRowsX; i > 0; i--) {	
+				for (int j = rl.getParams().emittersRowsY; j > 0; j--) {
 					ellipse(73 + ( i * circlesDistanceX),
 							135 + (j * circlesDistanceY), 25, 25);
 					textFont(openSans12);
