@@ -17,27 +17,15 @@ public class EmitterSubdivider {
     // It is exactly like HashMap, but presents the items in the insertion order.
     // Key : the unique value (ex: process name) used to separate emitter regions,
     // Value : the number associated (# of syscall) with that region (its size)
-
-//    public LinkedHashMap<String, Integer> divisionsSize;
-//    public HashMap<String, Float> divisionsLowerAngles;
-//    public HashMap<String, Float> divisionsHigherAngle;
-
     public LinkedHashMap<String, EmitterSubdivision> divisions;
-
     public long divisionsMaxSize;
 
 
     public EmitterSubdivider(Emitter em, float timeoutSeconds) {
         this.em = em;
 
-//        divisionsSize = new LinkedHashMap<String, Integer>();
-//        divisionsLowerAngles = new HashMap<String, Float>();
-//        divisionsHigherAngle = new HashMap<String, Float>();
-
         divisions = new LinkedHashMap<String, EmitterSubdivision>();
-
         divisionsMaxSize = 0;
-
 
         class SubdivSaver extends TimerTask {
 
@@ -59,19 +47,6 @@ public class EmitterSubdivider {
 
     public void saveDivisions() {
 
-//    	Iterator<Integer> it = divisionsSize.values().iterator();
-//    	Iterator<Float> it2 = divisionsHigherAngle.values().iterator();
-//    	Iterator<Float> it3 = divisionsLowerAngles.values().iterator();
-//
-//    	while(it.hasNext()) {
-//    		int size = it.next();
-//    		size = size - 10;
-//    	}
-
-//    	this.divisionsSize.clear();
-//    	this.divisionsMaxSize = 0;
-////    	this.divisionsLowerAngles.clear();
-//    	this.divisionsHigherAngle.clear();
 
 	}
 
@@ -82,19 +57,13 @@ public class EmitterSubdivider {
             String divisionID = e.attributes.get(divisionAttribute);
 
             if (divisions.containsKey(divisionID)) {
-
             	EmitterSubdivision div = divisions.get(divisionID);
             	div.size = div.size + e.syscallNumber;
-
-//                int lastVal = divisionsSize.get(divisionID);
-//                divisionsSize.put(divisionID, lastVal + e.syscallNumber);
             }
             else {
                 // new division
             	EmitterSubdivision div = new EmitterSubdivision(e.syscallNumber);
-
             	divisions.put(divisionID, div);
-                //divisionsSize.put(divisionID, e.syscallNumber);
 
                 // Get a new color for the new division or get the pre assigned
                 // color to that division ID
@@ -114,41 +83,28 @@ public class EmitterSubdivider {
     // divide the circle according to the event distribution
     public void adjustDivisionsSizes() {
 
-        Iterator<String> divisionsIDs = divisions.keySet().iterator();
         Iterator<EmitterSubdivision> divisionsValues = divisions.values().iterator();
-
-        //Iterator<Integer> divisionsSizes = divisionsSize.values().iterator();
-
-//        divisionsLowerAngles = new HashMap<String, Float>();
-//        divisionsHigherAngle = new HashMap<String, Float>();
 
         float lastAngle = 0;
         em.labelsList = new ArrayList<>();
 
-        while(divisionsIDs.hasNext()) {
+        while(divisionsValues.hasNext()) {
 
-            String divisionID = divisionsIDs.next();
-            //int size = divisionsSizes.next();
             EmitterSubdivision div = divisionsValues.next();
-
-
             float relativeSize = PApplet.map(div.size, 0, divisionsMaxSize, 0, 360);
 
             div.startAngleDeg = lastAngle;
-
-            //divisionsLowerAngles.put(divisionID, lastAngle);
-            //divisionsHigherAngle.put(divisionID, lastAngle + relativeSize);
             div.endAngleDeg = lastAngle + relativeSize;
             lastAngle = lastAngle + relativeSize;
         }
 
     }
 
-    public float getDivisionLowerAngle(String divisionID) {
+    public float getDivisionStartAngle(String divisionID) {
         return divisions.get(divisionID).startAngleDeg;
     }
 
-    public float getDivisonHigherAngle(String divisionID) {
+    public float getDivisonEndAngle(String divisionID) {
         return divisions.get(divisionID).endAngleDeg;
     }
 
