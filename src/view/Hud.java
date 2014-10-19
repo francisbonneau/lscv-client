@@ -9,7 +9,7 @@ import java.util.Queue;
 import model.Event;
 import model.Params;
 import processing.core.PApplet;
-import controller.RenderLoop;
+import controller.MainLoop;
 
 /**
  * The hud handle the update and drawing of one or multiples emitters,
@@ -20,7 +20,7 @@ public class Hud {
 
      public ArrayList<Emitter> emitters;
 
-     private RenderLoop rl;
+     private MainLoop rl;
      public PApplet p;
     public Params params;
 
@@ -38,7 +38,7 @@ public class Hud {
     public long eventsTotalCount;
     public long syscallTotalCount;
 
-    public Hud(RenderLoop rl) {
+    public Hud(MainLoop rl) {
 
         this.rl = rl;
         this.params = rl.getParams();

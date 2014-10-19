@@ -12,7 +12,7 @@ import redis.clients.jedis.JedisPubSub;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import controller.RenderLoop;
+import controller.MainLoop;
 
 public class DataSourceRedis extends Observable implements Runnable  {
 
@@ -23,10 +23,10 @@ public class DataSourceRedis extends Observable implements Runnable  {
     private String filter;
     HashMap<String, String> systemInfo;
 
-    private RenderLoop rl;
+    private MainLoop rl;
     private EventProcessor eventProcessor;
 
-    public DataSourceRedis(RenderLoop renderLoop, String host) {
+    public DataSourceRedis(MainLoop renderLoop, String host) {
 
         // Connect to the Redis instance
         this.host = host;

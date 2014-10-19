@@ -9,7 +9,7 @@ import controlP5.Slider;
 import controlP5.Textarea;
 import controlP5.Textfield;
 import controlP5.Textlabel;
-import controller.RenderLoop;
+import controller.MainLoop;
 
 /**
  * See ControlP5 documentation at  
@@ -20,7 +20,7 @@ public class ControlPanelUI extends PApplet {
 	private static final long serialVersionUID = 1L;
 
 	ControlP5 cp5;
-	private RenderLoop rl;
+	private MainLoop rl;
 	
 	public int windowWidth;
 	public int windowHeight;
@@ -32,7 +32,7 @@ public class ControlPanelUI extends PApplet {
 	PFont openSans15;	
 	PFont eurostile15;
 	
-	public ControlPanelUI(RenderLoop rl) {
+	public ControlPanelUI(MainLoop rl) {
 		this.rl = rl;
 		this.windowWidth = rl.getParams().controlsWindowWidth;
 		this.windowHeight =  rl.getParams().controlsWindowHeight;		 
