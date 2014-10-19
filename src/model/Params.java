@@ -53,8 +53,12 @@ public class Params {
 
     public float emitterRadius = 500;
     public float emitterRadiusBrightness = 15;
+
+    public float emitterSubDivisionsTimeoutSec = 30f;
+
     public boolean displayEmitterRadius = true;
     public boolean displayEmitterLabels = true;
+
     public int maxNumberOfEmittersX = 8;
     public int maxNumberOfEmittersY = 4;
     public float distanceBetweenEmitters = 35;

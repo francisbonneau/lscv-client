@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import model.Event;
 import processing.core.PApplet;
@@ -22,17 +24,40 @@ public class EmitterSubdivision {
     public HashMap<String, Float> divisionsHigherAngle;
 
 
-    public EmitterSubdivision(Emitter em) {
+    public EmitterSubdivision(Emitter em, float timeoutSeconds) {
         this.em = em;
         divisionsSize = new LinkedHashMap<String, Integer>();
-
         divisionsLowerAngles = new HashMap<String, Float>();
         divisionsHigherAngle = new HashMap<String, Float>();
         divisionsMaxSize = 0;
+
+
+        class SubdivisionsResetter extends TimerTask {
+
+        	EmitterSubdivision emSubdiv;
+        	public SubdivisionsResetter(EmitterSubdivision emSubdiv) {
+        		this.emSubdiv = emSubdiv;
+        	}
+
+            public void run() {
+            	emSubdiv.resetDivisions();
+            }
+         }
+
+        Timer timer = new Timer();
+        timer.schedule(new SubdivisionsResetter(this), 0,
+        		(long) timeoutSeconds * 1000);
+
     }
 
+    public void resetDivisions() {
+    	this.divisionsSize.clear();
+    	this.divisionsMaxSize = 0;
+    	this.divisionsLowerAngles.clear();
+    	this.divisionsHigherAngle.clear();
+	}
 
-    public void createDivisions(ArrayList<Event> newData, String divisionAttribute) {
+	public void createDivisions(ArrayList<Event> newData, String divisionAttribute) {
 
         for (Event e : newData) {
 

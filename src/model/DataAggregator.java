@@ -7,7 +7,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Queue;
 
-import controller.RenderLoop;
+import controller.MainLoop;
 
 /**
  * The DataAggregator is updated every time a new DataSource Thread receive
@@ -16,7 +16,7 @@ import controller.RenderLoop;
  */
 public class DataAggregator implements Observer {
 
-    private RenderLoop rl;
+    private MainLoop rl;
 
     private ArrayList<String> dataSourcesNames;
 
@@ -27,7 +27,7 @@ public class DataAggregator implements Observer {
     private ArrayList<Thread> dataSourcesThreads;
 
 
-    public DataAggregator(final RenderLoop renderLoop) {
+    public DataAggregator(final MainLoop renderLoop) {
         this.rl = renderLoop;
 
         dataSourcesNames = new ArrayList<>();

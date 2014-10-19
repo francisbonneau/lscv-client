@@ -9,15 +9,9 @@ import viewUI.ControlPanelUI;
 import controlP5.ControlP5;
 import processing.opengl.*;
 
-@SuppressWarnings("unused")
-/**
- *
- * @author franck
- *
- */
-public class RenderLoop extends PApplet {
+@SuppressWarnings({ "unused", "serial" })
 
-	private static final long serialVersionUID = 1L;
+public class MainLoop extends PApplet {
 
 	private Params params;
 	private DataAggregator da;
@@ -29,9 +23,9 @@ public class RenderLoop extends PApplet {
 	// Main method for starting the PApplet
 	public static void main(String args[]) {
 		if (fullscreenMode) {
-			PApplet.main(new String[] { "--present", "controller.RenderLoop" });
+			PApplet.main(new String[] { "--present", "controller.MainLoop" });
 		} else {
-			PApplet.main(new String[] { "controller.RenderLoop" });
+			PApplet.main(new String[] { "controller.MainLoop" });
 		}
 	}
 

@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import model.Event;
+import model.Params;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PVector;
@@ -48,7 +49,8 @@ public class Emitter {
         eventsTotalCount = 0;
         syscallTotalCount = 0;
 
-        subdivisions = new EmitterSubdivision(this);
+        subdivisions = new EmitterSubdivision(this,
+        		hud.params.emitterSubDivisionsTimeoutSec);
     }
 
     public void setHost(String host) {
