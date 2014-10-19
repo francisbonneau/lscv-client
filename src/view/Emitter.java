@@ -77,8 +77,8 @@ public class Emitter {
         Iterator<String> it = subdivisions.divisions.keySet().iterator();
         while (it.hasNext()) {
             String divisionID = it.next();
-            float Min = subdivisions.getDivisionLowerAngle(divisionID);
-            float Max = subdivisions.getDivisonHigherAngle(divisionID);
+            float Min = subdivisions.getDivisionStartAngle(divisionID);
+            float Max = subdivisions.getDivisonEndAngle(divisionID);
             float angle = (Min + Max)/2 + 45;
 
             float radius = hud.params.emitterRadius/2 + 35;
@@ -98,8 +98,8 @@ public class Emitter {
 
             Iterator<Integer> syscallName = event.latencyBreakdown.keySet().iterator();
 
-            float Min = subdivisions.getDivisionLowerAngle(divisionID);
-            float Max = subdivisions.getDivisonHigherAngle(divisionID);
+            float Min = subdivisions.getDivisionStartAngle(divisionID);
+            float Max = subdivisions.getDivisonEndAngle(divisionID);
 
             float angle = Min + (float) Math.random() * ((Max - Min) + 1);
 
