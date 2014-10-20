@@ -73,7 +73,7 @@ public class Emitter {
         subdivisions.adjustDivisionsSizes();
 
         // Add the labels to each emitter subdivision
-        Iterator<String> it = subdivisions.divisions.keySet().iterator();
+        Iterator<String> it = subdivisions.currentDivisions.keySet().iterator();
         while (it.hasNext()) {
             String divisionID = it.next();
             float Min = subdivisions.getDivisionStartAngle(divisionID);
@@ -158,8 +158,8 @@ public class Emitter {
                 syscallDisplayedCount -= particle.event.syscallNumber;
 
             // if the particle is approching the radius, fade it out
-            } else if (hud.params.emitterRadius/2 - distance < 40) {
-                particle.brightness =  particle.brightness - 10;
+            } else if (hud.params.emitterRadius/2 - distance < 60) {
+                particle.brightness =  particle.brightness - 8;
             }
         }
 

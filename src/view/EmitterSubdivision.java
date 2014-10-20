@@ -2,11 +2,11 @@ package view;
 
 public class EmitterSubdivision implements Cloneable {
 
-	public int size;
+	public float size;
 	public float startAngleDeg;
 	public float endAngleDeg;
 
-	public EmitterSubdivision(int size) {
+	public EmitterSubdivision(float size) {
 		super();
 		this.size = size;
 	}
