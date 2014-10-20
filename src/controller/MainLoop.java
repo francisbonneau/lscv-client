@@ -18,7 +18,7 @@ public class MainLoop extends PApplet {
 	private Hud hud;
 
 	// Single parameter outside of the Params class for the static context
-	public static boolean fullscreenMode = true;
+	public static boolean fullscreenMode = false;
 
 	// Main method for starting the PApplet
 	public static void main(String args[]) {

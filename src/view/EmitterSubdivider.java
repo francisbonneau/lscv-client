@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import jogamp.opengl.glu.nurbs.Subdivider;
 import model.Event;
 import processing.core.PApplet;
 
@@ -20,17 +22,21 @@ public class EmitterSubdivider {
     public LinkedHashMap<String, EmitterSubdivision> divisions;
     public long divisionsMaxSize;
 
+    public LinkedList<LinkedHashMap<String, EmitterSubdivision>> divisionsHistory;
 
-    public EmitterSubdivider(Emitter em, float timeoutSeconds) {
+    public EmitterSubdivider(Emitter em) {
         this.em = em;
 
         divisions = new LinkedHashMap<String, EmitterSubdivision>();
         divisionsMaxSize = 0;
 
-        class SubdivSaver extends TimerTask {
+        divisionsHistory = new LinkedList<>();
+
+        // This thread will save the subdivisions sizes at each secdon
+        class SubdivisonSaver extends TimerTask {
 
         	EmitterSubdivider emSubdiv;
-        	public SubdivSaver(EmitterSubdivider emSubdiv) {
+        	public SubdivisonSaver(EmitterSubdivider emSubdiv) {
         		this.emSubdiv = emSubdiv;
         	}
 
@@ -40,13 +46,44 @@ public class EmitterSubdivider {
          }
 
         Timer timer = new Timer();
-        timer.schedule(new SubdivSaver(this), 0, 1000);
+        timer.schedule(new SubdivisonSaver(this), 0, 1000);
 
     }
 
-
     public void saveDivisions() {
 
+    	int historyMaxSize = em.getHud().params.emitterSubDivisionsTimeoutSec;
+
+    	LinkedHashMap<String, EmitterSubdivision> currentDiv =
+    				new LinkedHashMap<String, EmitterSubdivision>();
+
+    	currentDiv.putAll(divisions);
+
+    	divisionsHistory.push(currentDiv);
+
+    	if (divisionsHistory.size() > historyMaxSize) {
+
+    		LinkedHashMap<String, EmitterSubdivision> timedOutData =
+    				divisionsHistory.removeLast();
+
+    		Iterator<String> it = divisions.keySet().iterator();
+    		Iterator<EmitterSubdivision> it2 = divisions.values().iterator();
+
+    		int i = 0;
+
+    		while(it.hasNext()) {
+    			String divID = it.next();
+    			EmitterSubdivision div = it2.next();
+
+    			if(timedOutData.containsKey(divID)) {
+    				int outdated = timedOutData.get(divID).size;
+    				div.size = div.size - outdated;
+    				i = i + outdated;
+    			}
+    		}
+    		this.divisionsMaxSize = this.divisionsMaxSize - i;
+
+    	}
 
 	}
 
