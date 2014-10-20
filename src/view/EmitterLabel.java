@@ -25,7 +25,7 @@ public class EmitterLabel {
     }
 
 
-    public void drawLabel() {
+    public void draw() {
         p.colorMode(PConstants.HSB, 360, 100, 100);
         p.textSize(textSize);
         p.fill(this.color, 100, 100);

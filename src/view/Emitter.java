@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import model.Event;
@@ -23,6 +24,7 @@ public class Emitter {
 
     public List<Particle> particlesList;
     public List<EmitterLabel> labelsList;
+    public List<EmitterHalo> halosList;
 
     public EmitterSubdivider subdivisions;
 
@@ -41,8 +43,14 @@ public class Emitter {
 
         this.host = "";
 
-        particlesList = new ArrayList<>();
-        labelsList = new ArrayList<>();
+        particlesList = new ArrayList<Particle>();
+        labelsList = new ArrayList<EmitterLabel>();
+
+        halosList = new ArrayList<EmitterHalo>();
+        int halosNb = hud.params.emitterHalosIntervalsSec.length;
+        for (int i = 0; i < halosNb; i++) {
+        	halosList.add(new EmitterHalo(this.p, this));
+        }
 
         eventsDisplayedCount = 0;
         syscallDisplayedCount = 0;
@@ -70,12 +78,13 @@ public class Emitter {
         String divisionsAttribute = "process";
 
         subdivisions.addDivisions(newData, divisionsAttribute);
-
         subdivisions.addHalos(newData, divisionsAttribute);
 
         subdivisions.adjustDivisionsSizes();
+        subdivisions.adjustHalosSizes();
 
         // Add the labels to each emitter subdivision
+        labelsList = new ArrayList<>();
         Iterator<String> it = subdivisions.currentDivisions.keySet().iterator();
         while (it.hasNext()) {
             String divisionID = it.next();
@@ -83,7 +92,7 @@ public class Emitter {
             float Max = subdivisions.getDivisonEndAngle(divisionID);
             float angle = (Min + Max)/2 + 45;
 
-            float radius = hud.params.emitterRadius/2 + 35;
+            float radius = hud.params.emitterRadius/2 + 105;
             float labelX = (float) Math.cos(PApplet.radians(angle)) * radius + centerX;
             float labelY = (float) Math.sin(PApplet.radians(angle)) * radius + centerY;
 
@@ -178,8 +187,27 @@ public class Emitter {
     // Draw the emitter labels
     public void drawLabels() {
         for (EmitterLabel label : labelsList) {
-            label.drawLabel();
+            label.draw();
         }
+    }
+
+
+    public void drawHalos() {
+
+    	LinkedList<LinkedHashMap<String, EmitterSubdivision>> halosDivs =
+    			subdivisions.halosDivisions;
+
+    	Iterator<LinkedHashMap<String, EmitterSubdivision>> it =
+    			halosDivs.iterator();
+
+    	float brightness = 100;
+    	float distance = 40;
+    	for (EmitterHalo halo : halosList) {
+    		brightness -= 15;
+    		halo.draw(subdivisions.currentDivisions, distance, brightness);
+    		distance += 45;
+    	}
+
     }
 
     // Draw the Emitter radius circle
@@ -209,6 +237,8 @@ public class Emitter {
         if (hud.params.displayEmitterRadius)
             drawRadius(hud.params.backgroundBrightness,
                 hud.params.emitterRadiusBrightness, hud.params.emitterRadius);
+
+        drawHalos();
     }
 
 
