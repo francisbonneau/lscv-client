@@ -49,8 +49,7 @@ public class Emitter {
         eventsTotalCount = 0;
         syscallTotalCount = 0;
 
-        subdivisions = new EmitterSubdivider(this,
-        		hud.params.emitterSubDivisionsTimeoutSec);
+        subdivisions = new EmitterSubdivider(this);
     }
 
     public void setHost(String host) {
@@ -208,5 +207,7 @@ public class Emitter {
             drawRadius(hud.params.backgroundBrightness,
                 hud.params.emitterRadiusBrightness, hud.params.emitterRadius);
     }
+
+
 
 }

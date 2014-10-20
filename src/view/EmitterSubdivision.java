@@ -1,6 +1,6 @@
 package view;
 
-public class EmitterSubdivision {
+public class EmitterSubdivision implements Cloneable {
 
 	public int size;
 	public float startAngleDeg;

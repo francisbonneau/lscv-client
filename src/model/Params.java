@@ -54,7 +54,7 @@ public class Params {
     public float emitterRadius = 500;
     public float emitterRadiusBrightness = 15;
 
-    public float emitterSubDivisionsTimeoutSec = 30f;
+    public int emitterSubDivisionsTimeoutSec = 10;
 
     public boolean displayEmitterRadius = true;
     public boolean displayEmitterLabels = true;
