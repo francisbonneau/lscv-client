@@ -49,12 +49,24 @@ public class Params {
         "100 ns", "10 ns", "1 ns"
     };
 
+    // Background color of the entire window
     public float backgroundBrightness = 9.0f;
 
-    public float emitterRadius = 500;
-    public float emitterRadiusBrightness = 15;
+    // An emitter (as in particle emitter) represent the circle where all the
+    // events are displayed as particles
+    public float emitterRadius = 500;          // the radius the circle
+    public float emitterRadiusBrightness = 15; // the brightness of the circle stroke
 
-    public int emitterSubDivisionsTimeoutSec = 10;
+    // Every 10 seconds the emitter divisions are resetted to display only
+    // the data from the last 10 seconds
+    public int emitterDivisionsIntervalSec = 10;
+
+    // However the emitter can also represent the movement of the different
+    // subdivisons over time intervals, by adding others circles on top of
+    // the particle emitter, each new circle (halo) represent a different time
+
+    // in this case 3 halos are displayed, for the 1 min, 5 min, and 15 min data
+    public int[] emitterHalosIntervalsSec = {60, 300, 900};
 
     public boolean displayEmitterRadius = true;
     public boolean displayEmitterLabels = true;
