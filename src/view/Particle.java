@@ -98,6 +98,8 @@ public class Particle {
 
             if (drawStroke) {
                 p.stroke(hue, saturation, backgroundBrightness);
+            } else {
+            	p.noStroke();
             }
 
 //			p.fill(hue, saturation, brightness);

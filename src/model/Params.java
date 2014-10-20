@@ -41,7 +41,7 @@ public class Params {
     // 10^−7 s	100 ns nanosecond
     // 10^−8 s	10  ns nanosecond
     // 10^−9 s	1   ns nanosecond
-    public int latencyRoundup = 6;
+    public int latencyRoundup = 3;
 
     public String[] latencyRoundupLegend = {
         "100 ms", "10 ms", "1 ms",
@@ -66,7 +66,7 @@ public class Params {
     // the particle emitter, each new circle (halo) represent a different time
 
     // in this case 3 halos are displayed, for the 1 min, 5 min, and 15 min data
-    public int[] emitterHalosIntervalsSec = {60, 300, 900};
+    public int[] emitterHalosIntervalsSec = {10, 60, 300, 900};
 
     public boolean displayEmitterRadius = true;
     public boolean displayEmitterLabels = true;

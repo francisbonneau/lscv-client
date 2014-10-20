@@ -25,7 +25,7 @@ public class EmitterSubdivider {
     private int divisionsTimeout;
 
     public LinkedList<LinkedHashMap<String, EmitterSubdivision>> halosDivisions;
-    public Long[] halosDivisuonsTotalSize;
+    public Long[] halosDivisionsTotalSize;
     public Integer[] halosTimeout;
 
     public EmitterSubdivider(Emitter em) {
@@ -39,11 +39,11 @@ public class EmitterSubdivider {
         // initialise the halos divisions and timers
         int halosNb = em.getHud().params.emitterHalosIntervalsSec.length;
         halosDivisions = new LinkedList<>();
-        halosDivisuonsTotalSize = new Long[halosNb];
+        halosDivisionsTotalSize = new Long[halosNb];
         halosTimeout = new Integer[halosNb];
         for (int i = 0; i < halosNb; i++) {
         	halosDivisions.add(new LinkedHashMap<String, EmitterSubdivision>());
-        	halosDivisuonsTotalSize[i] = 0l;
+        	halosDivisionsTotalSize[i] = 0l;
         	halosTimeout[i] = 0;
         }
 
@@ -73,24 +73,24 @@ public class EmitterSubdivider {
     public void resetDivisions() {
 
         if (divisionsTimeout == em.getHud().params.emitterDivisionsIntervalSec) {
-        	System.out.println("resetting the divisions");
+//        	System.out.println("resetting the divisions");
             currentDivisions.clear();
             divisionsTotalSize = 0;
             divisionsTimeout = 0;
         }
         divisionsTimeout++;
 
-        int i = 0;
-        for (int haloInterval : em.getHud().params.emitterHalosIntervalsSec) {
-        	if (halosTimeout[i] == haloInterval) {
-        		System.out.println("resetting the halo " + i);
-        		halosDivisions.get(i).clear();
-        		halosDivisuonsTotalSize[i] = 0l;
-        		halosTimeout[i] = 0;
-        	}
-        	halosTimeout[i] = halosTimeout[i] + 1;
-        	i++;
-        }
+//        int i = 0;
+//        for (int haloInterval : em.getHud().params.emitterHalosIntervalsSec) {
+//        	if (halosTimeout[i] == haloInterval) {
+////        		System.out.println("resetting the halo " + i);
+//        		halosDivisions.get(i).clear();
+//        		halosDivisionsTotalSize[i] = 0l;
+//        		halosTimeout[i] = 0;
+//        	}
+//        	halosTimeout[i] = halosTimeout[i] + 1;
+//        	i++;
+//        }
 
      }
 
@@ -136,44 +136,12 @@ public class EmitterSubdivider {
     }
 
 
-    public void addHalos(ArrayList<Event> newData, String divisionAttribute) {
-
-    	int halosNb = em.getHud().params.emitterHalosIntervalsSec.length -1;
-
-        for (Event e : newData) {
-
-            String divisionID = e.attributes.get(divisionAttribute);
-
-            if (halosDivisions.get(0).containsKey(divisionID)) {
-
-                for (int i = halosNb; i >= 0; i--) {
-                	EmitterSubdivision div = halosDivisions.get(i).get(divisionID);
-            		div.size = div.size + e.syscallNumber;
-                }
-            }
-            else {
-                // new halo division
-                EmitterSubdivision div = new EmitterSubdivision(e.syscallNumber);
-                for (int i = halosNb; i >= 0; i--) {
-                	halosDivisions.get(i).put(divisionID, div);
-                }
-            }
-
-            for (int i = halosNb; i >= 0; i--) {
-        		halosDivisuonsTotalSize[i] += e.syscallNumber;
-            }
-
-        }
-    }
-
     // divide the circle according to the event distribution
     public void adjustDivisionsSizes() {
 
         Iterator<EmitterSubdivision> divisionsValues = currentDivisions.values().iterator();
 
         float lastAngle = 0;
-        em.labelsList = new ArrayList<>();
-
         while(divisionsValues.hasNext()) {
 
             EmitterSubdivision div = divisionsValues.next();
@@ -187,22 +155,51 @@ public class EmitterSubdivider {
     }
 
 
+    public void addHalos(ArrayList<Event> newData, String divisionAttribute) {
+
+    	int halosNb = em.getHud().params.emitterHalosIntervalsSec.length;
+
+        for (Event e : newData) {
+
+            String divisionID = e.attributes.get(divisionAttribute);
+
+            if (halosDivisions.get(0).containsKey(divisionID)) {
+
+            	for (int i = 0; i < halosNb; i++) {
+                	EmitterSubdivision div = halosDivisions.get(i).get(divisionID);
+            		div.size = div.size + e.syscallNumber;
+                }
+            }
+            else {
+                // new halo division
+                EmitterSubdivision div = new EmitterSubdivision(e.syscallNumber);
+                for (int i = 0; i < halosNb; i++) {
+                	halosDivisions.get(i).put(divisionID, div);
+                }
+            }
+
+            for (int i = 0; i < halosNb; i++) {
+        		halosDivisionsTotalSize[i] += e.syscallNumber;
+            }
+
+        }
+    }
+
     // divide the circle according to the event distribution
     public void adjustHalosSizes() {
 
-    	int halosNb = em.getHud().params.emitterHalosIntervalsSec.length -1;
-    	for (int i = halosNb; i >= 0; i--) {
+    	int halosNb = em.getHud().params.emitterHalosIntervalsSec.length;
+    	for (int i = 0; i < halosNb; i++) {
 
     		Iterator<EmitterSubdivision> divisionsValues =
     				halosDivisions.get(i).values().iterator();
 
             float lastAngle = 0;
-            em.labelsList = new ArrayList<>();
-
             while(divisionsValues.hasNext()) {
 
                 EmitterSubdivision div = divisionsValues.next();
-                float relativeSize = PApplet.map(div.size, 0, divisionsTotalSize, 0, 360);
+                float relativeSize = PApplet.map(div.size, 0,
+                						halosDivisionsTotalSize[i], 0, 360);
 
                 div.startAngleDeg = lastAngle;
                 div.endAngleDeg = lastAngle + relativeSize;
