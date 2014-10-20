@@ -22,35 +22,46 @@ public class EmitterSubdivider {
     // Value : the number associated (# of syscall) with that region (its size)
     public LinkedHashMap<String, EmitterSubdivision> currentDivisions;
     public long divisionsTotalSize;
+    private int divisionsTimeout;
 
-    public LinkedList<LinkedHashMap<String, EmitterSubdivision>> divisionsHistory;
+    public LinkedList<LinkedHashMap<String, EmitterSubdivision>> halosDivisions;
+    public Long[] halosDivisuonsTotalSize;
+    public Integer[] halosTimeout;
 
     public EmitterSubdivider(Emitter em) {
         this.em = em;
 
+        // initialise the emitter divisions and timers
         currentDivisions = new LinkedHashMap<String, EmitterSubdivision>();
         divisionsTotalSize = 0;
+        divisionsTimeout = 0;
 
+        // initialise the halos divisions and timers
+        int halosNb = em.getHud().params.emitterHalosIntervalsSec.length;
+        halosDivisions = new LinkedList<>();
+        halosDivisuonsTotalSize = new Long[halosNb];
+        halosTimeout = new Integer[halosNb];
+        for (int i = 0; i < halosNb; i++) {
+        	halosDivisions.add(new LinkedHashMap<String, EmitterSubdivision>());
+        	halosDivisuonsTotalSize[i] = 0l;
+        	halosTimeout[i] = 0;
+        }
 
-        divisionsHistory = new LinkedList<>();
+        // This thread will reset the subdivisions sizes at each interval
+        class SubdivisonResetter extends TimerTask {
 
-        // This thread will save the subdivisions sizes at each secdon
-        class SubdivisonSaver extends TimerTask {
-
-        	EmitterSubdivider emSubdiv;
-        	public SubdivisonSaver(EmitterSubdivider emSubdiv) {
-        		this.emSubdiv = emSubdiv;
-        	}
+            EmitterSubdivider emSubdiv;
+            public SubdivisonResetter(EmitterSubdivider emSubdiv) {
+                this.emSubdiv = emSubdiv;
+            }
 
             public void run() {
-            	emSubdiv.saveDivisions();
+                emSubdiv.resetDivisions();
             }
          }
 
         Timer timer = new Timer();
-        timer.schedule(new SubdivisonSaver(this), 0,
-        		1000 * em.getHud().params.emitterSubDivisionsTimeoutSec);
-
+        timer.schedule(new SubdivisonResetter(this), 0, 1000);
     }
 
     /**
@@ -59,61 +70,29 @@ public class EmitterSubdivider {
      * if that is the case, the data currently displayed is reaching its time
      * limit (ex 30 sec) and in that case the divisions need to be recalculated.
      */
-    public void saveDivisions() {
+    public void resetDivisions() {
 
-//    	int historyMaxSize = em.getHud().params.emitterSubDivisionsTimeoutSec;
-//
-//    	LinkedHashMap<String, EmitterSubdivision> currentDiv =
-//    				new LinkedHashMap<String, EmitterSubdivision>();
-//
-//    	currentDiv.putAll(currentDivisions);
-//
-//    	divisionsHistory.push(currentDiv);
-//
-//    	if (divisionsHistory.size() > historyMaxSize) {
-//
-//    		LinkedHashMap<String, EmitterSubdivision> timedOutData =
-//    				divisionsHistory.removeLast();
-//
-//    		System.out.println("removed last element : " + divisionsHistory.size() );
-//
-//    		Iterator<String> it = currentDivisions.keySet().iterator();
-//    		Iterator<EmitterSubdivision> it2 = currentDivisions.values().iterator();
-//
-//    		float i = 0;
-//
-//    		while(it.hasNext()) {
-//    			String divID = it.next();
-//    			EmitterSubdivision div = it2.next();
-//
-//    			if(timedOutData.containsKey(divID)) {
-//    				float outdated = timedOutData.get(divID).size;
-//    				div.size = div.size - outdated;
-//
-//    				if (div.size < 1) {
-//    					System.out.print(" removed " + divID);
-//    					currentDivisions.remove(div);
-//    				} else{
-//    					System.out.print(divID + ": " + div.size );
-//    				}
-//    				i = i + outdated;
-//    			}
-//    			System.out.println(" ");
-//    		}
-//    		this.divisionsTotalSize = (long) (this.divisionsTotalSize - i);
-//    	}
-////
-//    	if ((divisionsHistory.size() / 100) == historyMaxSize) {
-//
-//    		divisionsHistory.removeLast();
-//
-//    	}
+        if (divisionsTimeout == em.getHud().params.emitterDivisionsIntervalSec) {
+        	System.out.println("resetting the divisions");
+            currentDivisions.clear();
+            divisionsTotalSize = 0;
+            divisionsTimeout = 0;
+        }
+        divisionsTimeout++;
 
-    	currentDivisions.clear();
-    	divisionsTotalSize = 0;
+        int i = 0;
+        for (int haloInterval : em.getHud().params.emitterHalosIntervalsSec) {
+        	if (halosTimeout[i] == haloInterval) {
+        		System.out.println("resetting the halo " + i);
+        		halosDivisions.get(i).clear();
+        		halosDivisuonsTotalSize[i] = 0l;
+        		halosTimeout[i] = 0;
+        	}
+        	halosTimeout[i] = halosTimeout[i] + 1;
+        	i++;
+        }
 
-	}
-
+     }
 
     /**
      * Prepare the division of the circle (emitter) into sections based on the
@@ -124,35 +103,67 @@ public class EmitterSubdivider {
      * @param newData
      * @param divisionAttribute
      */
-	public void addDivisions(ArrayList<Event> newData, String divisionAttribute) {
+    public void addDivisions(ArrayList<Event> newData, String divisionAttribute) {
 
         for (Event e : newData) {
 
             String divisionID = e.attributes.get(divisionAttribute);
 
             if (currentDivisions.containsKey(divisionID)) {
-            	EmitterSubdivision div = currentDivisions.get(divisionID);
-            	div.size = div.size + e.syscallNumber;
+                EmitterSubdivision div = currentDivisions.get(divisionID);
+                div.size = div.size + e.syscallNumber;
 
             }
             else {
                 // new division
-            	EmitterSubdivision div = new EmitterSubdivision(e.syscallNumber);
-            	currentDivisions.put(divisionID, div);
+                EmitterSubdivision div = new EmitterSubdivision(e.syscallNumber);
+                currentDivisions.put(divisionID, div);
 
                 // Get a new color for the new division or get the pre assigned
                 // color to that division ID
                 float newColor;
                 if (em.getHud().colorPalette.containsKey(divisionID)) {
-                	newColor =em.getHud().colorPalette.get(divisionID);
+                    newColor =em.getHud().colorPalette.get(divisionID);
                 } else {
-                	newColor = em.getHud().colorGenerator.getNewColorHue();
+                    newColor = em.getHud().colorGenerator.getNewColorHue();
                 }
                 em.getHud().colorPalette.put(divisionID, newColor);
             }
             divisionsTotalSize += e.syscallNumber;
+
         }
 
+    }
+
+
+    public void addHalos(ArrayList<Event> newData, String divisionAttribute) {
+
+    	int halosNb = em.getHud().params.emitterHalosIntervalsSec.length -1;
+
+        for (Event e : newData) {
+
+            String divisionID = e.attributes.get(divisionAttribute);
+
+            if (halosDivisions.get(0).containsKey(divisionID)) {
+
+                for (int i = halosNb; i >= 0; i--) {
+                	EmitterSubdivision div = halosDivisions.get(i).get(divisionID);
+            		div.size = div.size + e.syscallNumber;
+                }
+            }
+            else {
+                // new halo division
+                EmitterSubdivision div = new EmitterSubdivision(e.syscallNumber);
+                for (int i = halosNb; i >= 0; i--) {
+                	halosDivisions.get(i).put(divisionID, div);
+                }
+            }
+
+            for (int i = halosNb; i >= 0; i--) {
+        		halosDivisuonsTotalSize[i] += e.syscallNumber;
+            }
+
+        }
     }
 
     // divide the circle according to the event distribution
@@ -172,6 +183,32 @@ public class EmitterSubdivider {
             div.endAngleDeg = lastAngle + relativeSize;
             lastAngle = lastAngle + relativeSize;
         }
+
+    }
+
+
+    // divide the circle according to the event distribution
+    public void adjustHalosSizes() {
+
+    	int halosNb = em.getHud().params.emitterHalosIntervalsSec.length -1;
+    	for (int i = halosNb; i >= 0; i--) {
+
+    		Iterator<EmitterSubdivision> divisionsValues =
+    				halosDivisions.get(i).values().iterator();
+
+            float lastAngle = 0;
+            em.labelsList = new ArrayList<>();
+
+            while(divisionsValues.hasNext()) {
+
+                EmitterSubdivision div = divisionsValues.next();
+                float relativeSize = PApplet.map(div.size, 0, divisionsTotalSize, 0, 360);
+
+                div.startAngleDeg = lastAngle;
+                div.endAngleDeg = lastAngle + relativeSize;
+                lastAngle = lastAngle + relativeSize;
+            }
+    	}
 
     }
 

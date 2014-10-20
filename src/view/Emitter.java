@@ -70,6 +70,9 @@ public class Emitter {
         String divisionsAttribute = "process";
 
         subdivisions.addDivisions(newData, divisionsAttribute);
+
+        subdivisions.addHalos(newData, divisionsAttribute);
+
         subdivisions.adjustDivisionsSizes();
 
         // Add the labels to each emitter subdivision
