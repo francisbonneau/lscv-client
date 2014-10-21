@@ -6,9 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ThreadPoolExecutor.AbortPolicy;
-
-import com.jogamp.common.os.Platform.ABIType;
 
 import model.Event;
 import processing.core.PApplet;
@@ -72,18 +69,16 @@ public class EmitterSubdivider {
      */
     public void resetDivisions() {
 
-//        if (divisionsTimeout == em.getHud().params.emitterDivisionsIntervalSec) {
-//        	System.out.println("resetting the divisions");
-//            currentDivisions.clear();
-//            divisionsTotalSize = 0;
-//            divisionsTimeout = 0;
-//        }
-//        divisionsTimeout++;
+        if (divisionsTimeout == em.getHud().params.emitterDivisionsIntervalSec) {
+            currentDivisions.clear();
+            divisionsTotalSize = 0;
+            divisionsTimeout = 0;
+        }
+        divisionsTimeout++;
 
         int i = 0;
         for (int haloInterval : em.getHud().params.emitterHalosIntervalsSec) {
         	if (halosTimeout[i] == haloInterval) {
-        		System.out.println("resetting the halo " + i);
         		halosDivisions.get(i).clear();
         		halosDivisionsTotalSize[i] = 0l;
         		halosTimeout[i] = 0;
@@ -199,11 +194,7 @@ public class EmitterSubdivider {
                 div.startAngleDeg = lastAngle;
                 div.endAngleDeg = lastAngle + relativeSize;
                 lastAngle = lastAngle + relativeSize;
-
-                System.out.print(i + " " + div.size);
             }
-            System.out.println(" total size " + halosDivisionsTotalSize[i].toString());
-
     	}
 
     }
