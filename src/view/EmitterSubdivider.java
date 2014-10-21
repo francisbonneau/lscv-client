@@ -72,13 +72,13 @@ public class EmitterSubdivider {
      */
     public void resetDivisions() {
 
-        if (divisionsTimeout == em.getHud().params.emitterDivisionsIntervalSec) {
-//        	System.out.println("resetting the divisions");
-            currentDivisions.clear();
-            divisionsTotalSize = 0;
-            divisionsTimeout = 0;
-        }
-        divisionsTimeout++;
+//        if (divisionsTimeout == em.getHud().params.emitterDivisionsIntervalSec) {
+////        	System.out.println("resetting the divisions");
+//            currentDivisions.clear();
+//            divisionsTotalSize = 0;
+//            divisionsTimeout = 0;
+//        }
+//        divisionsTimeout++;
 
 //        int i = 0;
 //        for (int haloInterval : em.getHud().params.emitterHalosIntervalsSec) {
@@ -136,25 +136,6 @@ public class EmitterSubdivider {
     }
 
 
-    // divide the circle according to the event distribution
-    public void adjustDivisionsSizes() {
-
-        Iterator<EmitterSubdivision> divisionsValues = currentDivisions.values().iterator();
-
-        float lastAngle = 0;
-        while(divisionsValues.hasNext()) {
-
-            EmitterSubdivision div = divisionsValues.next();
-            float relativeSize = PApplet.map(div.size, 0, divisionsTotalSize, 0, 360);
-
-            div.startAngleDeg = lastAngle;
-            div.endAngleDeg = lastAngle + relativeSize;
-            lastAngle = lastAngle + relativeSize;
-        }
-
-    }
-
-
     public void addHalos(ArrayList<Event> newData, String divisionAttribute) {
 
     	int halosNb = em.getHud().params.emitterHalosIntervalsSec.length;
@@ -172,9 +153,9 @@ public class EmitterSubdivider {
             }
             else {
                 // new halo division
-                EmitterSubdivision div = new EmitterSubdivision(e.syscallNumber);
                 for (int i = 0; i < halosNb; i++) {
-                	halosDivisions.get(i).put(divisionID, div);
+                	halosDivisions.get(i).put(divisionID,
+                					new EmitterSubdivision(e.syscallNumber));
                 }
             }
 
@@ -184,6 +165,29 @@ public class EmitterSubdivider {
 
         }
     }
+
+    // divide the circle according to the event distribution
+    public void adjustDivisionsSizes() {
+
+        Iterator<EmitterSubdivision> divisionsValues = currentDivisions.values().iterator();
+
+        float lastAngle = 0;
+        while(divisionsValues.hasNext()) {
+
+            EmitterSubdivision div = divisionsValues.next();
+            float relativeSize = PApplet.map(div.size, 0,
+            							divisionsTotalSize, 0, 360);
+
+            div.startAngleDeg = lastAngle;
+            div.endAngleDeg = lastAngle + relativeSize;
+            lastAngle = lastAngle + relativeSize;
+
+            System.out.print("d " + div.size);
+        }
+        System.out.println(" " );
+
+    }
+
 
     // divide the circle according to the event distribution
     public void adjustHalosSizes() {
@@ -204,7 +208,11 @@ public class EmitterSubdivider {
                 div.startAngleDeg = lastAngle;
                 div.endAngleDeg = lastAngle + relativeSize;
                 lastAngle = lastAngle + relativeSize;
+
+                System.out.print(i + " " + div.size);
             }
+
+            System.out.println(" " );
     	}
 
     }

@@ -204,7 +204,7 @@ public class Emitter {
     	float distance = 40;
     	for (EmitterHalo halo : halosList) {
     		brightness -= 15;
-    		halo.draw(subdivisions.currentDivisions, distance, brightness);
+    		halo.draw(it.next(), distance, brightness);
     		distance += 45;
     	}
 

@@ -1,5 +1,6 @@
 package view;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
@@ -21,33 +22,42 @@ public class EmitterHalo {
 	public void draw(LinkedHashMap<String, EmitterSubdivision> divisions,
 			float distance, float brightness) {
 
-		Iterator<String> it = divisions.keySet().iterator();
-		Iterator<EmitterSubdivision> it2 = divisions.values().iterator();
+		try {
 
-		while (it.hasNext()) {
+			Iterator<String> it = divisions.keySet().iterator();
+			Iterator<EmitterSubdivision> it2 = divisions.values().iterator();
 
-			String divisionID = it.next();
-			EmitterSubdivision div = it2.next();
+			while (it.hasNext()) {
 
-			float color = em.getHud().colorPalette.get(divisionID);
+				String divisionID = it.next();
+				EmitterSubdivision div = it2.next();
 
-			p.colorMode(PConstants.HSB, 360, 100, 100);
-			p.stroke(color, 100, brightness);
-			p.smooth();
-			p.noFill();
+				float color = em.getHud().colorPalette.get(divisionID);
 
-			// float: x-coordinate of the arc's ellipse
-			// float: y-coordinate of the arc's ellipse
-			// float: width of the arc's ellipse by default
-			// float: height of the arc's ellipse by default
-			// float: angle to start the arc, specified in radians
-			// float: angle to stop the arc, specified in radians
+				p.colorMode(PConstants.HSB, 360, 100, 100);
+				p.stroke(color, 100, brightness);
+				p.smooth();
+				p.noFill();
 
-			float dist = em.getHud().params.emitterRadius + distance;
-			p.arc(em.centerX, em.centerY, dist, dist,
-					PApplet.radians(div.startAngleDeg + 45),
-					PApplet.radians(div.endAngleDeg + 45));
+				// float: x-coordinate of the arc's ellipse
+				// float: y-coordinate of the arc's ellipse
+				// float: width of the arc's ellipse by default
+				// float: height of the arc's ellipse by default
+				// float: angle to start the arc, specified in radians
+				// float: angle to stop the arc, specified in radians
+
+				float dist = em.getHud().params.emitterRadius + distance;
+				p.arc(em.centerX, em.centerY, dist, dist,
+						PApplet.radians(div.startAngleDeg + 45),
+						PApplet.radians(div.endAngleDeg + 45));
+			}
+
+		} catch (ConcurrentModificationException e) {
+			// no modification of the hashmap occurs here, but a simple
+			// get is enough to trigger a conccurrent exception
 		}
+
+
     }
 
 }
