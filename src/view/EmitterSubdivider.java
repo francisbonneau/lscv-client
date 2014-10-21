@@ -73,24 +73,24 @@ public class EmitterSubdivider {
     public void resetDivisions() {
 
 //        if (divisionsTimeout == em.getHud().params.emitterDivisionsIntervalSec) {
-////        	System.out.println("resetting the divisions");
+//        	System.out.println("resetting the divisions");
 //            currentDivisions.clear();
 //            divisionsTotalSize = 0;
 //            divisionsTimeout = 0;
 //        }
 //        divisionsTimeout++;
 
-//        int i = 0;
-//        for (int haloInterval : em.getHud().params.emitterHalosIntervalsSec) {
-//        	if (halosTimeout[i] == haloInterval) {
-////        		System.out.println("resetting the halo " + i);
-//        		halosDivisions.get(i).clear();
-//        		halosDivisionsTotalSize[i] = 0l;
-//        		halosTimeout[i] = 0;
-//        	}
-//        	halosTimeout[i] = halosTimeout[i] + 1;
-//        	i++;
-//        }
+        int i = 0;
+        for (int haloInterval : em.getHud().params.emitterHalosIntervalsSec) {
+        	if (halosTimeout[i] == haloInterval) {
+        		System.out.println("resetting the halo " + i);
+        		halosDivisions.get(i).clear();
+        		halosDivisionsTotalSize[i] = 0l;
+        		halosTimeout[i] = 0;
+        	}
+        	halosTimeout[i] = halosTimeout[i] + 1;
+        	i++;
+        }
 
      }
 
@@ -135,36 +135,30 @@ public class EmitterSubdivider {
 
     }
 
+	public void addHalos(ArrayList<Event> newData, String divisionAttribute) {
 
-    public void addHalos(ArrayList<Event> newData, String divisionAttribute) {
+		int halosNb = em.getHud().params.emitterHalosIntervalsSec.length;
 
-    	int halosNb = em.getHud().params.emitterHalosIntervalsSec.length;
+		for (Event e : newData) {
 
-        for (Event e : newData) {
+			String divisionID = e.attributes.get(divisionAttribute);
 
-            String divisionID = e.attributes.get(divisionAttribute);
+			for (int i = 0; i < halosNb; i++) {
 
-            if (halosDivisions.get(0).containsKey(divisionID)) {
+				if (halosDivisions.get(i).containsKey(divisionID)) {
+					EmitterSubdivision div = halosDivisions.get(i).get(
+																	divisionID);
+					div.size = div.size + e.syscallNumber;
+				} else {
+					// new halo division
+					halosDivisions.get(i).put(divisionID,
+										new EmitterSubdivision(e.syscallNumber));
+				}
+				halosDivisionsTotalSize[i] += e.syscallNumber;
+			}
 
-            	for (int i = 0; i < halosNb; i++) {
-                	EmitterSubdivision div = halosDivisions.get(i).get(divisionID);
-            		div.size = div.size + e.syscallNumber;
-                }
-            }
-            else {
-                // new halo division
-                for (int i = 0; i < halosNb; i++) {
-                	halosDivisions.get(i).put(divisionID,
-                					new EmitterSubdivision(e.syscallNumber));
-                }
-            }
-
-            for (int i = 0; i < halosNb; i++) {
-        		halosDivisionsTotalSize[i] += e.syscallNumber;
-            }
-
-        }
-    }
+		}
+	}
 
     // divide the circle according to the event distribution
     public void adjustDivisionsSizes() {
@@ -181,10 +175,7 @@ public class EmitterSubdivider {
             div.startAngleDeg = lastAngle;
             div.endAngleDeg = lastAngle + relativeSize;
             lastAngle = lastAngle + relativeSize;
-
-            System.out.print("d " + div.size);
         }
-        System.out.println(" " );
 
     }
 
@@ -211,8 +202,8 @@ public class EmitterSubdivider {
 
                 System.out.print(i + " " + div.size);
             }
+            System.out.println(" total size " + halosDivisionsTotalSize[i].toString());
 
-            System.out.println(" " );
     	}
 
     }
