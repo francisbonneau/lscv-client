@@ -5,8 +5,7 @@ public class Params {
 
     // Default parameters of the application, those variables can be changed
 	// in runtime, eg. by the user in the settings window or possibly via an
-	// API in the future. If the variable cannot be updated at runtime or
-	// doing so wont change anything anyway the variable is marked as static.
+	// API in the future.
 
     // ---- Display parameters
 
@@ -26,7 +25,7 @@ public class Params {
     public int settingsWindowWidth = 725;
 
     // Default framerate maximum limit
-    public static int maxFramerate = 30;
+    public int maxFramerate = 30;
 
     // True if the user can resize the app window (in non fullscreen mode)
     public boolean resizable = false;
@@ -93,6 +92,9 @@ public class Params {
     // However the emitter can also represent the movement of the different
     // subdivisons over time intervals, by adding others circles on top of
     // the particle emitter, each new circle (halo) represent a different time
+
+    // If the halos should be visible
+    public boolean displayEmitterHalos = true;
 
     // in this case 3 halos are displayed, for the 1 min, 5 min, and 15 min data
     public int[] emitterHalosIntervalsSec = {10, 60, 300, 900};

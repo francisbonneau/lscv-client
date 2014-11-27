@@ -190,7 +190,6 @@ public class Emitter {
         }
     }
 
-
     public void drawHalos() {
 
     	LinkedList<LinkedHashMap<String, EmitterSubdivision>> halosDivs =
@@ -237,7 +236,8 @@ public class Emitter {
             drawRadius(hud.params.backgroundBrightness,
                 hud.params.emitterRadiusBrightness, hud.params.emitterRadius);
 
-        drawHalos();
+        if (hud.params.displayEmitterHalos)
+        	drawHalos();
     }
 
 

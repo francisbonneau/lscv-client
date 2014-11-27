@@ -205,11 +205,6 @@ public class ControlPanelUI extends PApplet {
 			.setId(4).setValue(rl.getParams().particleSize)
 			.moveTo(cp5.getTab("Global settings"));
 
-//		cp5.addRange("Particle velocity", rl.getParams().particleVelocityRangeMin,
-//			rl.getParams().particleVelocityRangeMax, rl.getParams().particleMinVelocity,
-//			rl.getParams().particleMaxVelocity, 60, 240, 400, 15)
-//			.setId(5).moveTo(cp5.getTab("Global settings"));
-
 		cp5.addSlider("Particle min speed", 1, 10,
 			rl.getParams().particleMaxVelocity, 60, 240, 400, 15)
 			.setId(16).setValue(rl.getParams().particleMinVelocity)
@@ -233,25 +228,39 @@ public class ControlPanelUI extends PApplet {
 			+ " )", 620, 330).setFont(openSans15)
 			.moveTo(cp5.getTab("Global settings"));
 
-		cp5.addToggle("Display Grid").setPosition(60,360).setSize(40,20)
+		// switches for on/off settings
+		// first row
+		cp5.addToggle("Display Grid").setPosition(60,370).setSize(40,20)
 			.setValue(rl.getParams().displayGrid)
 			.setId(10).moveTo(cp5.getTab("Global settings"));
 
-		cp5.addToggle("Display Circle Radius").setPosition(260,360)
+		cp5.addToggle("Display Circle Radius").setPosition(260,370)
 			.setSize(40,20).setValue(rl.getParams().displayEmitterRadius)
 			.setId(11).moveTo(cp5.getTab("Global settings"));
 
-		cp5.addToggle("Display Labels").setPosition(60,410).setSize(40,20)
+		cp5.addToggle("Draw circles strokes").setPosition(460,370)
+			.setSize(40,20).setValue(rl.getParams().drawCirclesStrokes)
+			.setId(14).moveTo(cp5.getTab("Global settings"));
+
+		// second row
+		cp5.addToggle("Display Labels").setPosition(60,420).setSize(40,20)
 			.setValue(rl.getParams().displayEmitterRadius)
 			.setId(12).moveTo(cp5.getTab("Global settings"));
 
-		cp5.addToggle("Display FPS counter").setPosition(260,410)
+		cp5.addToggle("Display FPS counter").setPosition(260,420)
 			.setSize(40,20).setValue(rl.getParams().displayFPSCounter)
 			.setId(13).moveTo(cp5.getTab("Global settings"));
 
-		cp5.addToggle("Draw circles strokes").setPosition(460,360)
-			.setSize(40,20).setValue(rl.getParams().drawCirclesStrokes)
-			.setId(14).moveTo(cp5.getTab("Global settings"));
+		cp5.addToggle("Display Stats").setPosition(460,420)
+			.setSize(40,20).setValue(rl.getParams().displayStats)
+			.setId(18).moveTo(cp5.getTab("Global settings"));
+
+		// third row
+
+		cp5.addToggle("Display halos").setPosition(60,470)
+			.setSize(40,20).setValue(rl.getParams().displayEmitterHalos)
+			.setId(19).moveTo(cp5.getTab("Global settings"));
+
 
 		cp5.getTab("Global settings").add(cp5.getController("Load Config"));
 		cp5.getTab("Global settings").add(cp5.getController("Save Config"));
@@ -324,19 +333,19 @@ public class ControlPanelUI extends PApplet {
 			case (1):
 				rl.getParams().backgroundBrightness = newValue;
 				break;
+
 			case (2):
 				rl.getParams().emitterRadius = newValue;
 				break;
+
 			case (3):
 				rl.getParams().emitterRadiusBrightness = newValue;
 				break;
+
 			case (4):
 				rl.getParams().particleSize = newValue;
 				break;
-//			case (5):
-//				rl.getParams().particleMinVelocity = theEvent.getController().getArrayValue(0);
-//				rl.getParams().particleVelocityRangeMax = theEvent.getController().getArrayValue(1);
-//				break;
+
 			case (6):
 				rl.getParams().particleAcceleration = newValue;
 				break;
@@ -445,8 +454,8 @@ public class ControlPanelUI extends PApplet {
 				break;
 
 			case (15):
-					rl.getParams().distanceBetweenEmitters = newValue;
-					rl.getHud().regionManager.refresh();
+				rl.getParams().distanceBetweenEmitters = newValue;
+				rl.getHud().regionManager.refresh();
 				break;
 
 			case (16):
@@ -456,6 +465,21 @@ public class ControlPanelUI extends PApplet {
 			case(17):
 				rl.getParams().particleMaxVelocity = newValue;
 				break;
+
+			case(18):
+				if (newValue == 0.0)
+					rl.getParams().displayStats = false;
+				else
+					rl.getParams().displayStats = true;
+				break;
+
+			case(19):
+				if (newValue == 0.0)
+					rl.getParams().displayEmitterHalos = false;
+				else
+					rl.getParams().displayEmitterHalos = true;
+				break;
+
 
 			}
 		}
