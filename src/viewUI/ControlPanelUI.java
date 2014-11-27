@@ -99,12 +99,12 @@ public class ControlPanelUI extends PApplet {
 		// Name, Value, X, Y, W, H
 		cp5.addButton("newConnexionButton", 1, 470, 135, 165, 25).setLabel("Connect to server");
 
-//		Textarea myTextarea = cp5.addTextarea("txt", "", 85, 205, 550, 150)
-//                  .setFont(openSans14).setColor(color(255))
-//                  .setColorBackground(color(20))
-//                  .setColorForeground(color(255, 100));
-//		cp5.addConsole(myTextarea);
-//		println("Ready to establish new connexions...");
+		Textarea myTextarea = cp5.addTextarea("txt", "", 85, 205, 550, 150)
+                  .setFont(openSans14).setColor(color(255))
+                  .setColorBackground(color(20))
+                  .setColorForeground(color(255, 100));
+		cp5.addConsole(myTextarea);
+		println("Ready to establish new connexions...");
 
 		cp5.addTextlabel("tab1Labe2", "EVENTS FILTERS", 50, 380)
 			.moveTo(cp5.getTab("default"));

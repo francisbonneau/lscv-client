@@ -1,14 +1,12 @@
 package view;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import model.Event;
-import model.Params;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PVector;
@@ -171,7 +169,8 @@ public class Emitter {
 
             // if the particle is approching the radius, fade it out
             } else if (hud.params.emitterRadius/2 - distance < 60) {
-                particle.brightness =  particle.brightness - 8;
+            	if (particle.brightness -8 >= hud.params.backgroundBrightness)
+                	particle.brightness = particle.brightness - 8;
             }
         }
 

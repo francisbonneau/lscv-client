@@ -27,10 +27,13 @@ public class MainLoop extends PApplet {
 		} else {
 			PApplet.main(new String[] { "controller.MainLoop" });
 		}
+
 	}
 
 	// Setup the application
 	public final void setup() {
+
+		frame.setTitle("LSCV");
 
 		setParams(new Params()); // default parameters initialisation
 		getParams().windowMaximized = fullscreenMode;

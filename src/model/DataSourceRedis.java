@@ -139,12 +139,12 @@ public class DataSourceRedis extends Observable implements Runnable  {
         };
 
         // since once its in streaming mode it cannot do other operations
-//		try {
+		try {
             new Jedis(ip, port).subscribe(jpubSub, "data");
-//		} catch (Exception e) {
-//			System.out.println("Error encountered when trying to connect to " + host);
-//			System.out.println(e.getMessage());
-//		}
+		} catch (Exception e) {
+			System.out.println("Error encountered when trying to connect to " + host);
+			System.out.println(e.getMessage());
+		}
 
     }
 
