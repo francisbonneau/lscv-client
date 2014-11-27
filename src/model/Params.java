@@ -120,17 +120,12 @@ public class Params {
     // Each particle speed is calculated by comparing its latency to the overall
     // events latency. So the speed is relative, but the ranges can be adjusted
     // to speed up or slow down all particles.
-
-//    public float particleVelocityRangeMin = 1;
-
     public float particleMinVelocity = 5;
-
     public float particleMaxVelocity = 50;
 
-//    public float particleVelocityRangeMax = 1000;
-
+    // Particles acceleration, not used in the data viz by default
+    // but can be applied to all particles if the user wish
     public float particleAcceleration = 0;
-
 
     // The text displayed in the *about* panel of the settings window
     public String softwareLicense = "Copyright (c) 2014 Francis Bonneau\n" +
