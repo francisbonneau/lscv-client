@@ -205,22 +205,32 @@ public class ControlPanelUI extends PApplet {
 			.setId(4).setValue(rl.getParams().particleSize)
 			.moveTo(cp5.getTab("Global settings"));
 
-		cp5.addRange("Particle velocity", rl.getParams().particleVelocityRangeMin,
-			rl.getParams().particleVelocityRangeMax, rl.getParams().particleMinVelocity,
-			rl.getParams().particleMaxVelocity, 60, 240, 400, 15)
-			.setId(5).moveTo(cp5.getTab("Global settings"));
+//		cp5.addRange("Particle velocity", rl.getParams().particleVelocityRangeMin,
+//			rl.getParams().particleVelocityRangeMax, rl.getParams().particleMinVelocity,
+//			rl.getParams().particleMaxVelocity, 60, 240, 400, 15)
+//			.setId(5).moveTo(cp5.getTab("Global settings"));
 
-		cp5.addSlider("Particle acceleration", 0, 1, 60, 270, 400, 15).setId(6)
+		cp5.addSlider("Particle min speed", 1, 10,
+			rl.getParams().particleMaxVelocity, 60, 240, 400, 15)
+			.setId(16).setValue(rl.getParams().particleMinVelocity)
+			.moveTo(cp5.getTab("Global settings"));
+
+		cp5.addSlider("Particle max speed", 10, 100,
+			rl.getParams().particleMinVelocity, 60, 270, 400, 15)
+			.setId(17).setValue(rl.getParams().particleMaxVelocity)
+			.moveTo(cp5.getTab("Global settings"));
+
+		cp5.addSlider("Particle acceleration", 0, 1, 60, 300, 400, 15).setId(6)
 			.setValue(rl.getParams().particleAcceleration)
 			.moveTo(cp5.getTab("Global settings"));
 
-		cp5.addSlider("Latency rounding", 1, 8, 60, 300, 400, 15).setId(7)
+		cp5.addSlider("Latency rounding", 1, 8, 60, 330, 400, 15).setId(7)
 			.setValue(rl.getParams().latencyRoundup).setNumberOfTickMarks(8)
 			.showTickMarks(false).moveTo(cp5.getTab("Global settings"));
 
 		cp5.addTextlabel("latencyLabel", "( "
 			+ rl.getParams().latencyRoundupLegend[rl.getParams().latencyRoundup - 1]
-			+ " )", 620, 300).setFont(openSans15)
+			+ " )", 620, 330).setFont(openSans15)
 			.moveTo(cp5.getTab("Global settings"));
 
 		cp5.addToggle("Display Grid").setPosition(60,360).setSize(40,20)
@@ -323,10 +333,10 @@ public class ControlPanelUI extends PApplet {
 			case (4):
 				rl.getParams().particleSize = newValue;
 				break;
-			case (5):
-				rl.getParams().particleMinVelocity = theEvent.getController().getArrayValue(0);
-				rl.getParams().particleVelocityRangeMax = theEvent.getController().getArrayValue(1);
-				break;
+//			case (5):
+//				rl.getParams().particleMinVelocity = theEvent.getController().getArrayValue(0);
+//				rl.getParams().particleVelocityRangeMax = theEvent.getController().getArrayValue(1);
+//				break;
 			case (6):
 				rl.getParams().particleAcceleration = newValue;
 				break;
@@ -405,24 +415,28 @@ public class ControlPanelUI extends PApplet {
 				else
 					rl.getParams().displayGrid = true;
 				break;
+
 			case (11):
 				if (newValue == 0.0)
 					rl.getParams().displayEmitterRadius = false;
 				else
 					rl.getParams().displayEmitterRadius = true;
 				break;
+
 			case (12):
 				if (newValue == 0.0)
 					rl.getParams().displayEmitterLabels = false;
 				else
 					rl.getParams().displayEmitterLabels = true;
 				break;
+
 			case (13):
 				if (newValue == 0.0)
 					rl.getParams().displayFPSCounter = false;
 				else
 					rl.getParams().displayFPSCounter = true;
 				break;
+
 			case (14):
 				if (newValue == 0.0)
 					rl.getParams().drawCirclesStrokes = false;
@@ -434,6 +448,15 @@ public class ControlPanelUI extends PApplet {
 					rl.getParams().distanceBetweenEmitters = newValue;
 					rl.getHud().regionManager.refresh();
 				break;
+
+			case (16):
+				rl.getParams().particleMinVelocity = newValue;
+				break;
+
+			case(17):
+				rl.getParams().particleMaxVelocity = newValue;
+				break;
+
 			}
 		}
 	}
