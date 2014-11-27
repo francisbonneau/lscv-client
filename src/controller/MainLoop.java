@@ -46,7 +46,7 @@ public class MainLoop extends PApplet {
 
 		System.out.println("rendering with : " + g.getClass());
 
-		frameRate(getParams().framerate); // frames per second limit
+		frameRate(getParams().maxFramerate); // frames per second limit
 
 		if (this.getParams().resizable) {
 			frame.setResizable(true); // resizable window (non-fullscreen)
