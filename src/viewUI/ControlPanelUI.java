@@ -40,13 +40,13 @@ public class ControlPanelUI extends PApplet {
 
 	@SuppressWarnings("deprecation")
 	public void setup() {
+
 		size(windowWidth, windowHeight);
 		frameRate(25);
 		cp5 = new ControlP5(this);
-
 		cp5.window().setPositionOfTabs(20,20);
 
-		// setup fonts
+		// Load fonts
 		eurostile15 = loadFont("EurostileLTStd-15.vlw");
 		openSans12 = loadFont("OpenSans-12.vlw");
 		openSans13 = loadFont("OpenSans-13.vlw");
@@ -54,21 +54,11 @@ public class ControlPanelUI extends PApplet {
 		openSans15 = loadFont("OpenSans-15.vlw");
 		cp5.setFont(openSans15);
 
-		// set colors
-//		cp5.setColorBackground(color(213,244,198));
-//		cp5.setColorForeground(color(150,227,113)); //Qty & rim color
-//		cp5.setColorActive(color(119,219,70)); //Selected items
+		// ---------- Setup the tabs
 
-//		cp5.setColorBackground(color(33,71,14));
-//		cp5.setColorForeground(color(72,157,30)); //Qty & rim color
-//		cp5.setColorActive(color(72,157,30)); //Selected items
-
-		// Setup the tabs
 		cp5.getTab("default").setColorLabel(color(255));
 		cp5.addTab("Data display settings").setColorLabel(color(255));
-		//cp5.addTab("Filters").setColorLabel(color(255));
 		cp5.addTab("Global settings").setColorLabel(color(255));
-		//cp5.addTab("Statistics").setColorLabel(color(255));
 		cp5.addTab("About").setColorLabel(color(255));
 
 		cp5.getTab("default").activateEvent(true)
@@ -77,52 +67,55 @@ public class ControlPanelUI extends PApplet {
 		cp5.getTab("Data display settings").activateEvent(true)
 			.setLabel("  Data display settings  ").setId(202);
 
-		//cp5.getTab("Filters").activateEvent(true).setId(106);
-
 		cp5.getTab("Global settings").activateEvent(true)
 			.setLabel("    Global settings    ").setId(203);
-
-		//cp5.getTab("Statistics").activateEvent(true).setId(104);
 
 		cp5.getTab("About").activateEvent(true)
 			.setLabel("       About       ").setId(204);
 
-		// first tab content
+		// ---------- first tab content
 
-		cp5.addTextlabel("tab1Label", "DATA SOURCES", 50, 60).moveTo(cp5.getTab("default"));
-		cp5.addTextlabel("tab1Legend", "Enter here the network addresses of the servers to fetch data from.", 50, 90);
+		cp5.addTextlabel("tab1Label", "DATA SOURCES", 50, 60)
+			.moveTo(cp5.getTab("default"));
+
+		cp5.addTextlabel("tab1Legend", "Enter here the network addresses of" +
+			" the servers to fetch data from.", 50, 90);
+
 		// Name, X, Y, W, H
 		cp5.addTextfield("newConnexionField", 85, 135, 360, 25)
 			.setValue(rl.getParams().defaultDataSource)
-			.setLabel("Server address - IP:PORT").getCaptionLabel().setFont(openSans13);
+			.setLabel("Server address - IP:PORT")
+			.getCaptionLabel().setFont(openSans13);
 
 		// Name, Value, X, Y, W, H
-		cp5.addButton("newConnexionButton", 1, 470, 135, 165, 25).setLabel("Connect to server");
+		cp5.addButton("newConnexionButton", 1, 470, 135, 165, 25)
+			.setLabel("Connect to server");
 
 		Textarea myTextarea = cp5.addTextarea("txt", "", 85, 205, 550, 150)
-                  .setFont(openSans14).setColor(color(255))
-                  .setColorBackground(color(20))
-                  .setColorForeground(color(255, 100));
+			.setFont(openSans14).setColor(color(255))
+			.setColorBackground(color(20))
+			.setColorForeground(color(255, 100));
+
 		cp5.addConsole(myTextarea);
 		println("Ready to establish new connexions...");
 
 		cp5.addTextlabel("tab1Labe2", "EVENTS FILTERS", 50, 380)
 			.moveTo(cp5.getTab("default"));
+
 		cp5.addTextlabel("tab1Legend2", "(Optionnal) Filters can be applied here to the "
-				+ "data sources to restrict the incoming events.", 50, 410);
+			+ "data sources to restrict the incoming events.", 50, 410);
+
 		cp5.addTextlabel("tab1Legend3", "See https://github.com/draios/sysdig"
-				+ "/wiki/Sysdig-User-Guide", 50, 435);
+			+ "/wiki/Sysdig-User-Guide", 50, 435);
 
 		cp5.addTextlabel("tab1Legend4", "Select data source :", 50, 480);
 
 		cp5.addDropdownList("dataSourcesList2", 200, 498, 200, 105)
-			.setBarHeight(17)
-			.setLabel("Data sources list")
-			.setId(103);
+			.setBarHeight(17).setLabel("Data sources list").setId(103);
 
 		cp5.addTextfield("newfilterField", 85, 530, 360, 25)
-			.setValue("")
-			.setLabel("example : proc.name=top").getCaptionLabel().setFont(openSans13);
+			.setValue("").setLabel("example : proc.name=top")
+			.getCaptionLabel().setFont(openSans13);
 
 		cp5.addButton("newFilterButton", 1, 470, 530, 165, 25)
 			.setLabel("       Apply filter");
@@ -130,46 +123,47 @@ public class ControlPanelUI extends PApplet {
 		cp5.addButton("Load Config", 1, 510, 615, 87, 20).captionLabel().setFont(openSans12);
 		cp5.addButton("Save Config", 1, 605, 615, 87, 20).captionLabel().setFont(openSans12);
 
-		// second tab content
+		// ---------- second tab content
 
-		cp5.addTextlabel("tab2Label", "DATA DISPLAY", 50, 60).moveTo(cp5.getTab("Data display settings"));
+		cp5.addTextlabel("tab2Label", "DATA DISPLAY", 50, 60)
+		.moveTo(cp5.getTab("Data display settings"));
+
 		cp5.addTextlabel("tab2Legend", "Ajust the sliders to subdivide "
-				+ " the screen in multiples sections, each containing a circle.", 50, 90)
-				.moveTo(cp5.getTab("Data display settings"));
+			+ " the screen in multiples sections, each containing a circle.", 50, 90)
+			.moveTo(cp5.getTab("Data display settings"));
 
 		//addSlider(String theIndex, Sring theName, float theMin, float theMax,
 		//		float theDefaultValue, int theX, int theY, int theW, int theH)
 		cp5.addSlider("  ", 1, rl.getParams().maxNumberOfEmittersX, 1, 130, 135,
-				450, 10).setId(8).moveTo(cp5.getTab("Data display settings"))
-				.setNumberOfTickMarks(8).showTickMarks(false)
-				.setSliderMode(Slider.FLEXIBLE).valueLabel().setVisible(false);
+			450, 10).setId(8).moveTo(cp5.getTab("Data display settings"))
+			.setNumberOfTickMarks(8).showTickMarks(false)
+			.setSliderMode(Slider.FLEXIBLE).valueLabel().setVisible(false);
 
 		// trick to place the slider at the correct val ( on top ), we
 		// set the min and max val to the same val
 		cp5.addSlider(" ", 1, rl.getParams().maxNumberOfEmittersY,
-				rl.getParams().maxNumberOfEmittersY, 90, 175, 10, 120)
-				.setId(9).moveTo(cp5.getTab("Data display settings"))
-				.setNumberOfTickMarks(4).showTickMarks(false)
-				.setSliderMode(Slider.FLEXIBLE).valueLabel().setVisible(false);
+			rl.getParams().maxNumberOfEmittersY, 90, 175, 10, 120)
+			.setId(9).moveTo(cp5.getTab("Data display settings"))
+			.setNumberOfTickMarks(4).showTickMarks(false)
+			.setSliderMode(Slider.FLEXIBLE).valueLabel().setVisible(false);
 
 		cp5.addTextlabel("tab2Legend2", "Then select the data source that"
-				+ " each circle should display :", 50, 350)
-				.moveTo(cp5.getTab("Data display settings"));
+			+ " each circle should display :", 50, 350)
+			.moveTo(cp5.getTab("Data display settings"));
 
 		// (String theName, int theX, int theY, int theW, int theH)
 		DropdownList d1 = cp5.addDropdownList("circlesList", 90, 400, 200, 125)
-				.setBarHeight(17)
-				.setLabel("Circle number")
-				.moveTo(cp5.getTab("Data display settings"))
-				.setId(101);
+			.setBarHeight(17).setLabel("Circle number")
+			.moveTo(cp5.getTab("Data display settings"))
+			.setId(101);
 
 		// (String theName, int theValue
 		d1.addItem("Circle #1", 1);
 		d1.setIndex(0);
 
 		cp5.addTextlabel("tab2Legend3", "==", 305, 382)
-				.setFont(openSans15)
-				.moveTo(cp5.getTab("Data display settings"));
+			.setFont(openSans15)
+			.moveTo(cp5.getTab("Data display settings"));
 
 		cp5.addDropdownList("dataSourcesList", 345, 400, 200, 155)
 			.setBarHeight(17)
@@ -184,83 +178,110 @@ public class ControlPanelUI extends PApplet {
 		cp5.getTab("Data display settings").add(cp5.getController("Load Config"));
 		cp5.getTab("Data display settings").add(cp5.getController("Save Config"));
 
-		// third tab content
+		// ---------- third tab content
 
-		cp5.addTextlabel("tab4Label", "GLOBAL SETTINGS", 50, 60).moveTo(cp5.getTab("Global settings"));
+		cp5.addTextlabel("tab4Label", "GLOBAL SETTINGS", 50, 60)
+			.moveTo(cp5.getTab("Global settings"));
 
 		//addSlider(String theIndex, Sring theName, float theMin, float theMax,
 		//		float theDefaultValue, int theX, int theY, int theW, int theH)
 		cp5.addSlider("Background brightness", 0, 100, 60, 90, 400, 15)
-				.setId(1).setValue(rl.getParams().backgroundBrightness).moveTo(cp5.getTab("Global settings"));
+			.setId(1).setValue(rl.getParams().backgroundBrightness)
+			.moveTo(cp5.getTab("Global settings"));
 
 		cp5.addSlider("Circle radius", 100, 2000, 60, 120, 400, 15).setId(2)
-				.setValue(rl.getParams().emitterRadius).moveTo(cp5.getTab("Global settings"));
+			.setValue(rl.getParams().emitterRadius)
+			.moveTo(cp5.getTab("Global settings"));
 
-		cp5.addSlider("Radius brightness", 0, 100, 60, 150, 400, 15).setId(3)
-				.setValue(rl.getParams().emitterRadiusBrightness).moveTo(cp5.getTab("Global settings"));
+		cp5.addSlider("Radius brightness", 0, 100, 60, 150, 400, 15)
+			.setId(3).setValue(rl.getParams().emitterRadiusBrightness)
+			.moveTo(cp5.getTab("Global settings"));
 
-		cp5.addSlider("Distance between circles", 0, 1000, 60, 180, 400, 15).setId(15)
-		.setValue(rl.getParams().distanceBetweenEmitters).moveTo(cp5.getTab("Global settings"));
+		cp5.addSlider("Distance between circles", 0, 1000, 60, 180, 400, 15)
+			.setId(15).setValue(rl.getParams().distanceBetweenEmitters)
+			.moveTo(cp5.getTab("Global settings"));
 
-		cp5.addSlider("Particle size", 1, 400, 60, 210, 400, 15).setId(4)
-				.setValue(rl.getParams().particleSize).moveTo(cp5.getTab("Global settings"));
+		cp5.addSlider("Particle size", 1, 400, 60, 210, 400, 15)
+			.setId(4).setValue(rl.getParams().particleSize)
+			.moveTo(cp5.getTab("Global settings"));
 
 		cp5.addRange("Particle velocity", rl.getParams().particleVelocityRangeMin,
-				rl.getParams().particleVelocityRangeMax,
-				rl.getParams().particleMinVelocity,
-				rl.getParams().particleMaxVelocity, 60, 240, 400, 15)
-				.setId(5).moveTo(cp5.getTab("Global settings"));
+			rl.getParams().particleVelocityRangeMax, rl.getParams().particleMinVelocity,
+			rl.getParams().particleMaxVelocity, 60, 240, 400, 15)
+			.setId(5).moveTo(cp5.getTab("Global settings"));
 
 		cp5.addSlider("Particle acceleration", 0, 1, 60, 270, 400, 15).setId(6)
-				.setValue(rl.getParams().particleAcceleration).moveTo(cp5.getTab("Global settings"));
+			.setValue(rl.getParams().particleAcceleration)
+			.moveTo(cp5.getTab("Global settings"));
 
 		cp5.addSlider("Latency rounding", 1, 8, 60, 300, 400, 15).setId(7)
-				.setValue(rl.getParams().latencyRoundup).setNumberOfTickMarks(8)
-				.showTickMarks(false).moveTo(cp5.getTab("Global settings"));
+			.setValue(rl.getParams().latencyRoundup).setNumberOfTickMarks(8)
+			.showTickMarks(false).moveTo(cp5.getTab("Global settings"));
 
 		cp5.addTextlabel("latencyLabel", "( "
-						+ rl.getParams().latencyRoundupLegend[rl.getParams().latencyRoundup - 1]
-						+ " )", 620, 300).setFont(openSans15).moveTo(cp5.getTab("Global settings"));
+			+ rl.getParams().latencyRoundupLegend[rl.getParams().latencyRoundup - 1]
+			+ " )", 620, 300).setFont(openSans15)
+			.moveTo(cp5.getTab("Global settings"));
 
 		cp5.addToggle("Display Grid").setPosition(60,360).setSize(40,20)
-			.setValue(rl.getParams().displayGrid).setId(10).moveTo(cp5.getTab("Global settings"));
-		cp5.addToggle("Display Circle Radius").setPosition(260,360).setSize(40,20)
-			.setValue(rl.getParams().displayEmitterRadius).setId(11).moveTo(cp5.getTab("Global settings"));
+			.setValue(rl.getParams().displayGrid)
+			.setId(10).moveTo(cp5.getTab("Global settings"));
+
+		cp5.addToggle("Display Circle Radius").setPosition(260,360)
+			.setSize(40,20).setValue(rl.getParams().displayEmitterRadius)
+			.setId(11).moveTo(cp5.getTab("Global settings"));
+
 		cp5.addToggle("Display Labels").setPosition(60,410).setSize(40,20)
-			.setValue(rl.getParams().displayEmitterRadius).setId(12).moveTo(cp5.getTab("Global settings"));
-		cp5.addToggle("Display FPS counter").setPosition(260,410).setSize(40,20)
-			.setValue(rl.getParams().displayFPSCounter).setId(13).moveTo(cp5.getTab("Global settings"));
-		cp5.addToggle("Draw circles strokes").setPosition(460,360).setSize(40,20)
-		.setValue(rl.getParams().drawCirclesStrokes).setId(14).moveTo(cp5.getTab("Global settings"));
+			.setValue(rl.getParams().displayEmitterRadius)
+			.setId(12).moveTo(cp5.getTab("Global settings"));
+
+		cp5.addToggle("Display FPS counter").setPosition(260,410)
+			.setSize(40,20).setValue(rl.getParams().displayFPSCounter)
+			.setId(13).moveTo(cp5.getTab("Global settings"));
+
+		cp5.addToggle("Draw circles strokes").setPosition(460,360)
+			.setSize(40,20).setValue(rl.getParams().drawCirclesStrokes)
+			.setId(14).moveTo(cp5.getTab("Global settings"));
 
 		cp5.getTab("Global settings").add(cp5.getController("Load Config"));
 		cp5.getTab("Global settings").add(cp5.getController("Save Config"));
 
-		// fifth tab content
+		// ---------- fifth tab content
 
 		cp5.addTextlabel("ta56Label", "ABOUT", 50, 60).moveTo(
 				cp5.getTab("About"));
-		cp5.addTextlabel("about1",
-				"Project created for the course GTI719 at l'École de technologie supérieure (ETS) in ",
+
+		cp5.addTextlabel("about1", "Project created for the course GTI719 at "+
+				" l'École de technologie supérieure (ETS) in ",
 				50, 90).moveTo(cp5.getTab("About"));
+
 		cp5.addTextlabel("about2",
-				"Montréal, by Francis Bonneau under the supervision of Professor Michael J. McGuffin, Ph.D.",
+				"Montréal, by Francis Bonneau under the supervision of " +
+				"Professor Michael J. McGuffin, Ph.D.",
 				50, 115).moveTo(cp5.getTab("About"));
+
 		cp5.addTextlabel("about3",
-				"using the following open source projects : Sysdig ( http://www.sysdig.org/ ), ",
+				"using the following open source projects : Sysdig " +
+				"( http://www.sysdig.org/ ), ",
 				50, 140).moveTo(cp5.getTab("About"));
+
 		cp5.addTextlabel("about4",
-				"Redis ( http://redis.io/ ), Processing ( http://www.processing.org/ )",
+				"Redis ( http://redis.io/ ), Processing " +
+				"( http://www.processing.org/ )",
 				50, 165).moveTo(cp5.getTab("About"));
+
 		cp5.addTextlabel("about5",
 				"and ControlP5 ( http://www.sojamo.de/libraries/controlP5/ )",
 				50, 190).moveTo(cp5.getTab("About"));
 
 		cp5.addTextlabel("license", rl.getParams().softwareLicense, 50, 250)
 				.setFont(openSans14).moveTo(cp5.getTab("About"));
-
 	}
 
+
+	/**
+	 *  TODO Clean up this terrible mess
+	 */
 	public void controlEvent(ControlEvent theEvent) {
 
 		if (theEvent.getId() > 200 ) {
@@ -475,7 +496,6 @@ public class ControlPanelUI extends PApplet {
 		background(0,0,0);
 
 		if (currentTabIsDataDisplay) {	// draw emitters circles in the data source section
-
 			noFill();
 			stroke(255);
 			int circlesDistanceX = 62;
