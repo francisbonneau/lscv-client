@@ -119,13 +119,13 @@ public class Params {
     // events latency. So the speed is relative, but the ranges can be adjusted
     // to speed up or slow down all particles.
 
-    public float particleVelocityRangeMin = 1;
+//    public float particleVelocityRangeMin = 1;
 
     public float particleMinVelocity = 5;
 
-    public float particleMaxVelocity = 100;
+    public float particleMaxVelocity = 50;
 
-    public float particleVelocityRangeMax = 1000;
+//    public float particleVelocityRangeMax = 1000;
 
     public float particleAcceleration = 0;
 
