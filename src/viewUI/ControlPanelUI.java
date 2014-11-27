@@ -34,8 +34,8 @@ public class ControlPanelUI extends PApplet {
 
 	public ControlPanelUI(MainLoop rl) {
 		this.rl = rl;
-		this.windowWidth = rl.getParams().controlsWindowWidth;
-		this.windowHeight =  rl.getParams().controlsWindowHeight;
+		this.windowWidth = rl.getParams().settingsWindowWidth;
+		this.windowHeight =  rl.getParams().settingsWindowHeight;
 	}
 
 	@SuppressWarnings("deprecation")

@@ -3,32 +3,55 @@ package model;
 
 public class Params {
 
-    // default parameters of the application
+    // Default parameters of the application, those variables can be changed
+	// in runtime, eg. by the user in the settings window or possibly via an
+	// API in the future. If the variable cannot be updated at runtime or
+	// doing so wont change anything anyway the variable is marked as static.
 
-    // display parameters
+    // ---- Display parameters
+
+	// If the main window should take all the screen (different then fulllscreen)
     public boolean windowMaximized = false;
 
+    // Non-fullscreen default window height
     public int mainWindowHeight = 800;
+
+    // Non-fullscreen default window width
     public int mainWindowWidth = 1200;
 
-    public int controlsWindowHeight = 700;
-    public int controlsWindowWidth = 725;
+    // Default height for the settings window
+    public int settingsWindowHeight = 700;
 
-    public int framerate = 30;
+    // Default width for the settings window
+    public int settingsWindowWidth = 725;
+
+    // Default framerate maximum limit
+    public static int maxFramerate = 30;
+
+    // True if the user can resize the app window (in non fullscreen mode)
     public boolean resizable = false;
 
+    // Display the frames-per-second counter on the bottom right
     public boolean displayFPSCounter = true;
+
+    // Display a grid on the background
     public boolean displayGrid = false;
+
+    // Display stats on the # of events/particles in the bottom left corner
     public boolean displayStats = true;
 
+    // Draw a visible border around each particle (cercle) displayed
+    // It is way easier to distinguish multiples circles on top of each
+    // other when it is on
     public boolean drawCirclesStrokes = false;
 
-    // default data source
+    // Default data source
     public String defaultDataSource = "127.0.0.1:6379";
 
+    // Used to stop the dat viz, eg. by pressing the space bar key
     public boolean displayPaused = false;
 
-    // visualisation parameters
+    // ---- Visualisation parameters
 
     // between 1 and 8, used to control the number of particles
     // displayed by rounding up the events lat. in buckets (heat map)
@@ -57,6 +80,12 @@ public class Params {
     public float emitterRadius = 500;          // the radius the circle
     public float emitterRadiusBrightness = 15; // the brightness of the circle stroke
 
+    // If the emitter radius (a single gray circle) should be visible
+    public boolean displayEmitterRadius = true;
+
+    // If the labels for the categories should be displayed around the emitter
+    public boolean displayEmitterLabels = true;
+
     // Every 10 seconds the emitter divisions are resetted to display only
     // the data from the last 10 seconds
     public int emitterDivisionsIntervalSec = 10;
@@ -68,23 +97,40 @@ public class Params {
     // in this case 3 halos are displayed, for the 1 min, 5 min, and 15 min data
     public int[] emitterHalosIntervalsSec = {10, 60, 300, 900};
 
-    public boolean displayEmitterRadius = true;
-    public boolean displayEmitterLabels = true;
-
+    // The maximum number of emitter columns
     public int maxNumberOfEmittersX = 8;
+
+    // The maximum number of emitter rows
     public int maxNumberOfEmittersY = 4;
-    public float distanceBetweenEmitters = 35;
 
-    public float particleSize = 10;
-    public float particleVelocityRangeMin = 1;
-    public float particleMinVelocity = 5;
-    public float particleMaxVelocity = 100;
-    public float particleVelocityRangeMax = 1000;
-    public float particleAcceleration = 0;
-
+    // The default number of emitter rows
     public int emittersRowsX = 1;
+
+    // The default number of emitter columns
     public int emittersRowsY = 1;
 
+    // The distance between all the emitters
+    public float distanceBetweenEmitters = 35;
+
+    // The size of each particle (circle) displayed
+    public float particleSize = 10;
+
+    // Each particle speed is calculated by comparing its latency to the overall
+    // events latency. So the speed is relative, but the ranges can be adjusted
+    // to speed up or slow down all particles.
+
+    public float particleVelocityRangeMin = 1;
+
+    public float particleMinVelocity = 5;
+
+    public float particleMaxVelocity = 100;
+
+    public float particleVelocityRangeMax = 1000;
+
+    public float particleAcceleration = 0;
+
+
+    // The text displayed in the *about* panel of the settings window
     public String softwareLicense = "Copyright (c) 2014 Francis Bonneau\n" +
         "\n" +
         "Permission is hereby granted, free of charge, to any person obtaining a copy\n" +
