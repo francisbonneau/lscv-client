@@ -129,6 +129,7 @@ public class MainLoop extends PApplet {
 			x = getParams().mainWindowWidth - 75;
 			y = getParams().mainWindowHeight - 45;
 		}
+		text("FPS:", x - 25, y);
 		text(frameRate, x, y);
 	}
 

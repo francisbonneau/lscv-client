@@ -24,11 +24,11 @@ public class EmitterLabel {
     		float emitterRadius, float emitterCenterX, float emitterCenterY,
     		float labelsDistance) {
 
-        float angle = (minAngle + maxAngle)/2 + 45;
+        float angle = PApplet.radians((minAngle + maxAngle)/2 + 45);
         float radius = emitterRadius/2 + labelsDistance;
 
-        positionX = (float) Math.cos(PApplet.radians(angle)) * radius + emitterCenterX;
-        positionY = (float) Math.sin(PApplet.radians(angle)) * radius + emitterCenterY;
+        positionX = (float) Math.cos(angle) * radius + emitterCenterX;
+        positionY = (float) Math.sin(angle) * radius + emitterCenterY;
     }
 
     public void draw() {

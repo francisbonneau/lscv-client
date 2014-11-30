@@ -86,7 +86,7 @@ public class Params {
     public boolean displayEmitterLabels = true;
 
     // The distance between the emitter center and the labels around it
-    public float emitterLabelsDistance = 45;
+    public float emitterLabelsDistance = 35;
 
     // Every 10 seconds the emitter divisions are resetted to display only
     // the data from the last 10 seconds

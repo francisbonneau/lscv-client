@@ -476,7 +476,7 @@ public class ControlPanelUI extends PApplet {
 			case(19):
 				if (newValue == 0.0) {
 					rl.getParams().displayEmitterHalos = false;
-					rl.getParams().emitterLabelsDistance = 45;
+					rl.getParams().emitterLabelsDistance = 35;
 					rl.getHud().updateLabelsPositions();
 				}
 				else {
@@ -486,7 +486,6 @@ public class ControlPanelUI extends PApplet {
 				}
 
 				break;
-
 
 			}
 		}
