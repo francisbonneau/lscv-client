@@ -85,6 +85,9 @@ public class Params {
     // If the labels for the categories should be displayed around the emitter
     public boolean displayEmitterLabels = true;
 
+    // The distance between the emitter center and the labels around it
+    public float emitterLabelsDistance = 45;
+
     // Every 10 seconds the emitter divisions are resetted to display only
     // the data from the last 10 seconds
     public int emitterDivisionsIntervalSec = 10;
@@ -94,7 +97,7 @@ public class Params {
     // the particle emitter, each new circle (halo) represent a different time
 
     // If the halos should be visible
-    public boolean displayEmitterHalos = true;
+    public boolean displayEmitterHalos = false;
 
     // in this case 3 halos are displayed, for the 1 min, 5 min, and 15 min data
     public int[] emitterHalosIntervalsSec = {10, 60, 300, 900};

@@ -109,6 +109,13 @@ public class Hud {
         updateStats();
     }
 
+    // Update the labels positions
+    public void updateLabelsPositions() {
+        for (Emitter em : emitters) {
+        	em.updateLabelsPositions();
+        }
+    }
+
     // Draw the hud
     public void draw(Params params) {
 

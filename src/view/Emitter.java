@@ -70,7 +70,6 @@ public class Emitter {
         return this.hud;
     }
 
-
     public void addParticles(ArrayList<Event> newData) {
 
         String divisionsAttribute = "process";
@@ -85,17 +84,19 @@ public class Emitter {
         labelsList = new ArrayList<>();
         Iterator<String> it = subdivisions.currentDivisions.keySet().iterator();
         while (it.hasNext()) {
-            String divisionID = it.next();
-            float Min = subdivisions.getDivisionStartAngle(divisionID);
-            float Max = subdivisions.getDivisonEndAngle(divisionID);
-            float angle = (Min + Max)/2 + 45;
 
-            float radius = hud.params.emitterRadius/2 + 105;
-            float labelX = (float) Math.cos(PApplet.radians(angle)) * radius + centerX;
-            float labelY = (float) Math.sin(PApplet.radians(angle)) * radius + centerY;
+        	String divisionID = it.next();
 
-            labelsList.add(new EmitterLabel(p, divisionID, 15,
-                    hud.colorPalette.get(divisionID), labelX, labelY));
+            float minAngle = subdivisions.getDivisionStartAngle(divisionID);
+            float maxAngle = subdivisions.getDivisonEndAngle(divisionID);
+            float emitterRadius = hud.params.emitterRadius;
+            float labelColor = hud.colorPalette.get(divisionID);
+            float labelsDistance = hud.params.emitterLabelsDistance;
+
+            EmitterLabel label = new EmitterLabel(p, divisionID, 15, labelColor);
+            label.calculateLabelPosition(minAngle, maxAngle, emitterRadius,
+            		centerX, centerY, labelsDistance);
+            labelsList.add(label);
         }
 
         // for each process in the list
@@ -222,6 +223,22 @@ public class Emitter {
         if (!hud.params.displayPaused) {
             updateParticles();
         }
+    }
+
+
+    // Update the position of all the labels, used to realign the labels to
+    // the middle of each section of the emitter (or section of the pie chart)
+    // also used to readjust the labels distance to the center
+    public void updateLabelsPositions() {
+    	for (EmitterLabel label : labelsList) {
+            float minAngle = subdivisions.getDivisionStartAngle(label.divisionID);
+            float maxAngle = subdivisions.getDivisonEndAngle(label.divisionID);
+            float emitterRadius = hud.params.emitterRadius;
+            float labelsDistance = hud.params.emitterLabelsDistance;
+
+    		label.calculateLabelPosition(minAngle, maxAngle,
+    				emitterRadius, centerX, centerY, labelsDistance);
+    	}
     }
 
     // Draw all the components of the emitter

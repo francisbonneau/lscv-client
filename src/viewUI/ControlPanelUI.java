@@ -474,10 +474,17 @@ public class ControlPanelUI extends PApplet {
 				break;
 
 			case(19):
-				if (newValue == 0.0)
+				if (newValue == 0.0) {
 					rl.getParams().displayEmitterHalos = false;
-				else
+					rl.getParams().emitterLabelsDistance = 45;
+					rl.getHud().updateLabelsPositions();
+				}
+				else {
 					rl.getParams().displayEmitterHalos = true;
+					rl.getParams().emitterLabelsDistance = 105;
+					rl.getHud().updateLabelsPositions();
+				}
+
 				break;
 
 
