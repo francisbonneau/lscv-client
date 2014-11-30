@@ -102,27 +102,8 @@ public class Particle {
             	p.noStroke();
             }
 
-//			p.fill(hue, saturation, brightness);
-//			p.ellipse(location.x, location.y, size, size);
-
-//			for (int i = 5; i > 0; i--) {
-//				p.fill(hue, saturation, brightness - (5*i));
-//				p.ellipse(location.x, location.y, size - (1 * i), size - (1 * i));
-//			}
-
-//			PVector locationTMP = location.get();
-//			PVector velocityTMP = velocity.get();
-//			velocityTMP.rotate((float) Math.PI);
-//			velocityTMP.normalize();
-//			for (float i = velocity.mag(); i > 0; i--) {
-//				locationTMP.add(velocityTMP);
-//				p.fill(hue, saturation, brightness - (10*i));
-//				p.ellipse(locationTMP.x, locationTMP.y, size - i, size -i);
-//			}
-
             p.fill(hue, saturation, brightness);
             p.ellipse(location.x, location.y, size, size);
-
 
         }
 
