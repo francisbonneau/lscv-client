@@ -79,8 +79,8 @@ public class Particle {
         p.colorMode(PConstants.HSB, 360, 100, 100);
 
         // if the user mouse is hovering the particle
-        if (p.mouseX > location.x - size && p.mouseX < location.x + size
-            && p.mouseY > location.y - size && p.mouseY < location.y + size) {
+        if (p.mouseX > location.x - size/2 && p.mouseX < location.x + size/2
+            && p.mouseY > location.y - size/2 && p.mouseY < location.y + size/2) {
 
             p.fill(hue, 0, brightness);
             p.ellipse(location.x, location.y, size, size);
@@ -104,7 +104,6 @@ public class Particle {
 
             p.fill(hue, saturation, brightness);
             p.ellipse(location.x, location.y, size, size);
-
         }
 
     }
