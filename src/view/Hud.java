@@ -145,11 +145,11 @@ public class Hud {
             y = p.displayHeight - 150;
         } else {
             x = 50;
-            y = p.displayHeight - 45;
+            y = params.mainWindowHeight - 125;
         }
 
         NumberFormat formatter = NumberFormat.getInstance(new Locale("en_US"));
-
+        p.textSize(12);
         p.text("Particles : " + formatter.format(eventsDisplayedCount), x, y);
         p.text("System calls : " + formatter.format(syscallDisplayedCount), x, y + 25);
         p.text("Particles processed total : " + formatter.format(eventsTotalCount), x, y + 50);
