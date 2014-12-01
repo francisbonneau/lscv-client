@@ -52,8 +52,6 @@ public class EmitterLabel {
             p.text(divisionID, positionX, positionY);
         	return false;
         }
-
-
     }
 
 }

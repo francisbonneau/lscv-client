@@ -77,70 +77,67 @@ public class Particle {
     // return true if the user mouse is currently hovering that particle
     //
     public boolean draw(final float backgroundBrightness,
-    		final boolean drawStroke, boolean selectionActive, String selectionID) {
+            final boolean drawStroke, boolean selectionActive, String selectionID) {
 
         p.colorMode(PConstants.HSB, 360, 100, 100);
 
-        // if the user mouse is hovering the particle
-        if (p.mouseX > location.x - size/2 && p.mouseX < location.x + size/2
-            && p.mouseY > location.y - size/2 && p.mouseY < location.y + size/2) {
+        if (drawStroke)
+            p.stroke(hue, saturation, backgroundBrightness);
+        else
+            p.noStroke();
 
+        // if the user mouse is hovering the particle
+        boolean mouseOnParticle = p.mouseX > location.x - size/2 &&
+                p.mouseX < location.x + size/2 &&
+                p.mouseY > location.y - size/2 &&
+                p.mouseY < location.y + size/2;
+
+        if (mouseOnParticle) {
             p.fill(hue, 0, brightness);
             p.ellipse(location.x, location.y, size, size);
             p.fill(hue, saturation, brightness);
-
-            String args = event.toString() + "\n\n\n";
-            Iterator<String> it = event.arguments.values().iterator();
-            while(it.hasNext()) {
-                String s = it.next();
-                args += s + "\n";
-            }
-            p.text(args, 50, 50);
-
+            printEventArgs();
             return true;
 
+        } else if (selectionActive && event.processName.equals(selectionID)) {
+            p.fill(hue, saturation, brightness);
+            p.ellipse(location.x, location.y, size + 5, size + 5);
+
         } else {
-
-            if (drawStroke) {
-                p.stroke(hue, saturation, backgroundBrightness);
-            } else {
-            	p.noStroke();
-            }
-
-            if (selectionActive) {
-
-            	if (event.processName.equals(selectionID)) {
-            		p.fill(hue, saturation, brightness);
-                    p.ellipse(location.x, location.y, size + 5, size + 5);
-            	} else {
-            		p.fill(hue, saturation, brightness);
-                    p.ellipse(location.x, location.y, size, size);
-            	}
-
-        	} else {
-             	p.fill(hue, saturation, brightness);
-                p.ellipse(location.x, location.y, size, size);
-        	}
-
-            return false;
+            p.fill(hue, saturation, brightness);
+            p.ellipse(location.x, location.y, size, size);
         }
+        return false;
 
     }
 
+    // Print the event arguments on screen
+    public void printEventArgs() {
+
+        String args = event.toString() + "\n\n\n";
+        Iterator<String> it = event.arguments.values().iterator();
+        while(it.hasNext()) {
+            String s = it.next();
+            args += s + "\n";
+        }
+        p.textSize(14);
+        p.fill(hue, saturation, 100);
+        p.text(args, 50, 50);
+    }
+
+    // Return the id for this event, matching the attribute specified
     public String getDivisionID(String divisionAttribute) {
-	    if (divisionAttribute.equals("process")) {
-	    	return event.processName;
-	    }
 
-	    if (divisionAttribute.equals("syscall")) {
-	    	return event.syscall;
-	    }
+        if (divisionAttribute.equals("process"))
+            return event.processName;
 
-	    if (divisionAttribute.equals("user")) {
-	    	return event.username;
-	    }
+        if (divisionAttribute.equals("syscall"))
+            return event.syscall;
 
-	    return null;
+        if (divisionAttribute.equals("user"))
+            return event.username;
+
+        return null;
     }
 
 }
