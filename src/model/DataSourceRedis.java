@@ -12,7 +12,6 @@ import redis.clients.jedis.JedisPubSub;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import controller.MainLoop;
 
 public class DataSourceRedis extends Observable implements Runnable  {
 
@@ -23,17 +22,17 @@ public class DataSourceRedis extends Observable implements Runnable  {
     private String filter;
     HashMap<String, String> systemInfo;
 
-    private MainLoop rl;
+    private DataAggregator dataAgg;
     private EventProcessor eventProcessor;
 
-    public DataSourceRedis(MainLoop renderLoop, String host) {
+    public DataSourceRedis(DataAggregator dataAgg, String host) {
 
         // Connect to the Redis instance
         this.host = host;
         this.ip = host.split(":")[0];
         this.port = Integer.parseInt(host.split(":")[1]);
 
-        this.rl = renderLoop;
+        this.dataAgg = dataAgg;
         this.filter = "";
 
         tryFirstConnexion();
@@ -87,7 +86,6 @@ public class DataSourceRedis extends Observable implements Runnable  {
 
     public void setFilter(String newFilter) {
         filter = newFilter;
-
         new Jedis(ip, port).set("filter", filter);
     }
 
@@ -130,7 +128,7 @@ public class DataSourceRedis extends Observable implements Runnable  {
 
                 // process the data
                 ArrayList<Event> processedData = eventProcessor.processData(data,
-                        rl.getParams().latencyRoundup);
+                        dataAgg.getParams().latencyRoundup);
 
                 // notify the observers
                 setChanged();

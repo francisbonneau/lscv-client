@@ -1,7 +1,19 @@
 package model;
 
-
+/**
+ * Class containing
+ * @author franck
+ *
+ */
 public class Params {
+
+	private static final Params PARAMS = new Params();
+
+	private Params() {}
+
+	public static Params getInstance() {
+		return PARAMS;
+	}
 
     // Default parameters of the application, those variables can be changed
 	// in runtime, eg. by the user in the settings window or possibly via an
