@@ -26,6 +26,9 @@ public class Emitter {
 
     public EmitterSubdivider subdivisions;
 
+    public boolean selectionActive = false;
+    public String selectionID;
+
     // stats
     public long eventsDisplayedCount;
     public long syscallDisplayedCount;
@@ -47,7 +50,7 @@ public class Emitter {
         halosList = new ArrayList<EmitterHalo>();
         int halosNb = hud.params.emitterHalosIntervalsSec.length;
         for (int i = 0; i < halosNb; i++) {
-        	halosList.add(new EmitterHalo(this.p, this));
+            halosList.add(new EmitterHalo(this.p, this));
         }
 
         eventsDisplayedCount = 0;
@@ -72,10 +75,10 @@ public class Emitter {
 
     public void addParticles(ArrayList<Event> newData) {
 
-        String divisionsAttribute = "process";
+        String divisionAttribute = hud.params.divisionAttribute;
 
-        subdivisions.addDivisions(newData, divisionsAttribute);
-        subdivisions.addHalos(newData, divisionsAttribute);
+        subdivisions.addDivisions(newData, divisionAttribute);
+        subdivisions.addHalos(newData, divisionAttribute);
 
         subdivisions.adjustDivisionsSizes();
         subdivisions.adjustHalosSizes();
@@ -85,7 +88,7 @@ public class Emitter {
         Iterator<String> it = subdivisions.currentDivisions.keySet().iterator();
         while (it.hasNext()) {
 
-        	String divisionID = it.next();
+            String divisionID = it.next();
 
             float minAngle = subdivisions.getDivisionStartAngle(divisionID);
             float maxAngle = subdivisions.getDivisonEndAngle(divisionID);
@@ -95,7 +98,7 @@ public class Emitter {
 
             EmitterLabel label = new EmitterLabel(p, divisionID, 15, labelColor);
             label.calculateLabelPosition(minAngle, maxAngle, emitterRadius,
-            		centerX, centerY, labelsDistance);
+                    centerX, centerY, labelsDistance);
             labelsList.add(label);
         }
 
@@ -104,7 +107,7 @@ public class Emitter {
         while (events.hasNext()) {
             Event event = events.next();
 
-            String divisionID = event.attributes.get(divisionsAttribute);
+            String divisionID = event.attributes.get(divisionAttribute);
 
             Iterator<Integer> syscallName = event.latencyBreakdown.keySet().iterator();
 
@@ -170,42 +173,78 @@ public class Emitter {
 
             // if the particle is approching the radius, fade it out
             } else if (hud.params.emitterRadius/2 - distance < 60) {
-            	if (particle.brightness -8 >= hud.params.backgroundBrightness)
-                	particle.brightness = particle.brightness - 8;
+                if (particle.brightness -8 >= hud.params.backgroundBrightness)
+                    particle.brightness = particle.brightness - 8;
             }
         }
 
     }
 
-    // Draw all the particles
+    // Draw all the particles, and update the current selection if a particle
+    // is selected by the user
     public void drawParticles(float backgroundBrightness) {
+
+    	boolean selectionDetected = false;
+
         for (Particle particle : particlesList) {
-             particle.draw(backgroundBrightness, hud.params.drawCirclesStrokes);
+
+            boolean particleSelected = particle.draw(backgroundBrightness,
+            	hud.params.drawCirclesStrokes, selectionActive, selectionID);
+
+            if (particleSelected) {
+            	selectionActive = true;
+                selectionID = particle.getDivisionID(hud.params.divisionAttribute);
+                selectionDetected = true;
+            }
         }
+
+        if (!selectionDetected) {
+        	selectionActive = false;
+        }
+
     }
 
     // Draw the emitter labels
     public void drawLabels() {
+
+    	boolean selectionDetected = false;
+
         for (EmitterLabel label : labelsList) {
-            label.draw();
+        	boolean selectedLabel = false;
+
+        	if (selectionActive && selectionID.equals(label.divisionID)) {
+        		selectedLabel = true;
+        	}
+        	boolean labelSelected = label.draw(selectedLabel);
+
+        	if (labelSelected) {
+            	selectionActive = true;
+                selectionID = label.divisionID;
+                selectionDetected = true;
+            }
         }
+
+        if (!selectionDetected) {
+        	selectionActive = false;
+        }
+
     }
 
     public void drawHalos() {
 
-    	LinkedList<LinkedHashMap<String, EmitterSubdivision>> halosDivs =
-    			subdivisions.halosDivisions;
+        LinkedList<LinkedHashMap<String, EmitterSubdivision>> halosDivs =
+                subdivisions.halosDivisions;
 
-    	Iterator<LinkedHashMap<String, EmitterSubdivision>> it =
-    			halosDivs.iterator();
+        Iterator<LinkedHashMap<String, EmitterSubdivision>> it =
+                halosDivs.iterator();
 
-    	float brightness = 100;
-    	float distance = 40;
-    	for (EmitterHalo halo : halosList) {
-    		brightness -= 15;
-    		halo.draw(it.next(), distance, brightness);
-    		distance += 45;
-    	}
+        float brightness = 100;
+        float distance = 40;
+        for (EmitterHalo halo : halosList) {
+            brightness -= 15;
+            halo.draw(it.next(), distance, brightness);
+            distance += 45;
+        }
 
     }
 
@@ -225,20 +264,19 @@ public class Emitter {
         }
     }
 
-
     // Update the position of all the labels, used to realign the labels to
     // the middle of each section of the emitter (or section of the pie chart)
     // also used to readjust the labels distance to the center
     public void updateLabelsPositions() {
-    	for (EmitterLabel label : labelsList) {
+        for (EmitterLabel label : labelsList) {
             float minAngle = subdivisions.getDivisionStartAngle(label.divisionID);
             float maxAngle = subdivisions.getDivisonEndAngle(label.divisionID);
             float emitterRadius = hud.params.emitterRadius;
             float labelsDistance = hud.params.emitterLabelsDistance;
 
-    		label.calculateLabelPosition(minAngle, maxAngle,
-    				emitterRadius, centerX, centerY, labelsDistance);
-    	}
+            label.calculateLabelPosition(minAngle, maxAngle,
+                    emitterRadius, centerX, centerY, labelsDistance);
+        }
     }
 
     // Draw all the components of the emitter
@@ -254,7 +292,7 @@ public class Emitter {
                 hud.params.emitterRadiusBrightness, hud.params.emitterRadius);
 
         if (hud.params.displayEmitterHalos)
-        	drawHalos();
+            drawHalos();
     }
 
 

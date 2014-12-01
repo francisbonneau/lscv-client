@@ -31,11 +31,28 @@ public class EmitterLabel {
         positionY = (float) Math.sin(angle) * radius + emitterCenterY;
     }
 
-    public void draw() {
+    public boolean draw(boolean selected) {
+
         p.colorMode(PConstants.HSB, 360, 100, 100);
-        p.textSize(textSize);
-        p.fill(this.color, 100, 100);
-        p.text(divisionID, positionX, positionY);
+
+        boolean mouseOnLabel = p.mouseX > positionX &&
+        		p.mouseX < positionX + textSize * divisionID.length() &&
+                p.mouseY > positionY - textSize &&
+                p.mouseY < positionY;
+
+        if (selected || mouseOnLabel) {
+        	p.textSize(textSize + 5);
+        	p.fill(this.color, 100, 100);
+            p.text(divisionID, positionX, positionY);
+        	return true;
+
+        } else {
+        	p.textSize(textSize);
+        	p.fill(this.color, 100, 100);
+            p.text(divisionID, positionX, positionY);
+        	return false;
+        }
+
 
     }
 
