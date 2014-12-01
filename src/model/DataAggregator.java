@@ -27,7 +27,7 @@ public class DataAggregator implements Observer {
     private ArrayList<Thread> dataSourcesThreads;
 
 
-    public DataAggregator(final MainLoop renderLoop) {
+    public DataAggregator(MainLoop renderLoop) {
         this.rl = renderLoop;
 
         dataSourcesNames = new ArrayList<>();
@@ -46,7 +46,7 @@ public class DataAggregator implements Observer {
         dataBySource.put(hostname, data);
 
         // Instanciate the new data Source
-        DataSourceRedis newDataSource = new DataSourceRedis(rl, hostname);
+        DataSourceRedis newDataSource = new DataSourceRedis(this, hostname);
         newDataSource.addObserver(this);
         dataSourceByHost.put(hostname, newDataSource);
 
@@ -66,6 +66,10 @@ public class DataAggregator implements Observer {
         // and we store the new data according to it's source host
         dataBySource.get(source.host).add(newData);
 
+    }
+
+    public Params getParams() {
+    	return rl.getParams();
     }
 
     public final Queue<ArrayList<Event>> getDataForHost(final String host) {

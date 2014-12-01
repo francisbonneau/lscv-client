@@ -13,9 +13,10 @@ import processing.opengl.*;
 
 public class MainLoop extends PApplet {
 
-	private Params params;
 	private DataAggregator da;
 	private Hud hud;
+
+	private Params params;
 
 	// Single parameter outside of the Params class for the static context
 	public static boolean fullscreenMode = false;
@@ -33,9 +34,9 @@ public class MainLoop extends PApplet {
 	// Setup the application
 	public final void setup() {
 
-		frame.setTitle("LSCV");
+		frame.setTitle("LSCV"); // set the window name
 
-		setParams(new Params()); // default parameters initialisation
+		this.params = Params.getInstance(); // default parameters initialisation
 		getParams().windowMaximized = fullscreenMode;
 
 		if (getParams().windowMaximized) {
@@ -141,12 +142,6 @@ public class MainLoop extends PApplet {
 		return params;
 	}
 
-	/**
-	 * @param params
-	 */
-	public void setParams(Params params) {
-		this.params = params;
-	}
 
 	/**
 	 * @return the da
