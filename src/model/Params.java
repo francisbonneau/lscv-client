@@ -52,6 +52,11 @@ public class Params {
 
     // ---- Visualisation parameters
 
+    // The attribute used to categorize events, which will determine the
+    // particles color and position
+    // can be "user", "process" or "syscall"
+    public String divisionAttribute = "process";
+
     // between 1 and 8, used to control the number of particles
     // displayed by rounding up the events lat. in buckets (heat map)
     // 10^−1 s	100 ms millisecond

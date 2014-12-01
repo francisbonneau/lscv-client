@@ -48,7 +48,7 @@ public class Particle {
     }
 
     // Configure the particle according to the parameters in argument
-    public final void setup(final PVector location, final float size, final float angle,
+    public void setup(final PVector location, final float size, final float angle,
             final float baseVelocity, final float baseAcceleration, final float hue,
             final float brightness) {
 
@@ -68,13 +68,16 @@ public class Particle {
     }
 
     // Update the particle position and speed (by one unit of time)
-    public final void update() {
+    public void update() {
         velocity.add(acceleration);
         location.add(velocity);
     }
 
     // Draw the particle on the PApplet
-    public final void draw(final float backgroundBrightness, final boolean drawStroke) {
+    // return true if the user mouse is currently hovering that particle
+    //
+    public boolean draw(final float backgroundBrightness,
+    		final boolean drawStroke, boolean selectionActive, String selectionID) {
 
         p.colorMode(PConstants.HSB, 360, 100, 100);
 
@@ -94,6 +97,8 @@ public class Particle {
             }
             p.text(args, 50, 50);
 
+            return true;
+
         } else {
 
             if (drawStroke) {
@@ -102,10 +107,40 @@ public class Particle {
             	p.noStroke();
             }
 
-            p.fill(hue, saturation, brightness);
-            p.ellipse(location.x, location.y, size, size);
+            if (selectionActive) {
+
+            	if (event.processName.equals(selectionID)) {
+            		p.fill(hue, saturation, brightness);
+                    p.ellipse(location.x, location.y, size + 5, size + 5);
+            	} else {
+            		p.fill(hue, saturation, brightness);
+                    p.ellipse(location.x, location.y, size, size);
+            	}
+
+        	} else {
+             	p.fill(hue, saturation, brightness);
+                p.ellipse(location.x, location.y, size, size);
+        	}
+
+            return false;
         }
 
+    }
+
+    public String getDivisionID(String divisionAttribute) {
+	    if (divisionAttribute.equals("process")) {
+	    	return event.processName;
+	    }
+
+	    if (divisionAttribute.equals("syscall")) {
+	    	return event.syscall;
+	    }
+
+	    if (divisionAttribute.equals("user")) {
+	    	return event.username;
+	    }
+
+	    return null;
     }
 
 }
