@@ -42,6 +42,10 @@ public class Params {
     // True if the user can resize the app window (in non fullscreen mode)
     public boolean resizable = false;
 
+    // Display the help menu at the program startup, true by default
+    // can be hidden by pressing the 'h' key
+    public boolean displayHelpMenu = true;
+
     // Display the frames-per-second counter on the bottom right
     public boolean displayFPSCounter = true;
 
