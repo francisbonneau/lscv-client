@@ -2,12 +2,19 @@ package model;
 
 import java.util.HashMap;
 
+/**
+ * Simple class to keep the data associated with 2 or more Sysdig events
+ * depending if the events are regrouped (latencyRoundup setting) or not.
+ * Represent at least 2 *Sysdig* events since the enter event + exit event
+ * for the same system call are combined. (Time diff = event latency)
+ * @author Francis Bonneau
+ */
 public class Event {
 
-    public String username;
-    public String processName;
-    public String syscall;
-    public int syscallNumber;
+    public String username; 	// Event(s) processs user
+    public String processName;  // Event(s) process name
+    public String syscall;      // Event(s) system call name
+    public int syscallNumber;   // Number of Sysdigs events regrouped
 
     // Hashmap for the properties, ex : username, processname, system call name
     // usefull for direct access
@@ -50,10 +57,8 @@ public class Event {
 
     @Override
     public final String toString() {
-        return "Events (" + syscallNumber +  ") "
-               + "[username=" + username
-               + ", processName=" + processName
-               + ", syscall=" + syscall + "]";
+        return "Events (" + syscallNumber +  ") [username=" + username
+        	+ ", processName=" + processName + ", syscall=" + syscall + "]";
     }
 
 }

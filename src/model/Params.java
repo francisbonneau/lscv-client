@@ -1,16 +1,14 @@
 package model;
 
 /**
- * Class containing
- * @author franck
- *
+ * Class containing all the application global parameters and settings
+ * @author Francis Bonneau
  */
 public class Params {
 
+	// Singleton pattern to ensure a single instance exists
 	private static final Params PARAMS = new Params();
-
 	private Params() {}
-
 	public static Params getInstance() {
 		return PARAMS;
 	}
