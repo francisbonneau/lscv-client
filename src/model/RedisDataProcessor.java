@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class EventProcessor {
+public class RedisDataProcessor {
 
     /**
       Example of RAW data to process :
