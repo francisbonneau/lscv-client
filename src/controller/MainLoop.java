@@ -14,20 +14,24 @@ import processing.opengl.*;
 
 @SuppressWarnings({ "unused", "serial" })
 
+/**
+ * Main render loop of the application
+ * @author Francis Bonneau
+ */
 public class MainLoop extends PApplet {
 
-    private DataAggregator da;
+    private DataAggregator dataAgg;
     private Hud hud;
     private HelpMenu helpMenu;
-
     private Params params;
 
     // Single parameter outside of the Params class for the static context
-    public static boolean fullscreenMode = true;
+    public static boolean fullscreenMode = false;
 
     // Main method for starting the PApplet
     public static void main(String args[]) {
-        if (fullscreenMode) {
+
+    	if (fullscreenMode) {
             PApplet.main(new String[] { "--present", "controller.MainLoop" });
         } else {
             PApplet.main(new String[] { "controller.MainLoop" });
@@ -63,11 +67,10 @@ public class MainLoop extends PApplet {
         helpMenu = new HelpMenu(this);
 
         // Data source setup
-        setDataAgg(new DataAggregator(this));
+        dataAgg = new DataAggregator(this);
 
         // Data visualisation setup
-        setHud(new Hud(this));
-        // hud.addEmitter(params, params.defaultDataSource);
+        hud = new Hud(this);
 
         // UI controls are in separate window, configured here
         new ControlP5(this);
@@ -121,23 +124,11 @@ public class MainLoop extends PApplet {
         text(frameRate, x, y);
     }
 
+    // Handle the user key pressses
     public final void keyPressed() {
-        if (keyCode == TAB) {
-            if (getParams().windowMaximized) {
-                frame.setResizable(true);
-                frame.setBounds(400, 400, getParams().mainWindowWidth,
-                        getParams().mainWindowHeight);
-                getParams().windowMaximized = false;
-            } else {
-                frame.setResizable(true);
-                frame.setBounds(0, 0, displayWidth, displayWidth);
-                getParams().windowMaximized = true;
 
-            }
-            getHud().regionManager.refresh();
-        }
-
-        if (key == ' ') { // Spacebar pressed
+        // Pause the animation if the spacebar key is pressed
+        if (key == ' ') {
             if (getParams().displayPaused == false) {
                 getParams().displayPaused = true;
             } else {
@@ -145,7 +136,9 @@ public class MainLoop extends PApplet {
             }
         }
 
-        if (key == 'h' || key == 'H') { // H or h key pressed
+        // Hide or show the help menu if the h or H key is pressed
+        if (key == 'h' || key == 'H') {
+
         	if (getParams().displayHelpMenu == false) {
                 getParams().displayHelpMenu = true;
             } else {
@@ -153,12 +146,13 @@ public class MainLoop extends PApplet {
             }
         }
 
-        // Arrows keys pressed
-        if (key == 'n') {
+        // Switch to the next slide in the help menu
+        if (key == 'n' || key == 'N') {
         	helpMenu.SwitchToNextSlide();
         }
 
-        if (key == 'p') {
+        // Switch to the previous slide in the help menu
+        if (key == 'p' || key == 'P') {
         	helpMenu.SwitchToPreviousSlide();
         }
 
@@ -171,19 +165,11 @@ public class MainLoop extends PApplet {
         return params;
     }
 
-
     /**
-     * @return the da
+     * @return the dataAggregator
      */
     public DataAggregator getDataAgg() {
-        return da;
-    }
-
-    /**
-     * @param da
-     */
-    public void setDataAgg(DataAggregator da) {
-        this.da = da;
+        return dataAgg;
     }
 
     /**
@@ -191,13 +177,6 @@ public class MainLoop extends PApplet {
      */
     public Hud getHud() {
         return hud;
-    }
-
-    /**
-     * @param hud
-     */
-    public void setHud(Hud hud) {
-        this.hud = hud;
     }
 
 }
