@@ -18,12 +18,11 @@ import controller.MainLoop;
  */
 public class Hud {
 
-     public ArrayList<Emitter> emitters;
+	private MainLoop rl;
+	public PApplet p;
+	public Params params;
 
-     private MainLoop rl;
-     public PApplet p;
-    public Params params;
-
+    public ArrayList<Emitter> emitters;
     public HudRegionManager regionManager;
 
     // parameters shared by all emitters

@@ -5,74 +5,97 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-
-import model.Event;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PVector;
+import model.Event;
 
+/**
+ * This class represent the circle where the events (particles) are displayed.
+ * The name is from particle *emitter* because it handle the position of the
+ * particles and the asssociated labels.
+ * @author Francis Bonneau
+ */
 public class Emitter {
 
-    private PApplet p;
-    private Hud hud;
-    private int id;
-    public String host;
-    public float centerX;
-    public float centerY;
+	private PApplet p;		// Where to draw the particles
+    private Hud hud;		// Abstraction of multiples emitters
+    private int id;			// The Emitter ID
+    public String host;		// The data source hostname
+    public float centerX;	// The X center position of the emmitter
+    public float centerY;	// The Y center position of the emmitter
 
-    public List<Particle> particlesList;
-    public List<EmitterLabel> labelsList;
-    public List<EmitterHalo> halosList;
+    public List<Particle> particlesList;	// The list of displayed particles
+    public List<EmitterLabel> labelsList;	// The list of displayed labels
+    public List<EmitterHalo> halosList;		// The list of displayed halos
 
+	// The circle subdivisons - the circle is subdivided into section according
+    // to the events distributions, and this class take care of that
     public EmitterSubdivider subdivisions;
 
+    // True if the user mouse is over a displayed particle
     public boolean selectionActive = false;
+    // The name of category of the currently selected particle
     public String selectionID;
 
-    // stats
+    // Various counters to keep stats about the Emitter
     public long eventsDisplayedCount;
     public long syscallDisplayedCount;
     public long eventsTotalCount;
     public long syscallTotalCount;
 
+    // Constructor
     public Emitter(PApplet p, Hud hud, int id, int x, int y) {
-        this.p = p;
+
+    	this.p = p;
         this.hud = hud;
         this.id = id;
         this.centerX = x;
         this.centerY = y;
 
-        this.host = "";
+        this.host = ""; // empty hostname on initialisation
 
+        // create a new subdivider for this object
+        subdivisions = new EmitterSubdivider(this);
+
+        // initialise the lists
         particlesList = new ArrayList<Particle>();
         labelsList = new ArrayList<EmitterLabel>();
-
         halosList = new ArrayList<EmitterHalo>();
+
+        // Populate the halos list according to the settings
         int halosNb = hud.params.emitterHalosIntervalsSec.length;
         for (int i = 0; i < halosNb; i++) {
             halosList.add(new EmitterHalo(this.p, this));
         }
 
+        // initialise the stats counters
         eventsDisplayedCount = 0;
         syscallDisplayedCount = 0;
         eventsTotalCount = 0;
         syscallTotalCount = 0;
-
-        subdivisions = new EmitterSubdivider(this);
     }
 
+    // Setup the emitter data source hostname
     public void setHost(String host) {
         this.host = host;
     }
 
+    // Return the emitter ID
     public int getID() {
         return this.id;
     }
 
+    // Return the hud associated to the emitter
     public Hud getHud() {
         return this.hud;
     }
 
+   /**
+    * Add particles to the emitter, based on the new data received. The new
+    * particles will be added to the list, and updated and drawn every time
+    * at every update() and draw() of the emitter
+    */
     public void addParticles(ArrayList<Event> newData) {
 
         String divisionAttribute = hud.params.divisionAttribute;
@@ -294,7 +317,5 @@ public class Emitter {
         if (hud.params.displayEmitterHalos)
             drawHalos();
     }
-
-
 
 }
