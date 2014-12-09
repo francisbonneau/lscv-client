@@ -5,6 +5,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * This class responsability is to parse the data received from Redis and to
+ * output Events objets with the parsed data
+ * @author Francis Bonneau
+ */
 public class RedisDataProcessor {
 
     /**
@@ -96,9 +101,9 @@ public class RedisDataProcessor {
 
     }
 
+    // Aggregate the events latency in buckets determined
+    // by the latencyRoundup parameter
     private int roundLatency(final Double latency, final float latencyRoundup) {
-        // aggregate the events latency in buckets determined
-        // by the latencyRoundup parameter
         Double exp = Math.pow(10, 9 - latencyRoundup);
         Double tmp = Math.floor(latency / exp);
         int roundedVal = (int) (tmp * exp);
