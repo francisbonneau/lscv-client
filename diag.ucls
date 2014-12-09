@@ -37,8 +37,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="model.EventProcessor" project="PFE" file="/PFE/src/model/EventProcessor.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+  <class id="5" language="java" name="model.RedisDataProcessor" project="PFE" 
+    file="/PFE/src/model/RedisDataProcessor.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="231" y="957"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      

@@ -22,7 +22,7 @@ public class DataSourceRedis extends Observable implements Runnable  {
 	private DataAggregator dataAgg;
 
 	// The event processor, used to parse the incoming data into event objets
-    private EventProcessor eventProcessor;
+    private RedisDataProcessor eventProcessor;
 
     public String uri;	// the remote server uri, ex: 127.0.0.1:6973
     public String ip;	// the remote server IP addr, ex: 127.0.0.1
@@ -55,7 +55,7 @@ public class DataSourceRedis extends Observable implements Runnable  {
             fetchSystemInfo();
 
             // instanciate a new data processor
-            this.eventProcessor = new EventProcessor();
+            this.eventProcessor = new RedisDataProcessor();
 
             return true;
         } else {
