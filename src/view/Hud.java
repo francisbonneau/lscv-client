@@ -15,6 +15,7 @@ import controller.MainLoop;
  * The hud handle the update and drawing of one or multiples emitters,
  * and keeps state variables that need to be shared by each emitter,
  * like the smallest event latency accross all data source for example.
+ * @author Francis Bonneau
  */
 public class Hud {
 
@@ -22,21 +23,22 @@ public class Hud {
 	public PApplet p;
 	public Params params;
 
-    public ArrayList<Emitter> emitters;
-    public HudRegionManager regionManager;
+    public ArrayList<Emitter> emitters;  	// the list of all the emitters
+    public HudRegionManager regionManager;  // object to divide the hud regions
 
     // parameters shared by all emitters
-    public float smallestEvtLatency = 1;
-    public float biggestEvtLatency = 1;
+    public float smallestEvtLatency = 1; // all the events speed is relative
+    public float biggestEvtLatency = 1;	 // to the min and max particle speed
 
-    public HashMap<String, Float> colorPalette;
-    public ColorGenerator colorGenerator;
+    public HashMap<String, Float> colorPalette;  // the color palette, one color
+    public ColorGenerator colorGenerator;	// for each category is also shared
 
-    public long eventsDisplayedCount;
-    public long syscallDisplayedCount;
+    public long eventsDisplayedCount;	// Stats computed across all the
+    public long syscallDisplayedCount;	// currently visible emitters
     public long eventsTotalCount;
     public long syscallTotalCount;
 
+    // Constructor
     public Hud(MainLoop rl) {
 
         this.rl = rl;
@@ -48,9 +50,9 @@ public class Hud {
 
         this.colorPalette =  new HashMap<String, Float>();
         this.colorGenerator = new ColorGenerator();
-
     }
 
+    // Update the stats that will be displayed on the bottom left of the screen
     private void updateDisplayedData(Params params) {
 
         if (!params.displayPaused) {
@@ -83,7 +85,7 @@ public class Hud {
     }
 
     // Get the stats from all emitters and combine them
-    private void updateStats() {
+    private void getStats() {
 
         eventsDisplayedCount = 0;
         syscallDisplayedCount = 0;
@@ -105,7 +107,7 @@ public class Hud {
     // Update the hud
     public void update(Params params) {
         updateDisplayedData(params);
-        updateStats();
+        getStats();
     }
 
     // Update the labels positions
@@ -115,26 +117,7 @@ public class Hud {
         }
     }
 
-    // Draw the hud
-    public void draw(Params params) {
-
-        if (params.displayGrid == true)
-            drawGrid();
-
-        // to avoid ConcurrentModificationException
-        Object[] emittersList = emitters.toArray();
-        for (Object o : emittersList) {
-            Emitter em = (Emitter) o;
-            em.update();
-            em.draw();
-        }
-
-        if(params.displayStats)
-            drawStats();
-
-    }
-
-
+    // Draw the statistics on the bottom left of the screen
     private void drawStats() {
         p.fill(225); // gray color
         int x, y;
@@ -149,12 +132,17 @@ public class Hud {
 
         NumberFormat formatter = NumberFormat.getInstance(new Locale("en_US"));
         p.textSize(12);
-        p.text("Particles : " + formatter.format(eventsDisplayedCount), x, y);
-        p.text("System calls : " + formatter.format(syscallDisplayedCount), x, y + 25);
-        p.text("Particles processed total : " + formatter.format(eventsTotalCount), x, y + 50);
-        p.text("System calls processed total : " + formatter.format(syscallTotalCount), x, y + 75);
+        String visibleParticles = formatter.format(eventsDisplayedCount);
+        p.text("Particles : " + visibleParticles, x, y);
+        String visibleSyscalls = formatter.format(syscallDisplayedCount);
+        p.text("System calls : " + visibleSyscalls , x, y + 25);
+        String totalParticles = formatter.format(eventsTotalCount);
+        p.text("Particles processed total : " + totalParticles, x, y + 50);
+        String totalSyscalls = formatter.format(syscallTotalCount);
+        p.text("System calls processed total : " + totalSyscalls, x, y + 75);
     }
 
+    // Draw a grid on the background
     public void drawGrid() {
 
         int gridSquareSize = 45;
@@ -177,6 +165,24 @@ public class Hud {
           }
         }
         p.popMatrix();
+    }
+
+    // Draw the hud, the grid if enabled, and the stats if enabled
+    public void draw(Params params) {
+
+        if (params.displayGrid == true)
+            drawGrid();
+
+        // to avoid ConcurrentModificationException
+        Object[] emittersList = emitters.toArray();
+        for (Object o : emittersList) {
+            Emitter em = (Emitter) o;
+            em.update();
+            em.draw();
+        }
+
+        if(params.displayStats)
+            drawStats();
     }
 
 }

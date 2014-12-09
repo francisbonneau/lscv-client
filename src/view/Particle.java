@@ -6,6 +6,11 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PVector;
 
+/**
+ * A particle is a single circle draw on the screen that represent one or
+ * multiple regrouped events
+ * @author Francis Bonneau
+ */
 public class Particle {
 
     // the PApplet where the particle is drew
