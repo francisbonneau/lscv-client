@@ -47,7 +47,7 @@ public class ControlPanelUI extends PApplet {
 		cp5.window().setPositionOfTabs(20,20);
 
 		// Load fonts
-		eurostile15 = loadFont("EurostileLTStd-15.vlw");
+
 		openSans12 = loadFont("OpenSans-12.vlw");
 		openSans13 = loadFont("OpenSans-13.vlw");
  		openSans14 = loadFont("OpenSans-14.vlw");
