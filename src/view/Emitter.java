@@ -150,6 +150,7 @@ public class Emitter {
 
                 Particle newParticle = new Particle(p, event);
 
+                // determine the new paticle parameters
                 float hue = this.hud.colorPalette.get(divisionID);
                 float brightness = 100;
 
@@ -227,7 +228,7 @@ public class Emitter {
 
     }
 
-    // Draw the emitter labels
+    // Draw the labels - around the circle
     public void drawLabels() {
 
     	boolean selectionDetected = false;
@@ -253,6 +254,8 @@ public class Emitter {
 
     }
 
+    // Draw others circles (halos) around the main circle to represent different
+    // (longer) timeframes of events distribution
     public void drawHalos() {
 
         LinkedList<LinkedHashMap<String, EmitterSubdivision>> halosDivs =
@@ -290,6 +293,8 @@ public class Emitter {
     // Update the position of all the labels, used to realign the labels to
     // the middle of each section of the emitter (or section of the pie chart)
     // also used to readjust the labels distance to the center
+    // TODO : Should maybe be merged with the update() method, the only reason
+    // its not is to avoid the labels change position too frequently
     public void updateLabelsPositions() {
         for (EmitterLabel label : labelsList) {
             float minAngle = subdivisions.getDivisionStartAngle(label.divisionID);

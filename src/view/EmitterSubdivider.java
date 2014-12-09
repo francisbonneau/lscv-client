@@ -6,10 +6,15 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import model.Event;
 import processing.core.PApplet;
+import model.Event;
 
+/**
+ * The EmitterSubdivider is a class responsible of dividing the emitter circle
+ * in segments (one per category) of different sizes - according to the number
+ * of events in each category. Also handle the segments sizes of the halos.
+ * @author Francis Bonneau
+ */
 public class EmitterSubdivider {
 
     public Emitter em; // the parent Emitter
@@ -44,7 +49,7 @@ public class EmitterSubdivider {
         	halosTimeout[i] = 0;
         }
 
-        // This thread will reset the subdivisions sizes at each interval
+        // This thread will reset the subdivisions sizes at a given interval
         class SubdivisonResetter extends TimerTask {
 
             EmitterSubdivider emSubdiv;
@@ -130,6 +135,12 @@ public class EmitterSubdivider {
 
     }
 
+    /**
+     * Prepare the divisions of the additionnals circles (halos) around the emitter
+     *
+     * @param newData
+     * @param divisionAttribute
+     */
 	public void addHalos(ArrayList<Event> newData, String divisionAttribute) {
 
 		int halosNb = em.getHud().params.emitterHalosIntervalsSec.length;
@@ -174,7 +185,6 @@ public class EmitterSubdivider {
 
     }
 
-
     // divide the circle according to the event distribution
     public void adjustHalosSizes() {
 
@@ -199,10 +209,12 @@ public class EmitterSubdivider {
 
     }
 
+    // Return the start angle for a given event category (divisionID)
     public float getDivisionStartAngle(String divisionID) {
         return currentDivisions.get(divisionID).startAngleDeg;
     }
 
+    // Return the max angle for a given event category (divisionID)
     public float getDivisonEndAngle(String divisionID) {
         return currentDivisions.get(divisionID).endAngleDeg;
     }
