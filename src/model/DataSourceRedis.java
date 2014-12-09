@@ -5,55 +5,80 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
-
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-
+/**
+ * The DataSourceRedis is a thread whose job is to connect to a remote Redis
+ * instance, and subscribe to a specific pub-sub channel. Incoming data will be
+ * parsed by the EventProcessor and send to the DataAggregator via update()
+ * @author Francis Bonneau
+ */
 public class DataSourceRedis extends Observable implements Runnable  {
 
-    public String host;
-    public String ip;
-    public int port;
+	// The data aggregator where to send the received data
+	private DataAggregator dataAgg;
 
-    private String filter;
-    HashMap<String, String> systemInfo;
-
-    private DataAggregator dataAgg;
+	// The event processor, used to parse the incoming data into event objets
     private EventProcessor eventProcessor;
 
+    public String uri;	// the remote server uri, ex: 127.0.0.1:6973
+    public String ip;	// the remote server IP addr, ex: 127.0.0.1
+    public int port;	// the remote server port, ex: 6973
+
+    private String activeFilter; // the sysdig filter to apply to the remote server
+
+    // Information about the remote server, ex cpu type, cpu count, memory, etc.
+    HashMap<String, String> systemInfo;
+
+    // Constructor
     public DataSourceRedis(DataAggregator dataAgg, String host) {
 
-        // Connect to the Redis instance
-        this.host = host;
+    	// Split the URI into parts
+        this.uri = host;
         this.ip = host.split(":")[0];
         this.port = Integer.parseInt(host.split(":")[1]);
 
         this.dataAgg = dataAgg;
-        this.filter = "";
-
-        tryFirstConnexion();
-
-        this.systemInfo = new HashMap<>();
-        fetchSystemInfo();
-
-        // instanciate a new data processor
-        this.eventProcessor = new EventProcessor();
+        this.activeFilter = "";
     }
 
-    private void tryFirstConnexion() {
+    // Initiate a conexion to the remote Redis instance, and fetch info about
+    // the remote server if the connexion is sucessfull
+    public boolean initiateRemoteConnexion() {
+
+        if (testConnexion()) {
+
+        	this.systemInfo = new HashMap<>();
+            fetchSystemInfo();
+
+            // instanciate a new data processor
+            this.eventProcessor = new EventProcessor();
+
+            return true;
+        } else {
+        	return false;
+        }
+    }
+
+    // Test the connexion to the remote Redis instance
+    private boolean testConnexion() {
         try {
-            new Jedis(ip, port);
-            System.out.println("Successfully connected to " + host);
+            Jedis j = new Jedis(ip, port);
+            System.out.println("Successfully connected to " + uri);
+            j.close();
+            return true;
         } catch (Exception e) {
-            System.out.println("Could not connect to " + host);
+            System.out.println("Could not connect to " + uri);
+            return false;
         }
 
     }
 
+    // Get information about the remote server, the information is
+    // simply stored by the server app into specific Redis keys
     private void fetchSystemInfo() {
 
         Jedis jedis = new Jedis(ip, port);
@@ -76,23 +101,34 @@ public class DataSourceRedis extends Observable implements Runnable  {
         String memory = jedis.get("memory");
         systemInfo.put("memory", memory);
         System.out.print("memory: " + memory);
+
+        jedis.close();
     }
 
+    // Get the currently active Sysdig filter on the remote server
     public String getFilter() {
         Jedis jedis = new Jedis(ip, port);
-        this.filter = jedis.get("filter");
-        return filter;
+        this.activeFilter = jedis.get("filter");
+        jedis.close();
+        return activeFilter;
     }
 
+    // Set the remote server active Sysdig filter
     public void setFilter(String newFilter) {
-        filter = newFilter;
-        new Jedis(ip, port).set("filter", filter);
+        Jedis jedis = new Jedis(ip, port);
+        jedis.set("filter", newFilter);
+        activeFilter = newFilter;
+        jedis.close();
     }
 
+    // Thread loop
     @Override
     public void run() {
-        // TODO Auto-generated method stub
 
+    	Jedis j;
+
+    	// Anonymous class to handle the different scenarios of the Redis
+    	// publish-subscribe protocol
         JedisPubSub jpubSub = new JedisPubSub() {
 
             @Override
@@ -136,11 +172,12 @@ public class DataSourceRedis extends Observable implements Runnable  {
             }
         };
 
-        // since once its in streaming mode it cannot do other operations
+        // TODO better errors handling
 		try {
-            new Jedis(ip, port).subscribe(jpubSub, "data");
+            j = new Jedis(ip, port);
+            j.subscribe(jpubSub, "data");
 		} catch (Exception e) {
-			System.out.println("Error encountered when trying to connect to " + host);
+			System.out.println("Error encountered when trying to connect to " + uri);
 			System.out.println(e.getMessage());
 		}
 
