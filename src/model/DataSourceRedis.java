@@ -67,6 +67,7 @@ public class DataSourceRedis extends Observable implements Runnable  {
     private boolean testConnexion() {
         try {
             Jedis j = new Jedis(ip, port);
+            j.get("hostname");
             System.out.println("Successfully connected to " + uri);
             j.close();
             return true;

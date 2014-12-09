@@ -3,30 +3,26 @@ package view;
 import java.util.Iterator;
 
 /**
- * This object should handle the subdivision of the hud space into multiples
- * regions
+ * This object handle the subdivision of the hud space into multiples regions,
+ * by adding rows of emitters, horizontally or vertically
+ * @author Francis Bonneau
  */
 public class HudRegionManager {
 
     private Hud hud;
 
+    // Constructor, create the first emitter
     public HudRegionManager(Hud hud) {
         this.hud = hud;
 
-        // add the first emitter
+        // add the first emitter, there is always at least one emitter on the screen
         Emitter em = new Emitter(hud.p, hud, 1, 10, 10);
         hud.emitters.add(em);
         handleOnlyOneEmitterCase();
     }
 
-    public final void refresh() {
-        boolean onlyOneEmitter = handleOnlyOneEmitterCase();
-        if (!onlyOneEmitter) {
-            calculateEmittersPositions();
-        }
-
-    }
-
+    // Add a horizontal row of emitters on the screen, the number of emitters
+    // added depends on the number of vertical emitters (Y row)
     public final void addRowOfEmittersAxisX() {
 
         boolean onlyOneEmitter = handleOnlyOneEmitterCase();
@@ -43,6 +39,8 @@ public class HudRegionManager {
 
     }
 
+    // Add a vertical row of emitters on the screen, the number of emitters
+    // added depends on the number of horizontal emitters (X row)
     public final void addRowOfEmittersAxisY() {
 
         boolean onlyOneEmitter = handleOnlyOneEmitterCase();
@@ -57,6 +55,8 @@ public class HudRegionManager {
         }
     }
 
+    // Remove a horizontal row of emitters on the screen, the number of emitters
+    // removed depends on the number of vertical emitters (Y row)
     public final void removeRowOfEmittersAxisX() {
 
         for (int i = 0; i < hud.params.emittersRowsY; i++) {
@@ -69,6 +69,8 @@ public class HudRegionManager {
         }
     }
 
+	// Remove a vertical row of emitters on the screen, the number of emitters
+	// removed depends on the number of horizontal emitters (X row)
     public final void removeRowOfEmittersAxisY() {
 
         for (int i = 0; i < hud.params.emittersRowsX; i++) {
@@ -81,6 +83,35 @@ public class HudRegionManager {
         }
     }
 
+    // Recalculate the emitter positions, check if there is only one emitter
+    public final void refresh() {
+        boolean onlyOneEmitter = handleOnlyOneEmitterCase();
+        if (!onlyOneEmitter) {
+            calculateEmittersPositions();
+        }
+
+    }
+
+    // When there is only one X,Y row there is only one emitter, and in that
+    // special case the only emitter is centered on the screen
+    private boolean handleOnlyOneEmitterCase() {
+
+        if (hud.params.emittersRowsX == 1 && hud.params.emittersRowsY == 1) {
+            // if there is only one emitter, center it
+            int centerX = hud.p.width / 2;
+            int centerY = hud.p.height / 2;
+
+            Emitter em = hud.emitters.get(0);
+            em.centerX = centerX;
+            em.centerY = centerY;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Divide the screen according to the number of emitters, so that they are
+    // positionned at even distance from each other
     private void calculateEmittersPositions() {
 
         int emittersX = hud.params.emittersRowsX;
@@ -119,23 +150,6 @@ public class HudRegionManager {
             if (hud.params.emitterRadius > smallestDist) {
 				hud.params.emitterRadius = smallestDist - 10;
 			}
-        }
-
-    }
-
-    private boolean handleOnlyOneEmitterCase() {
-
-        if (hud.params.emittersRowsX == 1 && hud.params.emittersRowsY == 1) {
-            // if there is only one emitter, center it
-            int centerX = hud.p.width / 2;
-            int centerY = hud.p.height / 2;
-
-            Emitter em = hud.emitters.get(0);
-            em.centerX = centerX;
-            em.centerY = centerY;
-            return true;
-        } else {
-            return false;
         }
     }
 
