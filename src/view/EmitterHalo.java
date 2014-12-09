@@ -7,9 +7,11 @@ import java.util.LinkedHashMap;
 import processing.core.PApplet;
 import processing.core.PConstants;
 
+/**
+ * The EmitterHalo is a class dedicated tho
+ * @author Francis Bonneau
+ */
 public class EmitterHalo {
-
-	// https://www.processing.org/reference/arc_.html
 
     private PApplet p;
     private Emitter em;
@@ -39,6 +41,7 @@ public class EmitterHalo {
 				p.smooth();
 				p.noFill();
 
+				// https://www.processing.org/reference/arc_.html
 				// float: x-coordinate of the arc's ellipse
 				// float: y-coordinate of the arc's ellipse
 				// float: width of the arc's ellipse by default
