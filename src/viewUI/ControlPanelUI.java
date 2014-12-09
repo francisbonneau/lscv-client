@@ -12,8 +12,11 @@ import controlP5.Textlabel;
 import controller.MainLoop;
 
 /**
- * See ControlP5 documentation at
- * http://www.sojamo.de/libraries/controlP5/reference/controlP5/ControlP5.html
+ * This class is in charge of the Settings or Parameters Window. It uses the
+ * ControlP5 library to implement all the UI elements.
+ *
+ * TODO : It should be separated in multiples subclasses, one for each tab maybe
+ * and the events handling should be cleaned up.
  */
 public class ControlPanelUI extends PApplet {
 
@@ -54,6 +57,8 @@ public class ControlPanelUI extends PApplet {
 		cp5.setFont(openSans15);
 
 		// ---------- Setup the tabs
+		// See ControlP5 documentation at
+		// http://www.sojamo.de/libraries/controlP5/reference/controlP5/ControlP5.html
 
 		cp5.getTab("default").setColorLabel(color(255));
 		cp5.addTab("Data display settings").setColorLabel(color(255));
@@ -298,6 +303,7 @@ public class ControlPanelUI extends PApplet {
 
 
 	/**
+	 * Event handling for all the sliders and UI elements
 	 *  TODO Clean up this terrible mess
 	 */
 	public void controlEvent(ControlEvent theEvent) {
@@ -543,32 +549,35 @@ public class ControlPanelUI extends PApplet {
 		d2.setIndex(0);
 	}
 
+	// Draw the special UI to select the emitters rows
 	public void draw() {
 		colorMode(HSB,360,100,100);
 		background(0,0,0);
 
-		if (currentTabIsDataDisplay) {	// draw emitters circles in the data source section
+		// draw emitters circles in the data display tab only
+		if (currentTabIsDataDisplay) {
 			noFill();
 			stroke(255);
 			int circlesDistanceX = 62;
 			int circlesDistanceY = 45;
-			int numberOfEmitters = rl.getParams().emittersRowsX * rl.getParams().emittersRowsY;
+			int numberOfEmitters = rl.getParams().emittersRowsX *
+											rl.getParams().emittersRowsY;
 
 			for (int i = rl.getParams().emittersRowsX; i > 0; i--) {
 				for (int j = rl.getParams().emittersRowsY; j > 0; j--) {
 					ellipse(73 + ( i * circlesDistanceX),
 							135 + (j * circlesDistanceY), 25, 25);
 					textFont(openSans12);
-					int ajustedXPos = 70; // adjust the X position of the text to center double digits
+					// adjust the X position of the text to center double digits
+					int ajustedXPos = 70;
 					if (numberOfEmitters > 9 )
 						ajustedXPos = 66;
-					text("" + numberOfEmitters, ajustedXPos + ( i * circlesDistanceX),
-						140 + (j * circlesDistanceY));
+					text("" + numberOfEmitters, ajustedXPos +
+						( i * circlesDistanceX),140 + (j * circlesDistanceY));
 					numberOfEmitters--;
 				}
 			}
 		}
-
 	}
 
 	public ControlP5 control() {
